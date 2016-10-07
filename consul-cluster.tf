@@ -14,6 +14,24 @@ module "consul" {
     tagOwnerEmail = "${var.tagOwnerEmail}"
 }
 
-output "server_ips" {
-    value = "${module.consul.server_ips}"
+resource "null_resource" "consul_cluster" {
+    count = "${var.servers}"
+
+    provisioner "remote-exec" {
+      # Bootstrap script called with private_ip of each node in the clutser
+        connection {
+            host = "${element(module.consul.public_server_ips, count.index)}"
+        }
+        inline = [
+            "echo ${join(",", module.consul.private_server_ips)} > /tmp/consul-server-cluster"
+        ]
+    }
+}
+
+output "public_server_ips" {
+    value = "${module.consul.public_server_ips}"
+}
+
+output "private_server_ips" {
+    value = "${module.consul.private_server_ips}"
 }
