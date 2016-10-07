@@ -1,3 +1,3 @@
-output "server_address" {
-  value = "${aws_instance.server.0.private_ip}"
+output "server_addresses" {
+  value = ["${aws_instance.server.*.private_ip}"]
 }
