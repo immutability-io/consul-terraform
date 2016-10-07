@@ -1,0 +1,63 @@
+{
+  "variables": {
+    "aws_access_key":    "{{env `AWS_ACCESS_KEY_ID`}}",
+    "aws_secret_key":    "{{env `AWS_SECRET_ACCESS_KEY`}}",
+    "aws_region":        "{{env `DEFAULT_REGION_NAME`}}",
+    "aws_source_ami":    "{{env `DEFAULT_AMI_ID`}}",
+    "name":              "{{env `DEFAULT_AMI_NAME`}}",
+    "subnet_id":         "{{env `DEFAULT_SUBNET_ID`}}",
+    "vpc_id":            "{{env `DEFAULT_VPC_ID`}}",
+    "instance_type":     "{{env `DEFAULT_INSTANCE_TYPE`}}",
+    "security_group_id": "",
+    "scripts_dir":       "scripts",
+    "ssh_username":      "ubuntu",
+    "dns_listen_addr":   "0.0.0.0"
+  },
+  "builders": [
+    {
+      "type":              "amazon-ebs",
+      "access_key":        "{{user `aws_access_key`}}",
+      "secret_key":        "{{user `aws_secret_key`}}",
+      "region":            "{{user `aws_region`}}",
+      "vpc_id":            "{{user `vpc_id`}}",
+      "subnet_id":         "{{user `subnet_id`}}",
+      "security_group_id": "{{user `security_group_id`}}",
+      "source_ami":        "{{user `aws_source_ami`}}",
+      "instance_type":     "{{user `instance_type`}}",
+      "ssh_username":      "{{user `ssh_username`}}",
+      "ami_name":          "{{user `name`}}-{{timestamp}}",
+      "ami_virtualization_type": "hvm",
+      "ami_description":   "packer-{{user `name`}}-ami",
+      "ssh_private_ip":    false,
+      "associate_public_ip_address": true,
+      "tags": {
+        "artifact": "{{user `name`}}"
+      }
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "execute_command": "echo {{user `ssh_username`}} | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",
+      "inline": [
+        "mkdir -p /ops/{{user `scripts_dir`}}",
+        "chmod a+w /ops/{{user `scripts_dir`}}"
+      ]
+    },
+    {
+      "type": "file",
+      "source": "{{user `scripts_dir`}}/.",
+      "destination": "/ops/{{user `scripts_dir`}}"
+    },
+    {
+      "type": "shell",
+      "execute_command": "echo {{user `ssh_username`}} | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",
+      "inline": [
+        "sleep 30",
+        "sh /ops/{{user `scripts_dir`}}/dependencies.sh",
+        "sh /ops/{{user `scripts_dir`}}/consul.sh",
+        "sh /ops/{{user `scripts_dir`}}/cleanup.sh"
+      ]
+    }
+  ]
+}
