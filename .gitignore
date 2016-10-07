@@ -1,2 +1,3 @@
 *.tfvars
 .environment
+**/*.pem

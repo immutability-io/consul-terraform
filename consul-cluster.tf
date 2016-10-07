@@ -13,3 +13,7 @@ module "consul" {
     tagFinance = "${var.tagFinance}"
     tagOwnerEmail = "${var.tagOwnerEmail}"
 }
+
+output "server_ips" {
+    value = "${module.consul.server_ips}"
+}
