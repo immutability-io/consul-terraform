@@ -28,7 +28,10 @@ resource "aws_instance" "server" {
     provisioner "remote-exec" {
         inline = [
           "echo ${var.servers} > /tmp/consul-server-count",
-          "echo ${aws_instance.server.0.private_ip} > /tmp/consul-server-addr"
+          "echo ${aws_instance.server.0.private_ip} > /tmp/consul-server-addr",
+          "echo ${aws_instance.server.0.private_ip} > /tmp/consul-server-addrs",
+          "echo ${aws_instance.server.1.private_ip} >> /tmp/consul-server-addrs",
+          "echo ${aws_instance.server.2.private_ip} >> /tmp/consul-server-addrs"
         ]
     }
     provisioner "remote-exec" {
