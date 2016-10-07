@@ -9,7 +9,7 @@ resource "aws_instance" "server" {
 
     connection {
         user = "ubuntu"
-        private_key = "${file(var.key_path)}"
+        private_key = "${var.private_key}"
     }
 
     #Instance tags
