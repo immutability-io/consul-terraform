@@ -5,7 +5,7 @@ provider "aws" {
 module "consul" {
     source = "github.com/Immutability-io/consul-terraform//terraform"
     ami = "${var.ami}"
-    key_path = "${var.key_path}"
+    private_key_file = "${var.private_key_file}"
     key_name = "${var.key_name}"
     associate_public_ip_address = "${var.associate_public_ip_address}"
     subnet_id = "${var.subnet_id}"

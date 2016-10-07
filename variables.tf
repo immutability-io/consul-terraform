@@ -5,7 +5,7 @@ variable "key_name" {
     description = "SSH key name in your AWS account for AWS instances."
 }
 
-variable "key_path" {
+variable "private_key_file" {
     description = "Path to the private key specified by key_name."
 }
 
