@@ -22,6 +22,14 @@ data "template_file" "template-consul-config" {
         gossip_encryption_key = "${var.gossip_encryption_key}"
     }
 }
+resource "null_resource" "secrets" {
+  provisioner "local-exec" {
+      scripts = [
+          "sh ./scripts/secrets.sh ${var.common_name} ${var.certificate_path}"
+      ]
+  }
+}
+
 
 resource "null_resource" "consul_cluster" {
     count = "${var.servers}"

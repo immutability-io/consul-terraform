@@ -14,6 +14,7 @@ variable "gossip_encryption_key" {
 }
 
 
+
 variable "associate_public_ip_address" {
     description = "Create public IP."
     default = false
