@@ -24,6 +24,18 @@ variable "subnet_id" {
     description = "The Subnet to use for the consul cluster."
 }
 
+variable "root_certificate" {
+    description = "The root certificate for the consul cluster."
+}
+
+variable "consul_certificate" {
+    description = "The certificate use for the consul cluster."
+}
+
+variable "consul_key" {
+    description = "The key to use for the consul cluster."
+}
+
 
 variable "vpc_id" {
     description = "The VPC to use for the consul cluster."
@@ -37,6 +49,14 @@ variable "servers" {
 variable "ingress_22" {
     default = "0.0.0.0/0"
     description = "The number of Consul servers to launch."
+}
+
+variable "datacenter" {
+    description = "Name of consul datacenter."
+}
+
+variable "consul_template" {
+    description = "Name of consul datacenter."
 }
 
 variable "instance_type" {

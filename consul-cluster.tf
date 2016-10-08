@@ -14,18 +14,48 @@ module "consul" {
     tagOwnerEmail = "${var.tagOwnerEmail}"
 }
 
+data "template_file" "template-consul-config" {
+    template = "${file(var.consul_template)}"
+    vars {
+        retry_join = "${join("\",\"", module.consul.private_server_ips)}"
+        datacenter = "${var.datacenter}"
+    }
+}
+
 resource "null_resource" "consul_cluster" {
     count = "${var.servers}"
+    connection {
+        host = "${element(module.consul.public_server_ips, count.index)}"
+        user = "ubuntu"
+        private_key = "${file(var.private_key)}"
+    }
 
+    provisioner "file" {
+        content = "${data.template_file.template-consul-config.rendered}"
+        destination = "/tmp/consul.json"
+    }
+
+    provisioner "file" {
+        source = "${var.root_certificate}"
+        destination = "/tmp/root.crt"
+    }
+
+    provisioner "file" {
+        source = "${var.consul_certificate}"
+        destination = "/tmp/consul.crt"
+    }
+
+    provisioner "file" {
+        source = "${var.consul_key}"
+        destination = "/tmp/consul.key"
+    }
     provisioner "remote-exec" {
-      # Bootstrap script called with private_ip of each node in the clutser
-        connection {
-            host = "${element(module.consul.public_server_ips, count.index)}"
-        }
-        inline = [
-            "echo ${join(",", module.consul.private_server_ips)} > /tmp/consul-server-cluster"
+        scripts = [
+            "./scripts/setup.sh",
+            "./scripts/service.sh"
         ]
     }
+
 }
 
 output "public_server_ips" {

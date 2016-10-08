@@ -10,7 +10,7 @@ CONSUL_JOIN=$(cat /tmp/consul-server-addr | tr -d '\n')
 
 # Write the flags to a temporary file
 cat >/tmp/consul_flags << EOF
-CONSUL_FLAGS="-server -bootstrap-expect=${SERVER_COUNT} -join=${CONSUL_JOIN} -data-dir=/opt/consul/data"
+CONSUL_FLAGS="-server"
 EOF
 
 if [ -f /tmp/upstart.conf ];
