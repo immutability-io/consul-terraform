@@ -49,6 +49,7 @@ resource "null_resource" "consul_cluster" {
         source = "${var.consul_key}"
         destination = "/tmp/consul.key"
     }
+
     provisioner "remote-exec" {
         scripts = [
             "./scripts/setup.sh",
