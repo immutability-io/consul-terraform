@@ -19,6 +19,7 @@ data "template_file" "template-consul-config" {
     vars {
         retry_join = "${join("\",\"", module.consul.private_server_ips)}"
         datacenter = "${var.datacenter}"
+        gossip_encryption_key = "${var.gossip_encryption_key}"
     }
 }
 

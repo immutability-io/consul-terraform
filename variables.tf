@@ -9,6 +9,10 @@ variable "private_key" {
     description = "Path to the private key specified by key_name."
 }
 
+variable "gossip_encryption_key" {
+    description = "Result of consul keygen."
+}
+
 
 variable "associate_public_ip_address" {
     description = "Create public IP."
