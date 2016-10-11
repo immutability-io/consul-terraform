@@ -88,47 +88,48 @@ resource "aws_security_group" "consul" {
         protocol = "-1"
         cidr_blocks = ["0.0.0.0/0"]
     }
+}
 
-  resource "aws_security_group" "consul-ui" {
-      name = "${var.tagName}-ui-security-group"
-      description = "Consul web traffic + maintenance."
-      vpc_id = "${var.vpc_id}"
+resource "aws_security_group" "consul-ui" {
+    name = "${var.tagName}-ui-security-group"
+    description = "Consul web traffic + maintenance."
+    vpc_id = "${var.vpc_id}"
 
-      // These are for internal traffic
+    // These are for internal traffic
 
-      ingress {
-          from_port = 0
-          to_port = 65535
-          protocol = "udp"
-          security_groups = ["${aws_security_group.consul.id}"]
-      }
-      ingress {
-          from_port = 0
-          to_port = 65535
-          protocol = "tcp"
-          security_groups = ["${aws_security_group.consul.id}"]
-      }
+    ingress {
+        from_port = 0
+        to_port = 65535
+        protocol = "udp"
+        security_groups = ["${aws_security_group.consul.id}"]
+    }
+    ingress {
+        from_port = 0
+        to_port = 65535
+        protocol = "tcp"
+        security_groups = ["${aws_security_group.consul.id}"]
+    }
 
-      // These are for maintenance
-      ingress {
-          from_port = 22
-          to_port = 22
-          protocol = "tcp"
-          cidr_blocks = ["${var.ingress_22}"]
-      }
+    // These are for maintenance
+    ingress {
+        from_port = 22
+        to_port = 22
+        protocol = "tcp"
+        cidr_blocks = ["${var.ingress_22}"]
+    }
 
-      ingress {
-          from_port = 8500
-          to_port = 8500
-          protocol = "tcp"
-          cidr_blocks = ["0.0.0.0/0"]
-      }
+    ingress {
+        from_port = 8500
+        to_port = 8500
+        protocol = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
 
-      // This is for outbound internet access
-      egress {
-          from_port = 0
-          to_port = 0
-          protocol = "-1"
-          cidr_blocks = ["0.0.0.0/0"]
-      }
+    // This is for outbound internet access
+    egress {
+        from_port = 0
+        to_port = 0
+        protocol = "-1"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
 }
