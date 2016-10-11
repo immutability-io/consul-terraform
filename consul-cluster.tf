@@ -10,6 +10,7 @@ module "consul" {
     associate_public_ip_address = "${var.associate_public_ip_address}"
     subnet_id = "${var.subnet_id}"
     vpc_id = "${var.vpc_id}"
+    ingress_22 = "${var.ingress_22}"
     tagFinance = "${var.tagFinance}"
     tagOwnerEmail = "${var.tagOwnerEmail}"
 }
