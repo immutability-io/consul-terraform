@@ -13,6 +13,10 @@ variable "gossip_encryption_key" {
     description = "Result of consul keygen."
 }
 
+variable "password_file" {
+    description = "Result sudo htpasswd -c .htpasswd admin."
+}
+
 variable "associate_public_ip_address" {
     description = "Create public IP."
     default = false
