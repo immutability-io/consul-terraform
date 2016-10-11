@@ -1,4 +1,5 @@
-resource "aws_instance" "server" {
+resource "aws_instance" "server"
+{
     ami = "${var.ami}"
     instance_type = "${var.instance_type}"
     key_name = "${var.key_name}"
@@ -7,82 +8,93 @@ resource "aws_instance" "server" {
     associate_public_ip_address = "${var.associate_public_ip_address}"
     vpc_security_group_ids = ["${aws_security_group.consul.id}"]
 
-    connection {
+    connection
+    {
         user = "ubuntu"
         private_key = "${var.private_key}"
     }
 
     #Instance tags
-    tags {
+    tags
+    {
       Name = "${var.tagName}-${count.index}"
       Finance = "${var.tagFinance}"
       OwnerEmail = "${var.tagOwnerEmail}"
     }
 
-    provisioner "file" {
+    provisioner "file"
+    {
         source = "${path.module}/scripts/upstart.conf"
         destination = "/tmp/upstart.conf"
     }
 
-
-    provisioner "remote-exec" {
-        inline = [
+    provisioner "remote-exec"
+    {
+        inline =
+        [
           "echo ${var.servers} > /tmp/consul-server-count",
           "echo ${aws_instance.server.0.private_ip} > /tmp/consul-server-addr"
         ]
     }
-    provisioner "remote-exec" {
-        scripts = [
+    provisioner "remote-exec"
+    {
+        scripts =
+        [
             "${path.module}/scripts/install.sh",
             "${path.module}/scripts/ip_tables.sh"
         ]
     }
 }
 
-
-resource "aws_security_group" "consul" {
+resource "aws_security_group" "consul"
+{
     name = "${var.tagName}-security-group"
     description = "Consul internal traffic + maintenance."
     vpc_id = "${var.vpc_id}"
 
     // These are for internal traffic
-    ingress {
+    ingress
+    {
         from_port = 0
         to_port = 65535
         protocol = "tcp"
         self = true
     }
 
-    ingress {
+    ingress
+    {
         from_port = 0
         to_port = 65535
         protocol = "udp"
         self = true
     }
 
-    ingress {
+    ingress
+    {
         from_port = 0
         to_port = 65535
         protocol = "udp"
         security_groups = ["${aws_security_group.consul-ui.id}"]
     }
-    ingress {
+
+    ingress
+    {
         from_port = 0
         to_port = 65535
         protocol = "tcp"
         security_groups = ["${aws_security_group.consul-ui.id}"]
     }
 
-    // These are for maintenance
-    ingress {
+    ingress
+    {
         from_port = 22
         to_port = 22
         protocol = "tcp"
         cidr_blocks = ["${var.ingress_22}"]
     }
 
-    // This is for outbound internet access
-    egress {
+    egress
+    {
         from_port = 0
         to_port = 0
         protocol = "-1"
@@ -90,43 +102,46 @@ resource "aws_security_group" "consul" {
     }
 }
 
-resource "aws_security_group" "consul-ui" {
+resource "aws_security_group" "consul-ui"
+{
     name = "${var.tagName}-ui-security-group"
     description = "Consul web traffic + maintenance."
     vpc_id = "${var.vpc_id}"
 
-    // These are for internal traffic
-
-    ingress {
+    ingress
+    {
         from_port = 0
         to_port = 65535
         protocol = "udp"
         security_groups = ["${aws_security_group.consul.id}"]
     }
-    ingress {
+
+    ingress
+    {
         from_port = 0
         to_port = 65535
         protocol = "tcp"
         security_groups = ["${aws_security_group.consul.id}"]
     }
 
-    // These are for maintenance
-    ingress {
+    ingress
+    {
         from_port = 22
         to_port = 22
         protocol = "tcp"
         cidr_blocks = ["${var.ingress_22}"]
     }
 
-    ingress {
+    ingress
+    {
         from_port = 8500
         to_port = 8500
         protocol = "tcp"
         cidr_blocks = ["0.0.0.0/0"]
     }
 
-    // This is for outbound internet access
-    egress {
+    egress
+    {
         from_port = 0
         to_port = 0
         protocol = "-1"
