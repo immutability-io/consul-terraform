@@ -1,6 +1,7 @@
 {
     "bootstrap_expect" : 3,
     "server" : true,
+    "ui" : true,
     "datacenter" : "${datacenter}",
     "data_dir" : "/opt/consul/data",
     "log_level" : "INFO",

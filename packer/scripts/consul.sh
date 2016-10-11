@@ -19,7 +19,6 @@ CONSUL_DOWNLOAD=https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_$
 CONSUL_TEMPLATE_DOWNLOAD=https://releases.hashicorp.com/consul-template/${CONSUL_TEMPLATE_VERSION}/consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip
 CONSUL_REPLICATE_DOWNLOAD=https://releases.hashicorp.com/consul-replicate/${CONSUL_REPLICATE_VERSION}/consul-replicate_${CONSUL_REPLICATE_VERSION}_linux_amd64.zip
 ENVCONSUL_DOWNLOAD=https://releases.hashicorp.com/envconsul/${ENVCONSUL_VERSION}/envconsul_${ENVCONSUL_VERSION}_linux_amd64.zip
-CONSUL_WEBUI=https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_web_ui.zip
 CONSUL_DIR=/opt/consul
 CONSUL_BACKINATOR_DOWNLOAD=https://s3.amazonaws.com/immutability.io/distro/consul-backinator.zip
 
@@ -67,12 +66,5 @@ logger "Installing EnvConsul"
 unzip envconsul.zip -d /usr/local/bin
 chmod 0755 /usr/local/bin/envconsul
 chown root:root /usr/local/bin/envconsul
-
-logger "Installing Consul UI"
-logger $CONSUL_WEBUI
-curl -L $CONSUL_WEBUI > ui.zip
-logger "Consul Dir"
-logger $CONSUL_DIR
-unzip ui.zip -d $CONSUL_DIR/ui
 
 logger "Completed"

@@ -13,6 +13,8 @@ cat >/tmp/consul_flags << EOF
 CONSUL_FLAGS="-server"
 EOF
 
+sudo mv /tmp/nginx.conf /etc/nginx/sites-available/default
+
 if [ -f /tmp/upstart.conf ];
 then
   echo "Installing Upstart service..."

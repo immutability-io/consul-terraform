@@ -10,5 +10,5 @@ logger "Executing"
 
 logger "Install dependencies"
 apt-get -y update
-apt-get -y install curl unzip wget
+apt-get -y install curl unzip wget nginx 
 logger "Completed"
