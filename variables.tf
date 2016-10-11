@@ -13,8 +13,6 @@ variable "gossip_encryption_key" {
     description = "Result of consul keygen."
 }
 
-
-
 variable "associate_public_ip_address" {
     description = "Create public IP."
     default = false
@@ -62,10 +60,6 @@ variable "datacenter" {
 
 variable "consul_template" {
     description = "Name of consul template."
-}
-
-variable "consul_template_ui" {
-    description = "Name of consul ui template."
 }
 
 variable "instance_type" {

@@ -28,6 +28,12 @@ resource "aws_instance" "server"
         destination = "/tmp/upstart.conf"
     }
 
+    provisioner "file"
+    {
+        source = "${path.module}/scripts/nginx.conf"
+        destination = "/tmp/nginx.conf"
+    }
+
     provisioner "remote-exec"
     {
         inline =
@@ -79,8 +85,8 @@ resource "aws_security_group" "consul"
 
     ingress
     {
-        from_port = 8500
-        to_port = 8500
+        from_port = 80
+        to_port = 80
         protocol = "tcp"
         cidr_blocks = ["0.0.0.0/0"]
     }
