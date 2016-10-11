@@ -51,6 +51,11 @@ resource "null_resource" "consul_cluster" {
         destination = "/tmp/consul.key"
     }
 
+    provisioner "file" {
+        source = "${var.password_file}"
+        destination = "/tmp/.htpasswd"
+    }
+
     provisioner "remote-exec" {
         scripts = [
             "./scripts/setup.sh",

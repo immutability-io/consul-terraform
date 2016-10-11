@@ -20,3 +20,8 @@ echo "Setup Consul config"
 sudo chown root:root /tmp/consul.json
 sudo mv /tmp/consul.json /etc/consul.d/consul.json
 sudo chmod 0644 /etc/consul.d/consul.json
+
+echo "Setup nginx authentication"
+sudo chown root:root /tmp/.htpasswd
+sudo mv /tmp/.htpasswd /etc/nginx/.htpasswd
+sudo chmod 0644 /etc/nginx/.htpasswd
