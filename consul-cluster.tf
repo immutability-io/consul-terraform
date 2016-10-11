@@ -14,6 +14,15 @@ module "consul" {
     tagOwnerEmail = "${var.tagOwnerEmail}"
 }
 
+resource "aws_instance" "consul-ui" {
+    ami = "${var.ami}"
+    instance_type = "${var.instance_type}"
+    key_name = "${var.key_name}"
+    subnet_id = "${var.subnet_id}"
+    associate_public_ip_address = "${var.associate_public_ip_address}"
+    vpc_security_group_ids = ["${module.consul.web_security_group_ids}"]
+}
+
 data "template_file" "template-consul-config" {
     template = "${file(var.consul_template)}"
     vars {
@@ -22,14 +31,6 @@ data "template_file" "template-consul-config" {
         gossip_encryption_key = "${var.gossip_encryption_key}"
     }
 }
-resource "null_resource" "secrets" {
-  provisioner "local-exec" {
-      scripts = [
-          "sh ./scripts/secrets.sh ${var.common_name} ${var.certificate_path}"
-      ]
-  }
-}
-
 
 resource "null_resource" "consul_cluster" {
     count = "${var.servers}"
@@ -65,13 +66,20 @@ resource "null_resource" "consul_cluster" {
             "./scripts/service.sh"
         ]
     }
-
 }
 
 output "public_server_ips" {
     value = "${module.consul.public_server_ips}"
 }
 
+output "consul_ui_ips" {
+    value = "${aws_instance.consul-ui.public_ip}"
+}
+
 output "private_server_ips" {
     value = "${module.consul.private_server_ips}"
+}
+
+output "web_security_group_ids" {
+    value = "${module.consul.web_security_group_ids}"
 }

@@ -14,8 +14,8 @@ try:
 
     myhost = os.uname()[1]
     VAULT_TOKEN = os.environ['VAULT_TOKEN']
-    VAULT_ADDR = os.environ['VAULT_ADDR']
-    VAULT_CACERT = os.environ['VAULT_CACERT']
+    VAULT_ADDR = 'https://127.0.0.1:8200'
+    VAULT_CACERT = ''
     parser = argparse.ArgumentParser(description='Generate Keypair')
     parser.add_argument('common_name',
         help='Common name for certificate' )
@@ -41,7 +41,7 @@ try:
     with open(private_key_file, 'w') as outfile:
         outfile.write(private_key)
     issuer_file = args.path + "/" + "issuer.crt"
-    issuer = data['issuer']
+    issuer = data['issuing_ca']
     with open(issuer_file, 'w') as outfile:
         outfile.write(issuer)
 

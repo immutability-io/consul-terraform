@@ -61,7 +61,11 @@ variable "datacenter" {
 }
 
 variable "consul_template" {
-    description = "Name of consul datacenter."
+    description = "Name of consul template."
+}
+
+variable "consul_template_ui" {
+    description = "Name of consul ui template."
 }
 
 variable "instance_type" {
