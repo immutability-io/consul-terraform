@@ -7,5 +7,5 @@ output "private_server_ips" {
 }
 
 output "web_security_group_ids" {
-  value = ["${aws_security_group.consul-ui.id}"]
+  value = ["${aws_security_group.consul.id}"]
 }
