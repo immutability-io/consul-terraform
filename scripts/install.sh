@@ -7,10 +7,8 @@ sudo mkdir -p /opt/consul/data
 
 # Write the flags to a temporary file
 cat >/tmp/consul_flags << EOF
-CONSUL_FLAGS="-server"
+CONSUL_FLAGS="-client"
 EOF
-
-sudo mv /tmp/nginx.conf /etc/nginx/sites-available/default
 
 if [ -f /tmp/upstart.conf ];
 then

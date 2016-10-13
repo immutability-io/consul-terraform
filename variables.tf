@@ -1,6 +1,9 @@
 variable "ami" {
 }
 
+variable "service_ami" {
+}
+
 variable "key_name" {
     description = "SSH key name in your AWS account for AWS instances."
 }
@@ -64,6 +67,10 @@ variable "datacenter" {
 
 variable "consul_template" {
     description = "Name of consul template."
+}
+
+variable "client_consul_template" {
+    description = "Name of client consul template."
 }
 
 variable "instance_type" {

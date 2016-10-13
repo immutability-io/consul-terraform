@@ -11,6 +11,3 @@ else
   echo "using upstart"
   sudo start consul
 fi
-
-echo "Starting Nginx..."
-sudo service nginx reload
