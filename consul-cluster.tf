@@ -36,7 +36,7 @@ resource "aws_instance" "microservice"
     connection
     {
         user = "ubuntu"
-        private_key = "${var.private_key}"
+        private_key = "${file(var.private_key)}"
     }
 
     tags
@@ -66,6 +66,11 @@ resource "aws_instance" "microservice"
         destination = "/tmp/consul.key"
     }
 
+    provisioner "file" {
+        source = "${var.rest_service}"
+        destination = "/tmp/rest_service"
+    }
+
     provisioner "file"
     {
         source = "./scripts/upstart.conf"
@@ -74,9 +79,12 @@ resource "aws_instance" "microservice"
 
     provisioner "remote-exec" {
         scripts = [
-            "./scripts/setup_certs.sh",
             "./scripts/install.sh",
-            "./scripts/service.sh"
+            "./scripts/setup_certs.sh",
+            "./scripts/service.sh",
+            "./scripts/stop_nginx.sh",
+            "./scripts/install_service.sh"
+
         ]
     }
 }
@@ -129,7 +137,7 @@ resource "null_resource" "consul_cluster" {
             "./scripts/setup.sh",
             "./scripts/setup_certs.sh",
             "./scripts/service.sh",
-            "./scripts/nginx.sh"
+            "./scripts/reload_nginx.sh"
         ]
     }
 }
@@ -140,4 +148,8 @@ output "public_server_ips" {
 
 output "private_server_ips" {
     value = "${module.consul.private_server_ips}"
+}
+
+output "microservice_ip" {
+    value = "${aws_instance.microservice.public_ip}"
 }
