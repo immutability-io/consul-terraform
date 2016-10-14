@@ -1,11 +1,12 @@
 variable "ami" {
 }
 
-variable "service_ami" {
-}
-
 variable "key_name" {
     description = "SSH key name in your AWS account for AWS instances."
+}
+
+variable "rest_service" {
+    description = "Sample REST service."
 }
 
 variable "private_key" {
