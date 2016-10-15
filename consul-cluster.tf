@@ -42,7 +42,7 @@ resource "aws_instance" "microservice"
 
     tags
     {
-      Name = "microservice"
+      Name = "microservice-${count.index}"
       Finance = "${var.tagFinance}"
       OwnerEmail = "${var.tagOwnerEmail}"
     }
@@ -53,8 +53,8 @@ resource "aws_instance" "microservice"
     }
 
     provisioner "file" {
-        source = "./config/go-rest.json"
-        destination = "/tmp/go-rest.json"
+        source = "${var.service_config}"
+        destination = "/tmp/service.json"
     }
 
     provisioner "file" {
@@ -86,9 +86,9 @@ resource "aws_instance" "microservice"
         scripts = [
             "./scripts/install.sh",
             "./scripts/setup_certs.sh",
+            "./scripts/service.sh",
             "./scripts/stop_nginx.sh",
-            "./scripts/install_service.sh",
-            "./scripts/service.sh"
+            "./scripts/install_service.sh"
 
         ]
     }
@@ -155,6 +155,6 @@ output "private_server_ips" {
     value = "${module.consul.private_server_ips}"
 }
 
-output "microservice_ip" {
-    value = "${aws_instance.microservice.public_ip}"
+output "microservice_ips" {
+  value = ["${aws_instance.microservice.*.public_ip}"]
 }
