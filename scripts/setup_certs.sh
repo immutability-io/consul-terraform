@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 set -e
 
+
+
+if [ ! -d "/etc/consul.d" ]; then
+  sudo mkdir /etc/consul.d
+fi
+
 echo "Setup CA Certificate"
 sudo chown root:root /tmp/root.crt
 sudo mv /tmp/root.crt /etc/consul.d/root.crt
