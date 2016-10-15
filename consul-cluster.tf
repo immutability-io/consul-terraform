@@ -90,18 +90,12 @@ resource "aws_instance" "microservice"
     provisioner "remote-exec" {
         scripts = [
             "./scripts/stop_nginx.sh",
-            "./scripts/install_service.sh",
+            "./scripts/install_rest_service.sh",
             "./scripts/setup_certs.sh",
             "./scripts/rest_service.sh"
 
         ]
     }
-    provisioner "remote-exec" {
-        scripts = [
-            "./scripts/consul_service.sh"
-        ]
-    }
-
 }
 
 
