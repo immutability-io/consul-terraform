@@ -27,6 +27,7 @@ data "template_file" "template-client-consul-config" {
 resource "aws_instance" "microservice"
 {
     ami = "${var.ami}"
+    count = "${var.services}"
     instance_type = "${var.instance_type}"
     key_name = "${var.key_name}"
     subnet_id = "${var.subnet_id}"
