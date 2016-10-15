@@ -1,0 +1,14 @@
+{
+  "service": {
+    "name": "web",
+    "port": 8080,
+    "tags": ["go-rest"],
+    "check": {
+      "id": "go-rest-health",
+      "name": "Running on port 8080",
+      "http": "http://localhost:8080",
+      "interval": "10s",
+      "timeout": "1s"
+    }
+  }
+}

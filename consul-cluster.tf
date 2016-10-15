@@ -52,6 +52,11 @@ resource "aws_instance" "microservice"
     }
 
     provisioner "file" {
+        source = "./config/go-rest.json"
+        destination = "/tmp/go-rest.json"
+    }
+
+    provisioner "file" {
         source = "${var.root_certificate}"
         destination = "/tmp/root.crt"
     }
@@ -71,8 +76,7 @@ resource "aws_instance" "microservice"
         destination = "/tmp/rest_service"
     }
 
-    provisioner "file"
-    {
+    provisioner "file" {
         source = "./scripts/upstart.conf"
         destination = "/tmp/upstart.conf"
     }
@@ -81,9 +85,9 @@ resource "aws_instance" "microservice"
         scripts = [
             "./scripts/install.sh",
             "./scripts/setup_certs.sh",
-            "./scripts/service.sh",
             "./scripts/stop_nginx.sh",
-            "./scripts/install_service.sh"
+            "./scripts/install_service.sh",
+            "./scripts/service.sh"
 
         ]
     }
