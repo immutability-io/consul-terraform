@@ -1,5 +1,4 @@
 {
-    "server" : false,
     "datacenter" : "${datacenter}",
     "data_dir" : "/opt/consul/data",
     "log_level" : "INFO",
