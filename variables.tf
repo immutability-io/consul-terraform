@@ -5,6 +5,10 @@ variable "key_name" {
     description = "SSH key name in your AWS account for AWS instances."
 }
 
+variable "services" {
+    description = "Number of service instances."
+}
+
 variable "rest_service" {
     description = "Sample REST service."
 }
