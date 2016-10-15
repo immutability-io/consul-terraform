@@ -13,6 +13,10 @@ variable "rest_service" {
     description = "Sample REST service."
 }
 
+variable "service_config" {
+    description = "Sample REST service."
+}
+
 variable "private_key" {
     description = "Path to the private key specified by key_name."
 }
