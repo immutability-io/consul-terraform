@@ -78,6 +78,11 @@ resource "aws_instance" "microservice"
     }
 
     provisioner "file" {
+        source = "./scripts/rest_service.conf"
+        destination = "/tmp/rest_service.conf"
+    }
+
+    provisioner "file" {
         source = "./scripts/upstart.conf"
         destination = "/tmp/upstart.conf"
     }
@@ -85,10 +90,9 @@ resource "aws_instance" "microservice"
     provisioner "remote-exec" {
         scripts = [
             "./scripts/stop_nginx.sh",
-            "./scripts/install.sh",
             "./scripts/install_service.sh",
             "./scripts/setup_certs.sh",
-            "./scripts/service.sh"
+            "./scripts/rest_service.sh"
 
         ]
     }
@@ -145,9 +149,9 @@ resource "null_resource" "consul_cluster" {
 
     provisioner "remote-exec" {
         scripts = [
-            "./scripts/setup.sh",
+            "./scripts/setup_nginx_auth.sh",
             "./scripts/setup_certs.sh",
-            "./scripts/service.sh",
+            "./scripts/consul_service.sh",
             "./scripts/reload_nginx.sh"
         ]
     }
