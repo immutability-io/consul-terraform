@@ -84,14 +84,20 @@ resource "aws_instance" "microservice"
 
     provisioner "remote-exec" {
         scripts = [
-            "./scripts/install.sh",
-            "./scripts/setup_certs.sh",
-            "./scripts/service.sh",
             "./scripts/stop_nginx.sh",
-            "./scripts/install_service.sh"
+            "./scripts/install.sh",
+            "./scripts/install_service.sh",
+            "./scripts/setup_certs.sh",
+            "./scripts/service.sh"
 
         ]
     }
+    provisioner "remote-exec" {
+        scripts = [
+            "./scripts/consul_service.sh"
+        ]
+    }
+
 }
 
 
@@ -153,8 +159,4 @@ output "public_server_ips" {
 
 output "private_server_ips" {
     value = "${module.consul.private_server_ips}"
-}
-
-output "microservice_ips" {
-  value = ["${aws_instance.microservice.*.public_ip}"]
 }
