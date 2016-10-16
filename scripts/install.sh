@@ -11,8 +11,13 @@ CONSUL_FLAGS="-client"
 EOF
 
 echo "Installing Upstart service..."
-sudo mkdir -p /etc/consul.d
-sudo mkdir -p /etc/service
+
+if [ ! -d "/etc/consul.d" ]; then
+  sudo mkdir -p /etc/consul.d
+fi
+if [ ! -d "/etc/service" ]; then
+  sudo mkdir -p /etc/service
+fi
 sudo chown root:root /tmp/upstart.conf
 sudo mv /tmp/upstart.conf /etc/init/consul.conf
 sudo chmod 0644 /etc/init/consul.conf
