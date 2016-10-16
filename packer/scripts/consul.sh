@@ -12,6 +12,7 @@ cd /tmp
 
 
 CONSUL_VERSION=0.7.0
+VAULT_VERSION=0.6.2
 CONSUL_TEMPLATE_VERSION=0.16.0
 CONSUL_REPLICATE_VERSION=0.2.0
 ENVCONSUL_VERSION=0.6.1
@@ -21,6 +22,7 @@ CONSUL_REPLICATE_DOWNLOAD=https://releases.hashicorp.com/consul-replicate/${CONS
 ENVCONSUL_DOWNLOAD=https://releases.hashicorp.com/envconsul/${ENVCONSUL_VERSION}/envconsul_${ENVCONSUL_VERSION}_linux_amd64.zip
 CONSUL_DIR=/opt/consul
 CONSUL_BACKINATOR_DOWNLOAD=https://s3.amazonaws.com/immutability.io/distro/consul-backinator.zip
+VAULT_DOWNLOAD=https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip
 
 logger "Fetching Consul"
 logger $CONSUL_DOWNLOAD
@@ -30,6 +32,17 @@ logger "Installing Consul"
 unzip consul.zip -d /usr/local/bin
 chmod 0755 /usr/local/bin/consul
 chown root:root /usr/local/bin/consul
+mkdir /etc/consul.d
+
+logger "Fetching Vault"
+logger $VAULT_DOWNLOAD
+curl $VAULT_DOWNLOAD > vault.zip
+
+logger "Installing Vault"
+unzip vault.zip -d /usr/local/bin
+chmod 0755 /usr/local/bin/vault
+chown root:root /usr/local/bin/vault
+mkdir /etc/vault.d
 
 logger "Fetching Consul Backinator"
 logger $CONSUL_BACKINATOR_DOWNLOAD
