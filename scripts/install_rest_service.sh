@@ -8,15 +8,6 @@ if [ ! -d "/etc/service" ]; then
   sudo mkdir /etc/service
 fi
 
-mkdir /tmp/go
-export GOPATH=/tmp/go
-export PATH=$PATH:$GOPATH/bin
-export GOROOT=/usr/lib/go
-export GOBIN=$GOPATH/bin
-export PATH=$PATH:$GOBIN
-echo "Building go get REST service with Consul..."
-go get github.com/Immutability-io/go-rest
-
 echo "Registering REST service with Consul..."
 sudo chmod 777 /tmp/service.json
 sudo mv /tmp/service.json /etc/consul.d
