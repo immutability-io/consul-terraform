@@ -66,10 +66,6 @@ variable "consul_template" {
     description = "Name of consul template."
 }
 
-variable "client_consul_template" {
-    description = "Name of client consul template."
-}
-
 variable "instance_type" {
     default = "t2.micro"
     description = "AWS Instance type, if you change, make sure it is compatible with AMI, not all AMIs allow all instance types "
