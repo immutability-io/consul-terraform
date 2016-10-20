@@ -22,7 +22,7 @@ resource "aws_instance" "server"
       OwnerEmail = "${var.tagOwnerEmail}"
       Schedule = "${var.tagSchedule}"
       BusinessJustification = "${var.tagBusinessJustification}"
-      AutoStart = "${var.tagAutoStart}
+      AutoStart = "${var.tagAutoStart}"
     }
 
     provisioner "file"
