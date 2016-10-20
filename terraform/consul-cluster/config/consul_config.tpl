@@ -1,5 +1,5 @@
 {
-    "bootstrap_expect" : 3,
+    "bootstrap_expect" : ${node_count},
     "server" : true,
     "ui" : true,
     "datacenter" : "${datacenter}",

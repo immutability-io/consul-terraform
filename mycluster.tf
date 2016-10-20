@@ -5,6 +5,7 @@ provider "aws" {
 module "consul-cluster" {
     source = "github.com/Immutability-io/consul-terraform//terraform/consul-cluster"
     ami = "${var.ami}"
+    servers = "${var.servers}"
     private_key = "${file(var.private_key)}"
     key_name = "${var.key_name}"
     associate_public_ip_address = "${var.associate_public_ip_address}"

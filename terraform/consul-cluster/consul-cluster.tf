@@ -5,6 +5,7 @@ provider "aws" {
 module "consul" {
     source = "github.com/Immutability-io/consul-terraform//terraform/consul-node"
     ami = "${var.ami}"
+    servers = "${var.servers}"
     private_key = "${var.private_key}"
     key_name = "${var.key_name}"
     associate_public_ip_address = "${var.associate_public_ip_address}"
@@ -23,6 +24,7 @@ data "template_file" "template-consul-config" {
     vars {
         retry_join = "${join("\",\"", module.consul.private_server_ips)}"
         datacenter = "${var.datacenter}"
+        node_count = "${var.servers}"
         gossip_encryption_key = "${var.gossip_encryption_key}"
     }
 }
