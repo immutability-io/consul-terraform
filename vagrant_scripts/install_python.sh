@@ -14,3 +14,7 @@ python get-pip.py
 sudo pip install --upgrade pip
 sudo pip install --upgrade virtualenv
 sudo pip install git+https://github.com/cypherhat/hvac
+sudo add-apt-repository -y ppa:ubuntu-lxc/lxd-stable
+sudo apt-get -y update
+sudo apt-get -y install golang
+sudo wget -O /usr/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
