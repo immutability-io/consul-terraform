@@ -9,10 +9,6 @@ variable "services" {
     description = "Number of service instances."
 }
 
-variable "rest_service" {
-    description = "Sample REST service."
-}
-
 variable "service_config" {
     description = "Sample REST service."
 }
