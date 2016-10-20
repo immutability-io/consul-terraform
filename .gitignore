@@ -1,6 +1,6 @@
 *.tfvars
 .terraform
-*.log
+**/*.log
 .environment
 **/*.pem
 **/*.attr
