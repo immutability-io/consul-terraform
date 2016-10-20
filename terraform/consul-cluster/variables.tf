@@ -5,10 +5,6 @@ variable "key_name" {
     description = "SSH key name in your AWS account for AWS instances."
 }
 
-variable "service_config" {
-    description = "Sample REST service."
-}
-
 variable "private_key" {
     description = "Path to the private key specified by key_name."
 }
