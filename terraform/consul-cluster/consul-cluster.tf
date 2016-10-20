@@ -64,10 +64,10 @@ resource "null_resource" "consul_cluster" {
 
     provisioner "remote-exec" {
         scripts = [
-            "./scripts/setup_nginx_auth.sh",
-            "./scripts/setup_certs.sh",
-            "./scripts/consul_service.sh",
-            "./scripts/reload_nginx.sh"
+            "${path.module}/scripts/setup_nginx_auth.sh",
+            "${path.module}/scripts/setup_certs.sh",
+            "${path.module}/scripts/consul_service.sh",
+            "${path.module}/scripts/reload_nginx.sh"
         ]
     }
 }
