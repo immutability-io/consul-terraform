@@ -1,8 +1,9 @@
 
 resource "null_resource" "issue-certificate" {
     provisioner "local-exec" {
-        scripts = [
-            "${path.module}/scripts/issue_certificate.sh ${var.vault-token} ${var.vault-addr} ${var.common-name} ${var.ip-sans} ${var.issuer-certificate} ${var.certificate} ${var.private-key}"
-        ]
+        command = << EOT
+        VAULT_TOKEN=${var.vault-token}
+        vault write -format=json vault_intermediate/issue/web_server common_name="${var.common-name}"  ip_sans="${var.ip-sans}" ttl=720h > ./tmp.json
+        EOT
     }
 }

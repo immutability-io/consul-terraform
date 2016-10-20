@@ -1,7 +1,7 @@
 provider "aws" {
     region = "${var.region}"
 }
-
+/*
 module "consul-cluster" {
     source = "github.com/Immutability-io/consul-terraform//terraform/consul-cluster"
     ami = "${var.ami}"
@@ -24,4 +24,16 @@ module "consul-cluster" {
     root_certificate = "${var.root_certificate}"
     password_file = "${var.password_file}"
     consul_template ="${var.consul_template}"
+}
+*/
+
+module "vault-pki" {
+    source = "github.com/Immutability-io/consul-terraform//terraform/vault-pki"
+    certificate = "${var.consul_certificate}"
+    private-key = "${var.consul_key}"
+    issuer-certificate = "${var.root_certificate}"
+    common-name = "${var.common-name}"
+    ip-sans = "${var.ip-sans}"
+    vault-token = "${var.vault-token}"
+    vault-addr = "${var.vault-addr}"
 }
