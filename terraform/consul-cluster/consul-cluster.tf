@@ -29,7 +29,7 @@ data "template_file" "template-consul-config" {
     }
 }
 
-resource "null_resource" "consul_cluster" {
+resource "null_resource" "cluster-configuration" {
     count = "${var.servers}"
     connection {
         host = "${element(module.consul.public_server_ips, count.index)}"
