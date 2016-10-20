@@ -16,4 +16,11 @@ module "consul-cluster" {
     tagSchedule = "${var.tagSchedule}"
     tagBusinessJustification = "${var.tagBusinessJustification}"
     tagAutoStart = "${var.tagAutoStart}"
+    datacenter = "${var.datacenter}"
+    gossip_encryption_key = "${var.gossip_encryption_key}"
+    consul_certificate = "${var.consul_certificate}"
+    consul_key = "${var.consul_key}"
+    root_certificate = "${var.root_certificate}"
+    password_file = "${var.password_file}"
+    consul_template ="${var.consul_template}"
 }
