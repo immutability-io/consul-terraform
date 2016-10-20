@@ -20,6 +20,9 @@ resource "aws_instance" "server"
       Name = "${var.tagName}-${count.index}"
       Finance = "${var.tagFinance}"
       OwnerEmail = "${var.tagOwnerEmail}"
+      Schedule = "${var.tagSchedule}",
+      BusinessJustification = "${var.tagBusinessJustification}",
+      AutoStart = "${var.tagAutoStart}
     }
 
     provisioner "file"
