@@ -5,4 +5,13 @@ resource "null_resource" "issue-certificate" {
         VAULT_TOKEN=${var.vault-token} vault write -address=${var.vault-addr} -format=json vault_intermediate/issue/web_server common_name="${var.common-name}"  ip_sans="${var.ip-sans}" ttl=720h > ./tmp.json
 EOT
     }
+    provisioner "local-exec" {
+        command = "cat ./tmp.json | jq -r .data.certificate | cat > ${var.certificate}"
+    }
+    provisioner "local-exec" {
+        command = "cat ./tmp.json | jq -r .data.issuing_ca | cat > ${var.issuer-certificate}"
+    }
+    provisioner "local-exec" {
+        command = "cat ./tmp.json | jq -r .data.private_key | cat > ${var.private-key}"
+    }
 }
