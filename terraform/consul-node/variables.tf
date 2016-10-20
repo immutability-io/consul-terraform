@@ -56,3 +56,18 @@ variable "tagFinance" {
 variable "tagOwnerEmail" {
     description = "Email tag for the servers"
 }
+
+variable "tagSchedule" {
+    default = "AlwaysUp"
+    description = "Schedule tag for the servers"
+}
+
+variable "tagBusinessJustification" {
+    default = "Short lived instance that will auto terminate"
+    description = "BusinessJustification tag for the servers"
+}
+
+variable "tagAutoStart" {
+    default = "Off"
+    description = "AutoStart tag for the servers"
+}
