@@ -6,12 +6,12 @@ resource "null_resource" "issue-certificate" {
 EOT
     }
     provisioner "local-exec" {
-        command = "cat ./tmp.json | jq -r .data.certificate | cat > ./cert.crt"
+        command = "cat ./tmp.json | jq -r .data.certificate | cat > ${var.certificate}"
     }
     provisioner "local-exec" {
-        command = "cat ./tmp.json | jq -r .data.issuing_ca | cat > ./issuer.crt"
+        command = "cat ./tmp.json | jq -r .data.issuing_ca | cat > ${var.issuer-certificate}"
     }
     provisioner "local-exec" {
-        command = "cat ./tmp.json | jq -r .data.private_key | cat > ./private.key"
+        command = "cat ./tmp.json | jq -r .data.private_key | cat > ${var.private-key}"
     }
 }
