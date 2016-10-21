@@ -124,7 +124,7 @@ The consul-node module creates an EC2 instance (based on the AMI we built above)
 
 * IP Tables configuration to allow the Consul gossip traffic on ports 8300, 8301, 8302, 8400
 * An upstart configuration to load consul as soon as networking starts.
-* And nginx.conf to proxy 443 (HTTPS) to the Consul UI on 8500.
+* An nginx.conf to proxy 443 (HTTPS) to the Consul UI on 8500. Nginx is configured for basic authentication using an .htpasswd file. See [here](https://www.digitalocean.com/community/tutorials/how-to-set-up-password-authentication-with-nginx-on-ubuntu-14-04). htpasswd is installed in the vagrant box, so you can use it to generate your own .htpasswd file.
 
 This module also creates a security group that allows gossip traffic on the above ports.
 
@@ -146,3 +146,32 @@ The service configuration uses the `/unhealthy` endpoint for demo purposes.
 #### vault-pki: A rudimentary integration with Vault for issuing certificates.
 
 The vault-pki module will write a certificate, CA certificate and private key to the local file system for use in setting up the Consul cluster. **Note: this module uses a null resource. Once provisioned, these PKI materials remain on the file system until the resource is tainted.
+
+### TFVARS
+
+So, there are a lot of inputs to the terraform template. These are things that vary based on your own context. I will paste *some* of these here to help you get started.
+
+```
+ami = "<the AMI from your Packer build>"
+key_name = "<AWS Keypair name>"
+service_config = "./config/go-rest.json"
+datacenter = "my-data-center"
+private_key = "<location of AWS Keypair private key>"
+root_certificate = "./ssl/vault_root.cer"
+consul_certificate = "./ssl/consul.cer"
+consul_key = "./ssl/consul.key"
+common_name = "consul.example.com"
+ip_sans = "127.0.0.1"
+associate_public_ip_address = "true"
+region = "us-east-1"
+subnet_id = "<AWS subnet ID>"
+vpc_id = "<AWS VPC ID>"
+tagFinance = "CostCenter:Project"
+tagOwnerEmail = "<Your email>"
+gossip_encryption_key = "<Use `consul keygen`>"
+password_file = "./config/.htpasswd"
+ingress_22 = "0.0.0.0/0"
+service_count = "3"
+vault_token = "<harvested from above>"
+
+```

@@ -16,11 +16,6 @@ variable "associate_public_ip_address" {
     default = false
 }
 
-variable "client_consul_template" {
-    default = "config/client_consul_config.tpl"
-    description = "Consul configuration template."
-}
-
 variable "datacenter" {
     description = "Name of consul datacenter."
 }
