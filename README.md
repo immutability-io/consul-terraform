@@ -108,9 +108,9 @@ Each of my Terraform modules are composed of 3 main components:
 
 Component | File | Purpose
 --- | --- | ---
-*Main* | `main.tf` | **Provisions the core capability of the component. **
+*Main* | `main.tf` | **Provisions the core capability of the component.**
 *Inputs* | `variables.tf` | **Declares the inputs to this module.**
-*Outputs* | `outputs.tf` | **Declares the outputs to this module. **
+*Outputs* | `outputs.tf` | **Declares the outputs to this module.**
 
 In addition, modules typically contain scripts and configuration files in directories named (suprisingly enough):
 
