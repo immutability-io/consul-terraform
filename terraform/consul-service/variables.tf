@@ -8,6 +8,7 @@ variable "root_certificate" {
 }
 
 variable "consul_cluster_ips" {
+    type = "list"
     description = "List of consul cluster IPs."
 }
 
