@@ -14,7 +14,6 @@ sudo update-ca-certificates
 sudo mv /tmp/root.crt /etc/consul.d/root.crt
 sudo chmod 0644 /etc/consul.d/root.crt
 
-
 echo "Setup Consul Certificate"
 sudo chown root:root /tmp/consul.crt
 sudo mv /tmp/consul.crt /etc/consul.d/consul.crt
