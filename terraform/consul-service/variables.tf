@@ -7,6 +7,14 @@ variable "root_certificate" {
     description = "The root certificate for the consul cluster."
 }
 
+variable "consul_certificate" {
+    description = "The certificate use for the consul cluster."
+}
+
+variable "consul_key" {
+    description = "The key to use for the consul cluster."
+}
+
 variable "consul_cluster_ips" {
     type = "list"
     description = "List of consul cluster IPs."

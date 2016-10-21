@@ -56,6 +56,8 @@ module "consul-service" {
     tagAutoStart = "${var.tagAutoStart}"
     datacenter = "${var.datacenter}"
     gossip_encryption_key = "${var.gossip_encryption_key}"
+    consul_certificate = "${var.consul_certificate}"
+    consul_key = "${var.consul_key}"
     root_certificate = "${var.root_certificate}"
     rest_service_url = "${var.rest_service_url}"
 }
