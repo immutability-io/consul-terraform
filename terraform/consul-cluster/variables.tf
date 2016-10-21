@@ -63,7 +63,7 @@ variable "datacenter" {
 }
 
 variable "consul_template" {
-    description = "Name of consul template."
+    default = "${path.module}/config/consul_config.tpl"
 }
 
 variable "instance_type" {
