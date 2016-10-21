@@ -86,7 +86,14 @@ Assuming that there were no errors, we initiate the build:
 $ packer build consul.json
 ```
 
-After a successful build, we will have a new AMI ID. Take note of this because it will be used in the Terraform phase.
+After a successful build, we will have a new AMI ID. Take note of this because it will be used in the Terraform phase:
+
+```
+==> Builds finished. The artifacts of successful builds are:
+--> amazon-ebs: AMIs were created:
+
+us-east-1: ami-6eeab979
+```
 
 
 ### Terraforming the Consul Cluster
@@ -101,9 +108,9 @@ Each of my Terraform modules are composed of 3 main components:
 
 Component | File | Purpose
 --- | --- | ---
-*Core capability* | `main.tf` | **Provisions the core capability**
-*Inputs* | `variables.tf` | **Declares the inputs to this module**
-*Outputs* | `outputs.tf` | **Declares the outputs to this module**
+*Main* | `main.tf` | **Provisions the core capability of the component. **
+*Inputs* | `variables.tf` | **Declares the inputs to this module.**
+*Outputs* | `outputs.tf` | **Declares the outputs to this module. **
 
 In addition, modules typically contain scripts and configuration files in directories named (suprisingly enough):
 
@@ -129,10 +136,10 @@ The consul-cluster module creates cluster of EC2 instances (based on the consul-
 
 #### consul-service: A set of REST services that register with Consul
 
-The consul-service creates EC2 instances (also based on the AMI we built above) that run a REST service that registers with Consul. This can be any *single file* executable. For demo sake, we use a simple golang program that I wrote that has 2 health check endpoints:
+The consul-service creates EC2 instances (also based on the AMI we built above) that run a REST service that registers with Consul. This can be any *single file* executable. For demo sake, we use a [simple golang program](https://github.com/Immutability-io/go-rest) that I wrote that has 2 health check endpoints:
 
 * /health: Always healthy.
-* /unhealthy: Unhealthy 10% of the time.
+* /unhealthy: Unhealthy 30% of the time.
 
 The service configuration uses the `/unhealthy` endpoint for demo purposes.
 
