@@ -14,4 +14,7 @@ EOT
     provisioner "local-exec" {
         command = "cat ./tmp.json | jq -r .data.private_key | cat > ${var.private_key}"
     }
+    provisioner "local-exec" {
+        command = "rm ./tmp.json"
+    }
 }
