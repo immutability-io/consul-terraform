@@ -9,7 +9,7 @@ if [ ! -d "/etc/service" ]; then
 fi
 
 echo "Download REST service..."
-sudo wget -O /tmp/rest_service $1
+sudo wget -O /tmp/rest_service ${rest_service_url}
 
 echo "Registering REST service with Consul..."
 sudo chmod 777 /tmp/service.json
