@@ -7,8 +7,3 @@ vault write -format=json vault_root/root/sign-intermediate csr=@vault_intermedia
 vault write vault_intermediate/intermediate/set-signed certificate=@vault_intermediate.crt
 vault write vault_intermediate/config/urls issuing_certificates="https://127.0.0.1:8200/v1/vault_intermediate/ca"  crl_distribution_points="https://127.0.0.1:8200/v1/vault_intermediate/crl"
 vault write vault_intermediate/roles/web_server key_bits=2048 max_ttl=8760h allowed_domains="example.com,example.net" allow_bare_domains=true allow_subdomains=true allow_ip_sans=true
-
-vault write -format=json vault_intermediate/issue/web_server common_name="test.example.com"  ip_sans="172.17.0.2" ttl=720h | jq -r .data.certificate | cat > test.example.com.crt
-vault write -format=json vault_intermediate/issue/web_server common_name="test.example.com"  ip_sans="172.17.0.2" ttl=720h > test.example.com.json
-cat test.example.com.json | jq -r .data.certificate | cat > test.example.com.crt
-cat test.example.com.json | jq -r .data.issuing_ca | cat > issuing_ca.crt

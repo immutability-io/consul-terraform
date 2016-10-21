@@ -203,6 +203,32 @@ tdkhcUbrM1CO4UptzMw=
 -----END CERTIFICATE-----
 EOF
 
+cat << EOF > /tmp/vault.conf
+description "Vault agent"
+
+start on started networking
+stop on runlevel [!2345]
+
+respawn
+# This is to avoid Upstart re-spawning the process upon `consul leave`
+normal exit 0 INT
+
+script
+  if [ -f "/etc/service/vault" ]; then
+    . /etc/service/vault
+  fi
+
+  # Make sure to use all our CPUs, because Consul can block a scheduler thread
+  export GOMAXPROCS=`nproc`
+
+  exec /usr/local/bin/vault server -config="/etc/vault.d" >>/var/log/vault.log 2>&1 &
+end script
+EOF
+
+sudo chown root:root /tmp/vault.conf
+sudo mv /tmp/vault.conf /etc/init/vault.conf
+sudo chmod 0644 /etc/init/vault.conf
+
 sudo cp /tmp/root.crt /usr/local/share/ca-certificates/
 sudo cp /tmp/cacert.crt /usr/local/share/ca-certificates/
 sudo update-ca-certificates
