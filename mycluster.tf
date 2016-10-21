@@ -38,6 +38,8 @@ module "consul-cluster" {
 
 module "consul-service" {
     source = "github.com/Immutability-io/consul-terraform//terraform/consul-service"
+    consul_cluster_ips = "${module.consul-cluster.private_server_ips}"
+    security_group_id = "${module.consul-cluster.security_group_id}"
     ami = "${var.ami}"
     service_count = "${var.service_count}"
     private_key = "${file(var.private_key)}"
