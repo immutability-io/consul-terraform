@@ -34,5 +34,4 @@ module "consul-cluster" {
     consul_key = "${var.consul_key}"
     root_certificate = "${var.root_certificate}"
     password_file = "${var.password_file}"
-    consul_template ="${var.consul_template}"
 }
