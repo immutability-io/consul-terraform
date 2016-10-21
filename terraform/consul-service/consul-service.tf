@@ -61,10 +61,10 @@ resource "aws_instance" "consul-service"
 
     provisioner "remote-exec" {
         scripts = [
-            "./scripts/stop_nginx.sh",
-            "./scripts/install_rest_service.sh ${var.rest_service_url}",
-            "./scripts/setup_certs.sh",
-            "./scripts/rest_service.sh"
+            "${path.module}/scripts/stop_nginx.sh",
+            "${path.module}/scripts/install_rest_service.sh ${var.rest_service_url}",
+            "${path.module}/scripts/setup_certs.sh",
+            "${path.module}/scripts/rest_service.sh"
         ]
     }
 }
