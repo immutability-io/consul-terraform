@@ -1,13 +1,16 @@
-/*
-output "public_server_ips" {
+
+output "cluster_public_server_ips" {
     value = "${module.consul-cluster.public_server_ips}"
 }
 
-output "private_server_ips" {
+output "cluster_private_server_ips" {
     value = "${module.consul-cluster.private_server_ips}"
 }
 
-output "security_group_id" {
-    value = "${module.consul-cluster.security_group_id}"
+output "service_public_server_ips" {
+    value = "${module.consul-service.public_server_ips}"
 }
-*/
+
+output "service_private_server_ips" {
+    value = "${module.consul-service.private_server_ips}"
+}
