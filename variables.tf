@@ -99,19 +99,19 @@ variable "tagAutoStart" {
     description = "AutoStart tag for the servers"
 }
 
-variable "common-name" {
+variable "common_name" {
     description = "The CN for the certificate."
 }
 
-variable "ip-sans" {
+variable "ip_sans" {
     description = "The Subject Alt Names (IP) for the certificate."
 }
 
-variable "vault-token" {
+variable "vault_token" {
     description = "The vault token."
 }
 
-variable "vault-addr" {
+variable "vault_addr" {
     default = "https://127.0.0.1:8200"
     description = "The vault address."
 }
