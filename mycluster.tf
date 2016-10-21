@@ -35,3 +35,24 @@ module "consul-cluster" {
     root_certificate = "${var.root_certificate}"
     password_file = "${var.password_file}"
 }
+
+module "consul-service" {
+    source = "github.com/Immutability-io/consul-terraform//terraform/consul-service"
+    ami = "${var.ami}"
+    service_count = "${var.service_count}"
+    private_key = "${file(var.private_key)}"
+    key_name = "${var.key_name}"
+    associate_public_ip_address = "${var.associate_public_ip_address}"
+    subnet_id = "${var.subnet_id}"
+    vpc_id = "${var.vpc_id}"
+    ingress_22 = "${var.ingress_22}"
+    tagFinance = "${var.tagFinance}"
+    tagOwnerEmail = "${var.tagOwnerEmail}"
+    tagSchedule = "${var.tagSchedule}"
+    tagBusinessJustification = "${var.tagBusinessJustification}"
+    tagAutoStart = "${var.tagAutoStart}"
+    datacenter = "${var.datacenter}"
+    gossip_encryption_key = "${var.gossip_encryption_key}"
+    root_certificate = "${var.root_certificate}"
+    rest_service_url = "${var.rest_service_url}"
+}

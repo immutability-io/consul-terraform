@@ -9,7 +9,6 @@ variable "private_key" {
     description = "Path to the private key specified by key_name."
 }
 
-
 variable "associate_public_ip_address" {
     description = "Create public IP."
     default = false
