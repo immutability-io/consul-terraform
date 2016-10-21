@@ -22,6 +22,10 @@ variable "associate_public_ip_address" {
     default = false
 }
 
+variable "service_config" {
+    description = "The name/path of the consul config file for the service."
+}
+
 variable "service_count" {
     description = "Number of instances."
 }

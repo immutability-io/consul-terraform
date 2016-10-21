@@ -2,7 +2,7 @@
 data "template_file" "template-consul-client-config" {
     template = "${file("${path.module}/config/client_consul_config.tpl")}"
     vars {
-        retry_join = "${join("\",\"", ${var.consul_cluster_ips})}"
+        retry_join = "${join("\",\"", var.consul_cluster_ips)}"
         datacenter = "${var.datacenter}"
         gossip_encryption_key = "${var.gossip_encryption_key}"
     }

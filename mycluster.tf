@@ -42,6 +42,7 @@ module "consul-service" {
     security_group_id = "${module.consul-cluster.security_group_id}"
     ami = "${var.ami}"
     service_count = "${var.service_count}"
+    service_config = "${var.service_config}"
     private_key = "${file(var.private_key)}"
     key_name = "${var.key_name}"
     associate_public_ip_address = "${var.associate_public_ip_address}"
