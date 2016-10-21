@@ -62,10 +62,6 @@ variable "datacenter" {
     description = "Name of consul datacenter."
 }
 
-variable "consul_template" {
-    default = "${path.module}/config/consul_config.tpl"
-}
-
 variable "instance_type" {
     default = "t2.micro"
     description = "AWS Instance type, if you change, make sure it is compatible with AMI, not all AMIs allow all instance types "

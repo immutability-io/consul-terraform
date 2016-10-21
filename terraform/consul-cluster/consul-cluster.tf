@@ -20,7 +20,7 @@ module "consul" {
 }
 
 data "template_file" "template-consul-config" {
-    template = "${file(var.consul_template)}"
+    template = "${file(${path.module}/config/consul_config.tpl)}"
     vars {
         retry_join = "${join("\",\"", module.consul.private_server_ips)}"
         datacenter = "${var.datacenter}"
