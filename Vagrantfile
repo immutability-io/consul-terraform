@@ -66,6 +66,7 @@ Vagrant.configure("2") do |config|
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", path: "vagrant_scripts/install_python.sh"
+  config.vm.provision "shell", path: "vagrant_scripts/update_hashi.sh"
   config.vm.provision "shell", path: "vagrant_scripts/setup_vault_environment.sh"
   config.vm.provision "shell", path: "vagrant_scripts/start_vault.sh"
 end
