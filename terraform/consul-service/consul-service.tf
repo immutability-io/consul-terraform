@@ -8,6 +8,13 @@ data "template_file" "template-consul-client-config" {
     }
 }
 
+data "template_file" "template-install-rest-service" {
+    template = "${file("${path.module}/scripts/install_rest_service.sh")}"
+    vars {
+        rest_service_url = "${var.rest_service_url}"
+    }
+}
+
 resource "aws_instance" "consul-service"
 {
     ami = "${var.ami}"
@@ -40,6 +47,11 @@ resource "aws_instance" "consul-service"
     }
 
     provisioner "file" {
+        content = "${data.template_file.template-install-rest-service.rendered}"
+        destination = "/tmp/install_rest_service.sh"
+    }
+
+    provisioner "file" {
         source = "${var.service_config}"
         destination = "/tmp/service.json"
     }
@@ -61,10 +73,22 @@ resource "aws_instance" "consul-service"
 
     provisioner "remote-exec" {
         scripts = [
-            "${path.module}/scripts/stop_nginx.sh",
-            "${path.module}/scripts/install_rest_service.sh ${var.rest_service_url}",
+            "${path.module}/scripts/stop_nginx.sh"
+        ]
+    }
+
+    provisioner "remote-exec" {
+        inline = [
+            "chmod +x /tmp/install_rest_service.sh",
+            "/tmp/install_rest_service.sh"
+        ]
+    }
+
+    provisioner "remote-exec" {
+        scripts = [
             "${path.module}/scripts/setup_certs.sh",
             "${path.module}/scripts/rest_service.sh"
         ]
     }
+
 }
