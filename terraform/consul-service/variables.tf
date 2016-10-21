@@ -1,3 +1,12 @@
+
+variable "key_name" {
+    description = "SSH key name in your AWS account for AWS instances."
+}
+
+variable "root_certificate" {
+    description = "The root certificate for the consul cluster."
+}
+
 variable "consul_cluster_ips" {
     description = "List of consul cluster IPs."
 }
@@ -63,6 +72,14 @@ variable "security_group_id" {
     description = "Consul security_group_id."
 }
 
+variable "ingress_22" {
+    default = "0.0.0.0/0"
+    description = "The number of Consul servers to launch."
+}
+
+variable "vpc_id" {
+    description = "The VPC to use for the consul cluster."
+}
 
 variable "tagName" {
     default = "consul-server"

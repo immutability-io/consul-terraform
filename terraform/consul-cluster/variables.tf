@@ -43,7 +43,6 @@ variable "consul_key" {
     description = "The key to use for the consul cluster."
 }
 
-
 variable "vpc_id" {
     description = "The VPC to use for the consul cluster."
 }
