@@ -220,7 +220,6 @@ Eventually, our local service tests unhealthy and we find a remote instance:
 
 ```
 ubuntu@ip-172-31-59-232:~$ curl -s http://go-rest.service.my-data-center.consul:8080/hello | jq .
-100    56  100    56    0     0   5267      0 --:--:-- --:--:-- --:--:--  5600
 {
   "IPv4": "172.31.63.141",
   "Host": "ip-172-31-63-141"
