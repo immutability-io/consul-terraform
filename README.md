@@ -158,9 +158,9 @@ cluster_private_server_ips = [
     172.31.52.123
 ]
 cluster_public_server_ips = [
-    52.91.*.*,
-    54.175.*.*,
-    52.87.*.*
+    52.91.1.1,
+    54.175.1.1,
+    52.87.1.1
 ]
 service_private_server_ips = [
     172.31.48.16,
@@ -168,16 +168,16 @@ service_private_server_ips = [
     172.31.63.141
 ]
 service_public_server_ips = [
-    54.175.*.*,
-    52.23.*.*,
-    54.159.*.*
+    54.175.1.1,
+    52.23.1.1,
+    54.159.1.1
 ]
 ```
 
 SSH to one of the service instances:
 
 ```
-$ ssh -i keyname.pem ubuntu@54.175.*.*
+$ ssh -i keyname.pem ubuntu@54.175.1.1
 ```
 
 Now, use `dig` to discover your service:
