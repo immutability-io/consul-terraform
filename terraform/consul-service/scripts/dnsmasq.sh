@@ -3,28 +3,20 @@ set -e
 
 logger() {
   DT=$(date '+%Y/%m/%d %H:%M:%S')
-  echo "$DT dnsmasq.sh: 127.0.0.1"
+  echo "$DT dnsmasq.sh: 0.0.0.0"
 }
 
 logger "Executing"
 
-DNSLISTENADDR=127.0.0.1
-
 logger "Installing Dnsmasq"
-apt-get -qqy update
-apt-get -qqy upgrade
-apt-get -qqy install dnsmasq-base dnsmasq
+sudo apt-get -qqy update
+sudo apt-get -qqy upgrade
+sudo apt-get -qqy install dnsmasq-base dnsmasq
 
 logger "Configuring Dnsmasq"
-cat <<EOF >/etc/dnsmasq.d/consul
-server=/consul/127.0.0.1#8600
-listen-address=$DNSLISTENADDR
-bind-interfaces
-EOF
-
-cat /etc/dnsmasq.d/consul
+sudo mv /tmp/dnsmasq.conf /etc/dnsmasq.d/consul
 
 logger "Restarting dnsmasq"
-service dnsmasq start || service dnsmasq restart
+sudo service dnsmasq start || sudo service dnsmasq restart
 
 logger "Completed"
