@@ -209,6 +209,17 @@ ubuntu@ip-172-31-59-232:~$ curl -s http://go-rest.service.my-data-center.consul:
 
 ```
 
+Digging through SRV records isn't the most awesome thing in the world, but you can throw care into the wind and do this:
+
+```
+ubuntu@ip-172-31-59-232:~$ curl http://go-rest.service.my-data-center.consul:`dig +short +noadditional go-rest.service.my-data-center.consul. SRV | awk '{print $3}' | head -1`/hello
+{
+"Host": "ip-172-31-59-232",
+"IPv4": "172.31.59.232"
+}
+```
+
+
 #### vault-pki: A rudimentary integration with Vault for issuing certificates.
 
 The vault-pki module will write a certificate, CA certificate and private key to the local file system for use in setting up the Consul cluster. **Note: this module uses a null resource. Once provisioned, these PKI materials remain on the file system until the resource is tainted.
