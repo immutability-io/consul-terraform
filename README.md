@@ -180,7 +180,13 @@ SSH to one of the service instances:
 $ ssh -i keyname.pem ubuntu@54.175.1.1
 ```
 
-Now, use `dig` to discover your service:
+Now, use `dig` to discover the port for your service (which you named `go-rest`.) Consul services are named using the following method:
+
+```
+<service-name>.service.<datacenter>.consul
+```
+
+So, the following *shortened* dig query will return the port:
 
 ```
 ubuntu@ip-172-31-59-232:~$ dig +short go-rest.service.my-data-center.consul. SRV
