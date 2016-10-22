@@ -10,8 +10,5 @@ logger "Executing"
 
 logger "Install dependencies"
 apt-get -y update
-apt-get -y install curl unzip wget nginx apache2-utils git
-sudo add-apt-repository -y ppa:ubuntu-lxc/lxd-stable
-sudo apt-get -y update
-sudo apt-get -y install golang
+apt-get -y install curl unzip wget nginx apache2-utils git jq
 logger "Completed"
