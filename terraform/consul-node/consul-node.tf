@@ -32,16 +32,10 @@ resource "aws_instance" "server" {
         destination = "/tmp/nginx.conf"
     }
 
-    provisioner "file" {
-        source = "${path.module}/config/dnsmasq.conf"
-        destination = "/tmp/dnsmasq.conf"
-    }
-
     provisioner "remote-exec" {
         scripts =
         [
-            "${path.module}/scripts/install.sh",
-            "${path.module}/scripts/dnsmasq.sh"
+            "${path.module}/scripts/install.sh"
         ]
     }
 }
