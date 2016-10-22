@@ -11,7 +11,7 @@
     "security_group_id": "",
     "scripts_dir":       "scripts",
     "ssh_username":      "ubuntu",
-    "dns_listen_addr":   "0.0.0.0"
+    "dns_listen_addr":   "{{env `DNS_LISTEN_ADDR`}}"
   },
   "builders": [
     {
@@ -56,6 +56,7 @@
         "sleep 30",
         "sh /ops/{{user `scripts_dir`}}/dependencies.sh",
         "sh /ops/{{user `scripts_dir`}}/consul.sh",
+        "sh /ops/{{user `scripts_dir`}}/dnsmasq.sh {{user `dns_listen_addr`}}",
         "sh /ops/{{user `scripts_dir`}}/cleanup.sh"
       ]
     }
