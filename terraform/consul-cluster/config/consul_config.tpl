@@ -14,5 +14,10 @@
     "cert_file": "/etc/consul.d/consul.crt",
     "key_file": "/etc/consul.d/consul.key",
     "verify_incoming": true,
-    "verify_outgoing": true
+    "verify_outgoing": true,
+    "recursors": ["localhost:8600"],
+    "dns_config": {
+        "allow_stale": true
+    }
+
 }

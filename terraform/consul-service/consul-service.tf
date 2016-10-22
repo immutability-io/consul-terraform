@@ -94,10 +94,16 @@ resource "aws_instance" "consul-service"
         ]
     }
 
+    provisioner "file" {
+        source = "${path.module}/config/dnsmasq.conf"
+        destination = "/tmp/dnsmasq.conf"
+    }
+
     provisioner "remote-exec" {
         scripts = [
             "${path.module}/scripts/setup_certs.sh",
-            "${path.module}/scripts/rest_service.sh"
+            "${path.module}/scripts/rest_service.sh",
+            "${path.module}/scripts/dnsmasq.sh"
         ]
     }
 
