@@ -42,7 +42,8 @@ resource "aws_instance" "server"
         scripts =
         [
             "${path.module}/scripts/install.sh",
-            "${path.module}/scripts/ip_tables.sh"
+            "${path.module}/scripts/ip_tables.sh",
+            "${path.module}/scripts/dnsmasq.sh"
         ]
     }
 }
