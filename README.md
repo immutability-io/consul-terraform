@@ -209,7 +209,7 @@ ubuntu@ip-172-31-59-232:~$ curl -s http://go-rest.service.my-data-center.consul:
 
 ```
 
-Digging through SRV records isn't the most awesome thing in the world, but you can throw care into the wind and do this:
+Digging through SRV records to find the port associated with your service isn't the most awesome thing in the world, but you can throw care into the wind and do this:
 
 ```
 ubuntu@ip-172-31-59-232:~$ curl http://go-rest.service.my-data-center.consul:`dig +short  go-rest.service.my-data-center.consul. SRV | awk '{print $3}' | head -1`/hello
