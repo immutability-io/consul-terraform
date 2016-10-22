@@ -209,10 +209,7 @@ ip-172-31-59-232.node.my-data-center.consul. 0 IN A 172.31.59.232
 Since our health checks are *randomly* successful 70% of the time, we can expect that we get the local instance of the service *most* of the time. If we execute `curl -q http://go-rest.service.my-data-center.consul:8080/hello | jq .` repeatedly, we see that we find the closest service most of the time:
 
 ```
-ubuntu@ip-172-31-59-232:~$ curl -q http://go-rest.service.my-data-center.consul:8080/hello | jq .
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-100    56  100    56    0     0   3733      0 --:--:-- --:--:-- --:--:--  4000
+ubuntu@ip-172-31-59-232:~$ curl -s http://go-rest.service.my-data-center.consul:8080/hello | jq .
 {
   "IPv4": "172.31.59.232",
   "Host": "ip-172-31-59-232"
@@ -222,9 +219,7 @@ ubuntu@ip-172-31-59-232:~$ curl -q http://go-rest.service.my-data-center.consul:
 Eventually, our local service tests unhealthy and we find a remote instance:
 
 ```
-ubuntu@ip-172-31-59-232:~$ curl -q http://go-rest.service.my-data-center.consul:8080/hello | jq .
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
+ubuntu@ip-172-31-59-232:~$ curl -s http://go-rest.service.my-data-center.consul:8080/hello | jq .
 100    56  100    56    0     0   5267      0 --:--:-- --:--:-- --:--:--  5600
 {
   "IPv4": "172.31.63.141",
