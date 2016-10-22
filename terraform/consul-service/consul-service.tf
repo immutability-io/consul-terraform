@@ -97,7 +97,8 @@ resource "aws_instance" "consul-service"
     provisioner "remote-exec" {
         scripts = [
             "${path.module}/scripts/setup_certs.sh",
-            "${path.module}/scripts/rest_service.sh"
+            "${path.module}/scripts/rest_service.sh",
+            "${path.module}/scripts/dnsmasq.sh"
         ]
     }
 

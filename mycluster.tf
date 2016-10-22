@@ -3,7 +3,8 @@ provider "aws" {
 }
 
 module "vault-pki" {
-    source = "github.com/Immutability-io/consul-terraform//terraform/vault-pki"
+#    source = "github.com/Immutability-io/consul-terraform//terraform/vault-pki"
+    source = "./terraform/vault-pki"
     certificate = "${var.consul_certificate}"
     private_key = "${var.consul_key}"
     issuer_certificate = "${var.root_certificate}"
@@ -14,7 +15,8 @@ module "vault-pki" {
 }
 
 module "consul-cluster" {
-    source = "github.com/Immutability-io/consul-terraform//terraform/consul-cluster"
+#    source = "github.com/Immutability-io/consul-terraform//terraform/consul-cluster"
+    source = "./terraform/consul-cluster"
     ami = "${var.ami}"
     servers = "${var.servers}"
     private_key = "${file(var.private_key)}"
@@ -37,7 +39,8 @@ module "consul-cluster" {
 }
 
 module "consul-service" {
-    source = "github.com/Immutability-io/consul-terraform//terraform/consul-service"
+#    source = "github.com/Immutability-io/consul-terraform//terraform/consul-service"
+    source = "./terraform/consul-service"
     consul_cluster_ips = "${module.consul-cluster.private_server_ips}"
     security_group_id = "${module.consul-cluster.security_group_id}"
     ami = "${var.ami}"
