@@ -145,7 +145,93 @@ The consul-service creates EC2 instances (also based on the AMI we built above) 
 * /health: Always healthy.
 * /unhealthy: Unhealthy 30% of the time.
 
-The service configuration uses the `/unhealthy` endpoint for demo purposes.
+The service configuration uses the `/unhealthy` endpoint for demo purposes. After deployment, you can test the Consul DNS interface as follows:
+
+Using the outputs of your Terraform apply:
+
+```
+Outputs:
+
+cluster_private_server_ips = [
+    172.31.61.169,
+    172.31.52.240,
+    172.31.52.123
+]
+cluster_public_server_ips = [
+    52.91.174.97,
+    54.175.85.159,
+    52.87.157.205
+]
+service_private_server_ips = [
+    172.31.48.16,
+    172.31.59.232,
+    172.31.63.141
+]
+service_public_server_ips = [
+    54.175.224.17,
+    52.23.188.193,
+    54.159.209.20
+]
+```
+
+SSH to one of the service instances:
+
+```
+$ ssh -i keyname.pem ubuntu@54.175.224.17
+```
+
+Now, use `dig` to discover your service:
+
+```
+ubuntu@ip-172-31-59-232:~$ dig go-rest.service.my-data-center.consul. SRV
+
+; <<>> DiG 9.9.5-3ubuntu0.9-Ubuntu <<>> go-rest.service.my-data-center.consul. SRV
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 16832
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; QUESTION SECTION:
+;go-rest.service.my-data-center.consul. IN SRV
+
+;; ANSWER SECTION:
+go-rest.service.my-data-center.consul. 0 IN SRV	1 1 8080 ip-172-31-59-232.node.my-data-center.consul.
+
+;; ADDITIONAL SECTION:
+ip-172-31-59-232.node.my-data-center.consul. 0 IN A 172.31.59.232
+
+;; Query time: 5 msec
+;; SERVER: 127.0.0.1#53(127.0.0.1)
+;; WHEN: Sat Oct 22 18:34:35 UTC 2016
+;; MSG SIZE  rcvd: 113
+```
+
+Since our health checks are *randomly* successful 70% of the time, we can expect that we get the local instance of the service *most* of the time. If we execute `curl -q http://go-rest.service.my-data-center.consul:8080/hello | jq .` repeatedly, we see that we find the closest service most of the time:
+
+```
+ubuntu@ip-172-31-59-232:~$ curl -q http://go-rest.service.my-data-center.consul:8080/hello | jq .
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100    56  100    56    0     0   3733      0 --:--:-- --:--:-- --:--:--  4000
+{
+  "IPv4": "172.31.59.232",
+  "Host": "ip-172-31-59-232"
+}
+```
+
+Eventually, our local service tests unhealthy and we find a remote instance:
+
+```
+ubuntu@ip-172-31-59-232:~$ curl -q http://go-rest.service.my-data-center.consul:8080/hello | jq .
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100    56  100    56    0     0   5267      0 --:--:-- --:--:-- --:--:--  5600
+{
+  "IPv4": "172.31.63.141",
+  "Host": "ip-172-31-63-141"
+}
+
+```
 
 #### vault-pki: A rudimentary integration with Vault for issuing certificates.
 
