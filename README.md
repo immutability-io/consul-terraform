@@ -183,27 +183,9 @@ $ ssh -i keyname.pem ubuntu@54.175.224.17
 Now, use `dig` to discover your service:
 
 ```
-ubuntu@ip-172-31-59-232:~$ dig go-rest.service.my-data-center.consul. SRV
-
-; <<>> DiG 9.9.5-3ubuntu0.9-Ubuntu <<>> go-rest.service.my-data-center.consul. SRV
-;; global options: +cmd
-;; Got answer:
-;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 16832
-;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
-
-;; QUESTION SECTION:
-;go-rest.service.my-data-center.consul. IN SRV
-
-;; ANSWER SECTION:
-go-rest.service.my-data-center.consul. 0 IN SRV	1 1 8080 ip-172-31-59-232.node.my-data-center.consul.
-
-;; ADDITIONAL SECTION:
-ip-172-31-59-232.node.my-data-center.consul. 0 IN A 172.31.59.232
-
-;; Query time: 5 msec
-;; SERVER: 127.0.0.1#53(127.0.0.1)
-;; WHEN: Sat Oct 22 18:34:35 UTC 2016
-;; MSG SIZE  rcvd: 113
+ubuntu@ip-172-31-59-232:~$ dig +short go-rest.service.my-data-center.consul. SRV
+1 1 8080 ip-172-31-59-232.node.my-data-center.consul.
+1 1 8080 ip-172-31-48-16.node.my-data-center.consul.
 ```
 
 Since our health checks are *randomly* successful 70% of the time, we can expect that we get the local instance of the service *most* of the time. If we execute `curl -q http://go-rest.service.my-data-center.consul:8080/hello | jq .` repeatedly, we see that we find the closest service most of the time:
