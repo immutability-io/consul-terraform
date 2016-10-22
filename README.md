@@ -68,6 +68,10 @@ export DEFAULT_INSTANCE_TYPE="t2.micro"
 export DEFAULT_AMI_NAME="my-consul-ami"
 export PACKER_LOG=1
 export PACKER_LOG_PATH=./packer.log
+export DNS_LISTEN_ADDR="0.0.0.0"
+export DEFAULT_AMI_NAME="consul-server"
+#export DNS_LISTEN_ADDR="127.0.0.1"
+#export DEFAULT_AMI_NAME="consul-agent"
 
 ```
 
