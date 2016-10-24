@@ -3,7 +3,6 @@ provider "aws" {
 }
 
 module "consul" {
-#    source = "github.com/Immutability-io/consul-terraform//terraform/consul-node"
     source = "../consul-node"
     ami = "${var.ami}"
     servers = "${var.servers}"
