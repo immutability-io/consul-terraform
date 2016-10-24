@@ -8,14 +8,14 @@ data "template_file" "template-consul-client-config" {
     }
 }
 
-data "template_file" "template-install-rest-service" {
-    template = "${file("${path.module}/scripts/install_rest_service.sh")}"
+data "template_file" "template-install-fabio" {
+    template = "${file("${path.module}/scripts/install_fabio.sh")}"
     vars {
-        rest_service_url = "${var.rest_service_url}"
+        fabio_url = "${var.fabio_url}"
     }
 }
 
-resource "aws_instance" "consul-service"
+resource "aws_instance" "fabio"
 {
     ami = "${var.ami}"
     count = "${var.service_count}"
@@ -25,14 +25,12 @@ resource "aws_instance" "consul-service"
     associate_public_ip_address = "${var.associate_public_ip_address}"
     vpc_security_group_ids = ["${var.security_group_id}"]
 
-    connection
-    {
+    connection {
         user = "ubuntu"
         private_key = "${var.private_key}"
     }
 
-    tags
-    {
+    tags {
         Name = "${var.tagName}-${count.index}"
         Finance = "${var.tagFinance}"
         OwnerEmail = "${var.tagOwnerEmail}"
@@ -47,13 +45,13 @@ resource "aws_instance" "consul-service"
     }
 
     provisioner "file" {
-        content = "${data.template_file.template-install-rest-service.rendered}"
-        destination = "/tmp/install_rest_service.sh"
+        content = "${data.template_file.template-install-fabio.rendered}"
+        destination = "/tmp/install_fabio.sh"
     }
 
     provisioner "file" {
-        source = "${var.service_config}"
-        destination = "/tmp/service.json"
+        source = "${path.module}/config/nginx.conf"
+        destination = "/tmp/nginx.conf"
     }
 
     provisioner "file" {
@@ -72,8 +70,8 @@ resource "aws_instance" "consul-service"
     }
 
     provisioner "file" {
-        source = "${path.module}/config/rest_service.conf"
-        destination = "/tmp/rest_service.conf"
+        source = "${path.module}/config/fabio.conf"
+        destination = "/tmp/fabio.conf"
     }
 
     provisioner "file" {
@@ -82,16 +80,15 @@ resource "aws_instance" "consul-service"
     }
 
     provisioner "remote-exec" {
-        scripts = [
-            "${path.module}/scripts/stop_nginx.sh"
+        inline = [
+            "chmod +x /tmp/install_fabio.sh",
+            "/tmp/install_fabio.sh"
         ]
     }
 
-    provisioner "remote-exec" {
-        inline = [
-            "chmod +x /tmp/install_rest_service.sh",
-            "/tmp/install_rest_service.sh"
-        ]
+    provisioner "file" {
+        source = "${var.password_file}"
+        destination = "/tmp/.htpasswd"
     }
 
     provisioner "file" {
@@ -101,10 +98,18 @@ resource "aws_instance" "consul-service"
 
     provisioner "remote-exec" {
         scripts = [
+            "${path.module}/scripts/setup_nginx_auth.sh",
             "${path.module}/scripts/setup_certs.sh",
-            "${path.module}/scripts/rest_service.sh",
-            "${path.module}/scripts/dnsmasq.sh"
+            "${path.module}/scripts/dnsmasq.sh",
+            "${path.module}/scripts/fabio.sh",
+            "${path.module}/scripts/reload_nginx.sh"
         ]
     }
+    provisioner "remote-exec" {
+        inline = [
+            "sudo start fabio"
+        ]
+    }
+
 
 }
