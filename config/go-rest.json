@@ -2,11 +2,11 @@
   "service": {
     "name": "go-rest",
     "port": 8080,
-    "tags": ["go-rest"],
+    "tags": ["go-rest", "urlprefix-/hello"],
     "check": {
       "id": "go-rest-health",
       "name": "Running on port 8080",
-      "http": "http://localhost:8080/unhealthy",
+      "http": "http://localhost:8080/health",
       "interval": "10s",
       "timeout": "1s"
     }
