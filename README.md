@@ -225,10 +225,30 @@ ubuntu@ip-172-31-59-232:~$ curl http://go-rest.service.my-data-center.consul:`di
 }
 ```
 
-
 #### vault-pki: A rudimentary integration with Vault for issuing certificates.
 
 The vault-pki module will write a certificate, CA certificate and private key to the local file system for use in setting up the Consul cluster. **Note: this module uses a null resource. Once provisioned, these PKI materials remain on the file system until the resource is tainted.
+
+#### fabio: A load balancer for Consul
+
+As discussed above, digging through SRV records for the port of your service is a bit... awkward... A better solution is to use [Fabio](https://github.com/eBay/fabio) which is a low-touch load balancer for Consul services. When you use Fabio, you alway use the port of the Fabio server (9999). The only point of integration needed to enable Fabio is to add a tag `urlprefix-` to your Consul service config:
+
+```
+"tags": ["go-rest", "urlprefix-/hello"],
+
+```
+
+There are a variety of ways to use `urlprefix-`. Assuming that the IP of the Fabio server is `172.31.59.176`, the above `urlprefix-` confuration will allow you to do the following:
+
+```
+$ curl 172.31.59.176:9999/hello
+{
+"Host": "ip-172-31-59-32",
+"IPv4": "172.31.59.32"
+}
+```
+
+Fabio has a UI, like consul, and this Terraform module puts nginx in front of it for authentication and HTTPS.
 
 ### TFVARS
 
