@@ -86,7 +86,7 @@ variable "vpc_id" {
 }
 
 variable "tagName" {
-    default = "consul-server"
+    default = "consul-service"
     description = "Name tag for the servers"
 }
 
