@@ -14,3 +14,7 @@ output "service_public_server_ips" {
 output "service_private_server_ips" {
     value = "${module.consul-service.private_server_ips}"
 }
+
+output "fabio_public_server_ips" {
+    value = "${module.fabio.public_server_ips}"
+}
