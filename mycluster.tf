@@ -87,10 +87,55 @@ module "fabio" {
     password_file = "${var.password_file}"
 }
 
+resource "aws_iam_server_certificate" "consul_certificate" {
+    name_prefix      = "consul"
+    certificate_body = "${file(var.consul_certificate)}"
+    private_key      = "${file(var.consul_key)}"
+
+    lifecycle {
+        create_before_destroy = true
+    }
+}
+
+resource "aws_elb" "consul-ui" {
+    name                      = "consul-ui-elb"
+    availability_zones        = ["us-east-1b"]
+    cross_zone_load_balancing = true
+
+    listener {
+        instance_port      = 443
+        instance_protocol  = "https"
+        lb_port            = 443
+        lb_protocol        = "https"
+        ssl_certificate_id = "${aws_iam_server_certificate.consul_certificate.arn}"
+    }
+
+    health_check {
+        healthy_threshold = 2
+        unhealthy_threshold = 5
+        timeout = 10
+        target = "HTTPS:443/index.html"
+        interval = 30
+    }
+    security_groups = ["${module.consul-cluster.security_group_id}"]
+    instances = ["${module.consul-cluster.instance_ids}"]
+
+}
+
+
 resource "aws_route53_record" "api" {
    zone_id = "${var.aws_route53_zone_id}"
    name = "api.${var.domain_name}"
    type = "A"
    ttl = "30"
    records = ["${module.fabio.public_server_ips}"]
+}
+
+
+resource "aws_route53_record" "consul" {
+   zone_id = "${var.aws_route53_zone_id}"
+   name = "consul.${var.domain_name}"
+   type = "CNAME"
+   ttl = "30"
+   records = ["${aws_elb.consul-ui.dns_name}"]
 }
