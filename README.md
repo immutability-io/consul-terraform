@@ -102,7 +102,7 @@ us-east-1: ami-6eeab979
 
 ### Terraforming the Consul Cluster
 
-If infrastructure is a cat, then Terraform is the Swiss Army knife that lets you skin it in a variety of ways. *Don't skin any real cats - they have claws!*
+If infrastructure is a cat, then Terraform is the Swiss Army knife that lets you skin it in a variety of ways. *NOTE: Don't skin any real cats - they have claws!*
 
 This project demonstrates the use of Terraform modules to encapsulate certain operations for *maximum* re-use.
 
