@@ -86,3 +86,11 @@ module "fabio" {
     root_certificate = "${var.root_certificate}"
     password_file = "${var.password_file}"
 }
+
+resource "aws_route53_record" "api" {
+   zone_id = "${var.aws_route53_zone_id}"
+   name = "api.${var.domain_name}"
+   type = "A"
+   ttl = "30"
+   records = ["${module.fabio.public_server_ips}"]
+}

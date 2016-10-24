@@ -124,3 +124,11 @@ variable "vault_addr" {
     default = "https://127.0.0.1:8200"
     description = "The vault address."
 }
+
+variable "aws_route53_zone_id" {
+    description = "The Hosted Zone ID."
+}
+
+variable "domain_name" {
+    description = "The domain name."
+}

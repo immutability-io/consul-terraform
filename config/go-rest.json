@@ -6,7 +6,7 @@
     "check": {
       "id": "go-rest-health",
       "name": "Running on port 8080",
-      "http": "http://localhost:8080/health",
+      "http": "http://localhost:8080/unhealthy",
       "interval": "10s",
       "timeout": "1s"
     }
