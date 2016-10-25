@@ -68,7 +68,7 @@ variable "servers" {
 
 variable "ingress_22" {
     default = "0.0.0.0/0"
-    description = "The number of Consul servers to launch."
+    description = "Ingress CIDR block."
 }
 
 variable "datacenter" {
