@@ -100,16 +100,10 @@ resource "aws_instance" "fabio"
         scripts = [
             "${path.module}/scripts/setup_nginx_auth.sh",
             "${path.module}/scripts/setup_certs.sh",
-            "${path.module}/scripts/dnsmasq.sh",
             "${path.module}/scripts/fabio.sh",
+            "${path.module}/scripts/dnsmasq.sh",
             "${path.module}/scripts/reload_nginx.sh"
         ]
     }
-    provisioner "remote-exec" {
-        inline = [
-            "sudo start fabio"
-        ]
-    }
-
 
 }
