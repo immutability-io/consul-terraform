@@ -88,6 +88,7 @@ module "consul-cluster" {
 
 module "consul-service" {
     source = "./terraform/consul-service"
+    instance_type = "t2.nano"
     consul_cluster_ips = "${module.consul-cluster.private_server_ips}"
     security_group_id = "${aws_security_group.consul.id}"
     ami = "${var.ami}"
