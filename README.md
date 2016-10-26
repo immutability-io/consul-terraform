@@ -1,6 +1,6 @@
 ## Getting Started
 
-This project is a development exercise in building a HashiCorp [Consul](https://consul.io) cluster in AWS using HashiCorp [Terraform] (https://terraform.io), [Packer](https://www.packer.io) and [Vault](https://vaultproject.io).
+This project is a development exercise in building a HashiCorp [Consul](https://consul.io) cluster in AWS using HashiCorp [Terraform] (https://terraform.io), [Packer](https://www.packer.io) and [Vault](https://vaultproject.io). I have a Slack channel for this repository. Please comment on [this issue](https://github.com/Immutability-io/consul-terraform/issues/7) to get an invite to the channel.
 
 The first thing we do is bring up a HashiCorp [Vagrant](https://www.vagrantup.com/) box. This will install a few things:
 
