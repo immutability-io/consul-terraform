@@ -9,6 +9,7 @@ module "vault-pki" {
     issuer_certificate = "${var.root_certificate}"
     common_name = "${var.common_name}"
     ip_sans = "${var.ip_sans}"
+    alt_names = "${var.alt_names}"
     vault_token = "${var.vault_token}"
     vault_addr = "${var.vault_addr}"
 }
