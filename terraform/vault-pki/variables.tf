@@ -14,6 +14,10 @@ variable "common_name" {
     description = "The CN for the certificate."
 }
 
+variable "alt_names" {
+    description = "The Subject Alt Names for the certificate."
+}
+
 variable "ip_sans" {
     description = "The Subject Alt Names (IP) for the certificate."
 }
