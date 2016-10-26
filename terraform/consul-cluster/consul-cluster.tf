@@ -9,6 +9,7 @@ module "consul" {
     private_key = "${var.private_key}"
     key_name = "${var.key_name}"
     associate_public_ip_address = "${var.associate_public_ip_address}"
+    security_group_id = "${var.security_group_id}"
     subnet_id = "${var.subnet_id}"
     vpc_id = "${var.vpc_id}"
     ingress_22 = "${var.ingress_22}"

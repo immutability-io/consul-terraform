@@ -1,6 +1,10 @@
 variable "ami" {
 }
 
+variable "security_group_id" {
+    description = "Consul security_group_id."
+}
+
 variable "key_name" {
     description = "SSH key name in your AWS account for AWS instances."
 }
