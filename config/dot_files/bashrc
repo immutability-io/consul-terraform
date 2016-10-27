@@ -1,0 +1,156 @@
+# ~/.bashrc: executed by bash(1) for non-login shells.
+# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
+# for examples
+
+# If not running interactively, don't do anything
+case $- in
+    *i*) ;;
+      *) return;;
+esac
+
+######################### PROFILE VARIABLES ###########################
+
+# Define System Env
+RUNNING_ENV="unknown"
+if [ "$(uname)"=="Darwin" ]; then
+   RUNNING_ENV="OSX"
+elif [ "$(expr substr $(uname -s) 1 5)"=="Linux" ]; then
+   RUNNING_ENV="LINUX"
+elif [ "$(expr substr $(uname -s) 1 10)"=="MINGW32_NT" ]; then
+   RUNNING_ENV="WINDOWS"
+fi
+export RUNNING_ENV
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+   . /etc/bashrc
+fi
+
+# System profile
+if [ -f /etc/profile ]; then
+   source /etc/profile
+fi
+
+# set PATH so it includes user's private bin if it exists
+export BIN_USER="$HOME/bin"
+if [ -d "$BIN_USER" ] ; then
+    export PATH="$BIN_USER:$PATH"
+fi
+
+export MY_DOT_BIN="$HOME/.bin"
+export PATH=$MY_DOT_BIN:$PATH
+
+#Create my temp area
+if [ -z "$TMP" ]; then
+   export TMP=/tmp/$USER
+   mkdir -p $TMP/bin
+   export PATH=$TMP/bin:$PATH
+fi
+
+#######################################################################
+
+
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+
+######################### HISTORY MANAGEMENT ##########################
+
+# don't put duplicate lines or lines starting with space in the history.
+# See bash(1) for more options
+HISTCONTROL=ignoreboth
+
+# append to the history file, don't overwrite it
+shopt -s histappend
+
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+HISTSIZE=1000
+HISTFILESIZE=2000
+
+######################### HISTORY MANAGEMENT [END] ####################
+
+######################## LOOK 'N FEEL ################################
+# make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# set a fancy prompt (non-color, unless we know we "want" color)
+case "$TERM" in
+    xterm-color) color_prompt=yes;;
+esac
+
+# uncomment for a colored prompt, if the terminal has the capability; turned
+# off by default to not distract the user: the focus in a terminal window
+# should be on the output of commands, not on the prompt
+force_color_prompt=yes
+
+if [ -n "$force_color_prompt" ]; then
+    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+    # We have color support; assume it's compliant with Ecma-48
+    # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+    # a case would tend to support setf rather than setaf.)
+    color_prompt=yes
+    else
+    color_prompt=
+    fi
+fi
+
+#  prompt string
+if [ "$color_prompt" = yes ]; then
+    PS1='\[\033[00;35m\]\u\[\033[01;34m\]@\[\033[00;33m\]\h\[\033[00m\]:\[\033[01;32m\]\W\[\033[00m\]'
+else
+    PS1='\u@\h:\W'
+fi
+unset color_prompt force_color_prompt
+
+
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
+
+######################## LOOK 'N FEEL [END] ###########################
+
+############################ BEHAVIOUR ###############################
+
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+if ! shopt -oq posix  && [ ! "$OS" = Windows_NT ]; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
+
+############################ BEHAVIOUR [END] ##########################
+
+########################## ADDITIONAL SETTINGS ######################
+function source_dir {
+   source_d=$1
+   if [ -d $source_d ]; then
+      for source_f in $source_d/*.sh; do
+         if [ -d $source_f ]; then
+            source_dir $source_f
+         else
+          source $source_f
+         fi
+      done
+   fi
+}
+
+BASHRC_ADD_SETTINGS_DIR=$HOME/.bashrc.d
+if [ -d $BASHRC_ADD_SETTINGS_DIR ]; then
+   source_dir $BASHRC_ADD_SETTINGS_DIR
+fi
+
+######################## ADDITIONAL SETTINGS [END] ####################
+
+# close prompt string
+PS1=$PS1'> '
