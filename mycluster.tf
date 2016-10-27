@@ -145,7 +145,7 @@ module "fabio-api-load-balancer" {
     instance_ids = ["${module.fabio.instance_ids}"]
 }
 
-resource "aws_route53_record" "api" {
+resource "aws_route53_record" "fabio" {
   zone_id = "${var.aws_route53_zone_id}"
   name = "fabio.${var.domain_name}"
   type = "CNAME"
