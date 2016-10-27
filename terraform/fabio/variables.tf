@@ -78,8 +78,8 @@ variable "vpc_cidr" {
 }
 
 variable "tagName" {
-    default = "consul-server"
-    description = "Name tag for the servers"
+    default = "fabio-router"
+    description = "Name tag for the fabio servers"
 }
 
 variable "tagFinance" {
