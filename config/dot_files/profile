@@ -7,3 +7,5 @@ if [ -n "$BASH_VERSION" ]; then
         . "$HOME/.bashrc"
     fi
 fi
+export VAULT_ADDR=https://127.0.0.1:8200
+export VAULT_TOKEN=62e5a1ff-d89e-357d-c2f0-7a7ad2a9cd2e

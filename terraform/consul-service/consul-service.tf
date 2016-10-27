@@ -1,3 +1,24 @@
+resource "aws_security_group" "consul-service" {
+    name = "${var.tagName}-security-group"
+    description = "Consul internal traffic + maintenance."
+    vpc_id = "${var.vpc_id}"
+
+    // These are for internal traffic
+
+    ingress {
+        protocol    = -1
+        from_port   = 0
+        to_port     = 0
+        cidr_blocks = ["${var.vpc_cidr}"]
+    }
+
+    egress {
+        from_port = 0
+        to_port = 0
+        protocol = "-1"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+}
 
 data "template_file" "template-consul-client-config" {
     template = "${file("${path.module}/config/client_consul_config.tpl")}"
@@ -15,6 +36,7 @@ data "template_file" "template-install-rest-service" {
     }
 }
 
+
 resource "aws_instance" "consul-service"
 {
     ami = "${var.ami}"
@@ -23,12 +45,16 @@ resource "aws_instance" "consul-service"
     key_name = "${var.key_name}"
     subnet_id = "${var.subnet_id}"
     associate_public_ip_address = "${var.associate_public_ip_address}"
-    vpc_security_group_ids = ["${var.security_group_id}"]
+    vpc_security_group_ids = ["${aws_security_group.consul-service.id}"]
 
     connection
     {
-        user = "ubuntu"
-        private_key = "${var.private_key}"
+        user          = "ubuntu"
+        host          = "${self.private_ip}"
+        private_key   = "${var.private_key}"
+        agent         = "false"
+        bastion_host  = "${var.bastion_public_ip}"
+        bastion_user  = "${var.bastion_user}"
     }
 
     tags
@@ -106,5 +132,4 @@ resource "aws_instance" "consul-service"
             "${path.module}/scripts/dnsmasq.sh"
         ]
     }
-
 }

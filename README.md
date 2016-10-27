@@ -273,7 +273,6 @@ tagFinance = "CostCenter:Project"
 tagOwnerEmail = "<Your email>"
 gossip_encryption_key = "<Use `consul keygen`>"
 password_file = "./config/.htpasswd"
-ingress_22 = "<My IP>"
 service_count = "3"
 vault_token = "<harvested from above>"
 
