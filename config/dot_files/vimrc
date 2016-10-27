@@ -1,0 +1,26 @@
+" Enable terminal colors
+set t_Co=256
+
+syntax on
+
+set background=dark
+" or, for the light background mode:
+" set background=light
+
+colorscheme desert
+
+set cursorline
+
+" Search behaviour
+set hlsearch " Highlight search results
+
+
+" show line number
+set number
+
+" Indentation and tabs
+" use SOFT tabs (not pure tab but spaces)
+set expandtab " remove for pure tabs
+set shiftwidth=3
+set softtabstop=3 " use tabstop for pure tab
+filetype indent on
