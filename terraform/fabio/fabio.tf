@@ -15,6 +15,41 @@ data "template_file" "template-install-fabio" {
     }
 }
 
+resource "aws_security_group" "fabio" {
+    name = "${var.tagName}-security-group"
+    description = "Consul internal traffic + maintenance."
+    vpc_id = "${var.vpc_id}"
+
+    // These are for internal traffic
+
+    ingress {
+        protocol    = -1
+        from_port   = 0
+        to_port     = 0
+        cidr_blocks = ["${var.vpc_cidr}"]
+    }
+
+    ingress {
+        from_port = 9999
+        to_port = 9999
+        protocol = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+
+    ingress {
+        from_port = 443
+        to_port = 443
+        protocol = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+
+    egress {
+        from_port = 0
+        to_port = 0
+        protocol = "-1"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+}
 resource "aws_instance" "fabio"
 {
     ami = "${var.ami}"
@@ -23,11 +58,15 @@ resource "aws_instance" "fabio"
     key_name = "${var.key_name}"
     subnet_id = "${var.subnet_id}"
     associate_public_ip_address = "${var.associate_public_ip_address}"
-    vpc_security_group_ids = ["${var.security_group_id}"]
+    vpc_security_group_ids = ["${aws_security_group.fabio.id}"]
 
     connection {
-        user = "ubuntu"
-        private_key = "${var.private_key}"
+        user          = "ubuntu"
+        host          = "${self.private_ip}"
+        private_key   = "${var.private_key}"
+        agent         = "false"
+        bastion_host  = "${var.bastion_public_ip}"
+        bastion_user  = "${var.bastion_user}"
     }
 
     tags {
