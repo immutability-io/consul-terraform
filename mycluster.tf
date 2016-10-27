@@ -131,6 +131,7 @@ module "consul-ui-load-balancer" {
     instance_ids = ["${module.consul-cluster.instance_ids}"]
 }
 
+/*
 module "fabio-api-load-balancer" {
     source = "./terraform/load-balancer"
     tagName = "fabio-api"
@@ -144,13 +145,13 @@ module "fabio-api-load-balancer" {
     ssl_certificate_id = "${aws_iam_server_certificate.consul_certificate.arn}"
     instance_ids = ["${module.fabio.instance_ids}"]
 }
-
+*/
 resource "aws_route53_record" "fabio" {
-  zone_id = "${var.aws_route53_zone_id}"
-  name = "fabio.${var.domain_name}"
-  type = "CNAME"
-  ttl = "10"
-  records = ["${module.fabio-api-load-balancer.dns_name}"]
+    zone_id = "${var.aws_route53_zone_id}"
+    name = "fabio.${var.domain_name}"
+    type = "A"
+    ttl = "10"
+    records = ["${module.fabio.public_server_ips}"]
 }
 
 resource "aws_route53_record" "consul" {
