@@ -56,19 +56,17 @@ variable "consul_key" {
     description = "The key to use for the consul cluster."
 }
 
-
 variable "vpc_id" {
     description = "The VPC to use for the consul cluster."
+}
+
+variable "vpc_cidr"       {
+    description = "The VPC CIDR block."
 }
 
 variable "servers" {
     default = "3"
     description = "The number of Consul servers to launch."
-}
-
-variable "ingress_22" {
-    default = "0.0.0.0/0"
-    description = "Ingress CIDR block."
 }
 
 variable "datacenter" {

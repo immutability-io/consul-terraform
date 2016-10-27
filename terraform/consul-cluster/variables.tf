@@ -1,10 +1,6 @@
 variable "ami" {
 }
 
-variable "security_group_id" {
-    description = "Consul security_group_id."
-}
-
 variable "key_name" {
     description = "SSH key name in your AWS account for AWS instances."
 }
@@ -21,14 +17,17 @@ variable "password_file" {
     description = "Result sudo htpasswd -c .htpasswd admin."
 }
 
+variable "bastion_public_ip" {
+    description = "Bastion host IP."
+}
+
+variable "bastion_user" {
+    description = "Bastion host user."
+}
+
 variable "associate_public_ip_address" {
     description = "Create public IP."
     default = false
-}
-
-variable "region" {
-    default = "us-east-1"
-    description = "The region of AWS, for AMI lookups."
 }
 
 variable "subnet_id" {
@@ -51,13 +50,11 @@ variable "vpc_id" {
     description = "The VPC to use for the consul cluster."
 }
 
-variable "servers" {
-    default = "3"
-    description = "The number of Consul servers to launch."
+variable "vpc_cidr" {
 }
 
-variable "ingress_22" {
-    default = "0.0.0.0/0"
+variable "servers" {
+    default = "3"
     description = "The number of Consul servers to launch."
 }
 

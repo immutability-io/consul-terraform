@@ -14,53 +14,18 @@ module "vault-pki" {
     vault_addr = "${var.vault_addr}"
 }
 
-resource "aws_security_group" "consul" {
-    name = "${var.tagName}-security-group"
-    description = "Consul internal traffic + maintenance."
+module "bastion" {
+    source = "./terraform/bastion"
+    ami = "ami-2d39803a"
+    key_name = "${var.key_name}"
+    subnet_id = "${var.subnet_id}"
     vpc_id = "${var.vpc_id}"
-
-    // These are for internal traffic
-    ingress {
-        from_port = 0
-        to_port = 65535
-        protocol = "tcp"
-        self = true
-    }
-
-    ingress {
-        from_port = 0
-        to_port = 65535
-        protocol = "udp"
-        self = true
-    }
-
-    ingress {
-        from_port = 22
-        to_port = 22
-        protocol = "tcp"
-        cidr_blocks = ["${var.ingress_22}"]
-    }
-
-    ingress {
-        from_port = 443
-        to_port = 443
-        protocol = "tcp"
-        cidr_blocks = ["0.0.0.0/0"]
-    }
-
-    ingress {
-        from_port = 9999
-        to_port = 9999
-        protocol = "tcp"
-        cidr_blocks = ["0.0.0.0/0"]
-    }
-
-    egress {
-        from_port = 0
-        to_port = 0
-        protocol = "-1"
-        cidr_blocks = ["0.0.0.0/0"]
-    }
+    vpc_cidr = "${var.vpc_cidr}"
+    tagFinance = "${var.tagFinance}"
+    tagOwnerEmail = "${var.tagOwnerEmail}"
+    tagSchedule = "${var.tagSchedule}"
+    tagBusinessJustification = "${var.tagBusinessJustification}"
+    tagAutoStart = "${var.tagAutoStart}"
 }
 
 module "consul-cluster" {
@@ -69,11 +34,12 @@ module "consul-cluster" {
     servers = "${var.servers}"
     private_key = "${file(var.private_key)}"
     key_name = "${var.key_name}"
-    security_group_id = "${aws_security_group.consul.id}"
+    bastion_public_ip = "${module.bastion.public_ip}"
+    bastion_user = "${module.bastion.user}"
     associate_public_ip_address = "${var.associate_public_ip_address}"
     subnet_id = "${var.subnet_id}"
     vpc_id = "${var.vpc_id}"
-    ingress_22 = "${var.ingress_22}"
+    vpc_cidr = "${var.vpc_cidr}"
     tagFinance = "${var.tagFinance}"
     tagOwnerEmail = "${var.tagOwnerEmail}"
     tagSchedule = "${var.tagSchedule}"
@@ -91,16 +57,17 @@ module "consul-service" {
     source = "./terraform/consul-service"
     instance_type = "t2.nano"
     consul_cluster_ips = "${module.consul-cluster.private_server_ips}"
-    security_group_id = "${aws_security_group.consul.id}"
     ami = "${var.ami}"
     service_count = "${var.service_count}"
     service_config = "${var.service_config}"
     private_key = "${file(var.private_key)}"
     key_name = "${var.key_name}"
+    bastion_public_ip = "${module.bastion.public_ip}"
+    bastion_user = "${module.bastion.user}"
     associate_public_ip_address = "${var.associate_public_ip_address}"
     subnet_id = "${var.subnet_id}"
     vpc_id = "${var.vpc_id}"
-    ingress_22 = "${var.ingress_22}"
+    vpc_cidr = "${var.vpc_cidr}"
     tagFinance = "${var.tagFinance}"
     tagOwnerEmail = "${var.tagOwnerEmail}"
     tagSchedule = "${var.tagSchedule}"
@@ -117,15 +84,16 @@ module "consul-service" {
 module "fabio" {
     source = "./terraform/fabio"
     consul_cluster_ips = "${module.consul-cluster.private_server_ips}"
-    security_group_id = "${aws_security_group.consul.id}"
     ami = "${var.ami}"
-    service_count = "1"
+    service_count = "2"
     private_key = "${file(var.private_key)}"
     key_name = "${var.key_name}"
+    bastion_public_ip = "${module.bastion.public_ip}"
+    bastion_user = "${module.bastion.user}"
     associate_public_ip_address = "${var.associate_public_ip_address}"
     subnet_id = "${var.subnet_id}"
     vpc_id = "${var.vpc_id}"
-    ingress_22 = "${var.ingress_22}"
+    vpc_cidr = "${var.vpc_cidr}"
     tagFinance = "${var.tagFinance}"
     tagOwnerEmail = "${var.tagOwnerEmail}"
     tagSchedule = "${var.tagSchedule}"
@@ -149,45 +117,47 @@ resource "aws_iam_server_certificate" "consul_certificate" {
     }
 }
 
-resource "aws_elb" "consul-ui" {
-    name                      = "consul-ui-elb"
-    availability_zones        = ["us-east-1b"]
-    cross_zone_load_balancing = true
-
-    listener {
-        instance_port      = 443
-        instance_protocol  = "https"
-        lb_port            = 443
-        lb_protocol        = "https"
-        ssl_certificate_id = "${aws_iam_server_certificate.consul_certificate.arn}"
-    }
-
-    health_check {
-        healthy_threshold = 2
-        unhealthy_threshold = 5
-        timeout = 10
-        target = "HTTPS:443/index.html"
-        interval = 30
-    }
-    security_groups = ["${aws_security_group.consul.id}"]
-    instances = ["${module.consul-cluster.instance_ids}"]
-
+module "consul-ui-load-balancer" {
+    source = "./terraform/load-balancer"
+    tagName = "consul-ui"
+    tagFinance = "${var.tagFinance}"
+    tagOwnerEmail = "${var.tagOwnerEmail}"
+    tagSchedule = "${var.tagSchedule}"
+    tagBusinessJustification = "${var.tagBusinessJustification}"
+    tagAutoStart = "${var.tagAutoStart}"
+    vpc_id = "${var.vpc_id}"
+    vpc_cidr = "${var.vpc_cidr}"
+    ssl_certificate_id = "${aws_iam_server_certificate.consul_certificate.arn}"
+    instance_ids = ["${module.consul-cluster.instance_ids}"]
 }
 
-
-resource "aws_route53_record" "api" {
-   zone_id = "${var.aws_route53_zone_id}"
-   name = "api.${var.domain_name}"
-   type = "A"
-   ttl = "30"
-   records = ["${module.fabio.public_server_ips}"]
+/*
+module "fabio-api-load-balancer" {
+    source = "./terraform/load-balancer"
+    tagName = "fabio-api"
+    tagFinance = "${var.tagFinance}"
+    tagOwnerEmail = "${var.tagOwnerEmail}"
+    tagSchedule = "${var.tagSchedule}"
+    tagBusinessJustification = "${var.tagBusinessJustification}"
+    tagAutoStart = "${var.tagAutoStart}"
+    vpc_id = "${var.vpc_id}"
+    vpc_cidr = "${var.vpc_cidr}"
+    ssl_certificate_id = "${aws_iam_server_certificate.consul_certificate.arn}"
+    instance_ids = ["${module.fabio.instance_ids}"]
 }
-
+*/
+resource "aws_route53_record" "fabio" {
+    zone_id = "${var.aws_route53_zone_id}"
+    name = "fabio.${var.domain_name}"
+    type = "A"
+    ttl = "10"
+    records = ["${module.fabio.public_server_ips}"]
+}
 
 resource "aws_route53_record" "consul" {
    zone_id = "${var.aws_route53_zone_id}"
    name = "consul.${var.domain_name}"
    type = "CNAME"
-   ttl = "30"
-   records = ["${aws_elb.consul-ui.dns_name}"]
+   ttl = "10"
+   records = ["${module.consul-ui-load-balancer.dns_name}"]
 }
