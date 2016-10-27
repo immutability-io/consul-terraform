@@ -1,4 +1,12 @@
 
+variable "bastion_public_ip" {
+    description = "IP of the bastion host"
+}
+
+variable "bastion_user" {
+    description = "user of the bastion host"
+}
+
 variable "key_name" {
     description = "SSH key name in your AWS account for AWS instances."
 }
@@ -72,17 +80,11 @@ variable "service_upstart_conf" {
     description = "The name/path of the service upstart script."
 }
 
-variable "security_group_id" {
-    description = "Consul security_group_id."
-}
-
-variable "ingress_22" {
-    default = "0.0.0.0/0"
-    description = "The number of Consul servers to launch."
-}
-
 variable "vpc_id" {
     description = "The VPC to use for the consul cluster."
+}
+
+variable "vpc_cidr" {
 }
 
 variable "tagName" {

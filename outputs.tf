@@ -18,3 +18,7 @@ output "service_private_server_ips" {
 output "fabio_public_server_ips" {
     value = "${module.fabio.public_server_ips}"
 }
+
+output "bastion" {
+    value = "${module.bastion.user}@${module.bastion.public_ip}"
+}
