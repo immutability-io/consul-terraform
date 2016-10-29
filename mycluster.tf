@@ -146,12 +146,28 @@ module "fabio-api-load-balancer" {
     instance_ids = ["${module.fabio.instance_ids}"]
 }
 */
-resource "aws_route53_record" "fabio" {
+resource "aws_route53_record" "fabio_a" {
     zone_id = "${var.aws_route53_zone_id}"
     name = "fabio.${var.domain_name}"
     type = "A"
     ttl = "10"
-    records = ["${module.fabio.public_server_ips}"]
+    weighted_routing_policy {
+      weight = 50
+    }
+    set_identifier = "fabio_a"
+    records = ["${element(module.fabio.public_server_ips, 0)}"]
+}
+
+resource "aws_route53_record" "fabio_b" {
+    zone_id = "${var.aws_route53_zone_id}"
+    name = "fabio.${var.domain_name}"
+    type = "A"
+    ttl = "10"
+    weighted_routing_policy {
+      weight = 50
+    }
+    set_identifier = "fabio_b"
+    records = ["${element(module.fabio.public_server_ips, 1)}"]
 }
 
 resource "aws_route53_record" "consul" {
