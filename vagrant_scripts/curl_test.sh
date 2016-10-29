@@ -1,7 +1,7 @@
 echo "Press [CTRL+C] to stop.."
 while :
 do
-	echo "curl fabio.immutability.org:9999/hello"
-  curl fabio.immutability.org:9999/hello
+	echo "curl `echo $1`/hello"
+  curl -w "@curl_format.txt" -s $1/hello
 	sleep 1
 done
