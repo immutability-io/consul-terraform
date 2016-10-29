@@ -14,42 +14,6 @@ data "template_file" "template-install-fabio" {
         fabio_url = "${var.fabio_url}"
     }
 }
-
-resource "aws_security_group" "fabio" {
-    name = "${var.tagName}-security-group"
-    description = "Consul internal traffic + maintenance."
-    vpc_id = "${var.vpc_id}"
-
-    // These are for internal traffic
-
-    ingress {
-        protocol    = -1
-        from_port   = 0
-        to_port     = 0
-        cidr_blocks = ["${var.vpc_cidr}"]
-    }
-
-    ingress {
-        from_port = 9999
-        to_port = 9999
-        protocol = "tcp"
-        cidr_blocks = ["0.0.0.0/0"]
-    }
-
-    ingress {
-        from_port = 443
-        to_port = 443
-        protocol = "tcp"
-        cidr_blocks = ["0.0.0.0/0"]
-    }
-
-    egress {
-        from_port = 0
-        to_port = 0
-        protocol = "-1"
-        cidr_blocks = ["0.0.0.0/0"]
-    }
-}
 resource "aws_instance" "fabio"
 {
     ami = "${var.ami}"
@@ -145,4 +109,40 @@ resource "aws_instance" "fabio"
         ]
     }
 
+}
+
+resource "aws_security_group" "fabio" {
+    name = "${var.tagName}-security-group"
+    description = "Consul internal traffic + maintenance."
+    vpc_id = "${var.vpc_id}"
+
+    // These are for internal traffic
+
+    ingress {
+        protocol    = -1
+        from_port   = 0
+        to_port     = 0
+        cidr_blocks = ["${var.vpc_cidr}"]
+    }
+
+    ingress {
+        from_port = 9999
+        to_port = 9999
+        protocol = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+
+    ingress {
+        from_port = 443
+        to_port = 443
+        protocol = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+
+    egress {
+        from_port = 0
+        to_port = 0
+        protocol = "-1"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
 }
