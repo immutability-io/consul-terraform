@@ -1,31 +1,3 @@
-resource "aws_security_group" "consul-service" {
-    name = "${var.tagName}-security-group"
-    description = "Consul internal traffic + maintenance."
-    vpc_id = "${var.vpc_id}"
-
-    // These are for internal traffic
-
-    ingress {
-        protocol    = -1
-        from_port   = 0
-        to_port     = 0
-        cidr_blocks = ["${var.vpc_cidr}"]
-    }
-
-    ingress {
-        protocol    = "tcp"
-        from_port   = 8080
-        to_port     = 8080
-        cidr_blocks = ["0.0.0.0/0"]
-    }
-
-    egress {
-        from_port = 0
-        to_port = 0
-        protocol = "-1"
-        cidr_blocks = ["0.0.0.0/0"]
-    }
-}
 
 data "template_file" "template-consul-client-config" {
     template = "${file("${path.module}/config/client_consul_config.tpl")}"
@@ -138,5 +110,33 @@ resource "aws_instance" "consul-service"
             "${path.module}/scripts/rest_service.sh",
             "${path.module}/scripts/dnsmasq.sh"
         ]
+    }
+}
+resource "aws_security_group" "consul-service" {
+    name = "${var.tagName}-security-group"
+    description = "Consul internal traffic + maintenance."
+    vpc_id = "${var.vpc_id}"
+
+    // These are for internal traffic
+
+    ingress {
+        protocol    = -1
+        from_port   = 0
+        to_port     = 0
+        cidr_blocks = ["${var.vpc_cidr}"]
+    }
+
+    ingress {
+        protocol    = "tcp"
+        from_port   = 8080
+        to_port     = 8080
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+
+    egress {
+        from_port = 0
+        to_port = 0
+        protocol = "-1"
+        cidr_blocks = ["0.0.0.0/0"]
     }
 }

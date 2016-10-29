@@ -1,31 +1,3 @@
-resource "aws_security_group" "load-balancer" {
-    name = "${var.tagName}-security-group"
-    description = "load-balancer traffic"
-    vpc_id = "${var.vpc_id}"
-
-    // These are for internal traffic
-
-    ingress {
-        protocol    = -1
-        from_port   = 0
-        to_port     = 0
-        cidr_blocks = ["${var.vpc_cidr}"]
-    }
-
-    ingress {
-        from_port = 443
-        to_port = 443
-        protocol = "tcp"
-        cidr_blocks = ["0.0.0.0/0"]
-    }
-
-    egress {
-        from_port = 0
-        to_port = 0
-        protocol = "-1"
-        cidr_blocks = ["0.0.0.0/0"]
-    }
-}
 
 resource "aws_elb" "load-balancer" {
     name                      = "${var.tagName}-elb"
@@ -58,5 +30,34 @@ resource "aws_elb" "load-balancer" {
         Schedule = "${var.tagSchedule}"
         BusinessJustification = "${var.tagBusinessJustification}"
         AutoStart = "${var.tagAutoStart}"
+    }
+}
+
+resource "aws_security_group" "load-balancer" {
+    name = "${var.tagName}-security-group"
+    description = "load-balancer traffic"
+    vpc_id = "${var.vpc_id}"
+
+    // These are for internal traffic
+
+    ingress {
+        protocol    = -1
+        from_port   = 0
+        to_port     = 0
+        cidr_blocks = ["${var.vpc_cidr}"]
+    }
+
+    ingress {
+        from_port = 443
+        to_port = 443
+        protocol = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+
+    egress {
+        from_port = 0
+        to_port = 0
+        protocol = "-1"
+        cidr_blocks = ["0.0.0.0/0"]
     }
 }

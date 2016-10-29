@@ -1,26 +1,4 @@
 
-resource "aws_security_group" "consul-node" {
-    name = "${var.tagName}-security-group"
-    description = "Consul internal traffic + maintenance."
-    vpc_id = "${var.vpc_id}"
-
-    // These are for internal traffic
-
-    ingress {
-        protocol    = -1
-        from_port   = 0
-        to_port     = 0
-        cidr_blocks = ["${var.vpc_cidr}"]
-    }
-
-    egress {
-        from_port = 0
-        to_port = 0
-        protocol = "-1"
-        cidr_blocks = ["0.0.0.0/0"]
-    }
-}
-
 resource "aws_instance" "consul-node" {
     ami = "${var.ami}"
     instance_type = "${var.instance_type}"
@@ -64,5 +42,28 @@ resource "aws_instance" "consul-node" {
         [
             "${path.module}/scripts/install.sh"
         ]
+    }
+}
+
+
+resource "aws_security_group" "consul-node" {
+    name = "${var.tagName}-security-group"
+    description = "Consul internal traffic + maintenance."
+    vpc_id = "${var.vpc_id}"
+
+    // These are for internal traffic
+
+    ingress {
+        protocol    = -1
+        from_port   = 0
+        to_port     = 0
+        cidr_blocks = ["${var.vpc_cidr}"]
+    }
+
+    egress {
+        from_port = 0
+        to_port = 0
+        protocol = "-1"
+        cidr_blocks = ["0.0.0.0/0"]
     }
 }
