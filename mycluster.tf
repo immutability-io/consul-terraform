@@ -161,3 +161,22 @@ resource "aws_route53_record" "consul" {
    ttl = "10"
    records = ["${module.consul-ui-load-balancer.dns_name}"]
 }
+
+resource "aws_route53_record" "resty" {
+    zone_id = "${var.aws_route53_zone_id}"
+    name = "resty.${var.domain_name}"
+    type = "A"
+    ttl = "10"
+    records = ["${module.consul-service.public_server_ips}"]
+}
+
+resource "aws_route53_health_check" "resty-health" {
+    count = "${var.service_count}"
+    ip_address = "${element(module.consul-service.public_server_ips, count.index)}"
+    port = 8080
+    type = "HTTP"
+    resource_path = "/unhealthy"
+    failure_threshold = "3"
+    request_interval = "30"
+
+}
