@@ -131,27 +131,29 @@ module "consul-ui-load-balancer" {
     instance_ids = ["${module.consul-cluster.instance_ids}"]
 }
 
-/*
-module "fabio-api-load-balancer" {
-    source = "./terraform/load-balancer"
-    tagName = "fabio-api"
-    tagFinance = "${var.tagFinance}"
-    tagOwnerEmail = "${var.tagOwnerEmail}"
-    tagSchedule = "${var.tagSchedule}"
-    tagBusinessJustification = "${var.tagBusinessJustification}"
-    tagAutoStart = "${var.tagAutoStart}"
-    vpc_id = "${var.vpc_id}"
-    vpc_cidr = "${var.vpc_cidr}"
-    ssl_certificate_id = "${aws_iam_server_certificate.consul_certificate.arn}"
-    instance_ids = ["${module.fabio.instance_ids}"]
-}
-*/
-resource "aws_route53_record" "fabio" {
+
+resource "aws_route53_record" "fabio_a" {
     zone_id = "${var.aws_route53_zone_id}"
     name = "fabio.${var.domain_name}"
     type = "A"
     ttl = "10"
-    records = ["${module.fabio.public_server_ips}"]
+    weighted_routing_policy {
+      weight = 50
+    }
+    set_identifier = "fabio_a"
+    records = ["${element(module.fabio.public_server_ips, 0)}"]
+}
+
+resource "aws_route53_record" "fabio_b" {
+    zone_id = "${var.aws_route53_zone_id}"
+    name = "fabio.${var.domain_name}"
+    type = "A"
+    ttl = "10"
+    weighted_routing_policy {
+      weight = 50
+    }
+    set_identifier = "fabio_b"
+    records = ["${element(module.fabio.public_server_ips, 1)}"]
 }
 
 resource "aws_route53_record" "consul" {
@@ -161,3 +163,24 @@ resource "aws_route53_record" "consul" {
    ttl = "10"
    records = ["${module.consul-ui-load-balancer.dns_name}"]
 }
+/*
+resource "aws_route53_record" "resty" {
+    zone_id = "${var.aws_route53_zone_id}"
+    name = "resty.${var.domain_name}"
+    type = "A"
+    ttl = "10"
+    records = ["${module.consul-service.public_server_ips}"]
+}
+
+
+resource "aws_route53_health_check" "resty-health" {
+    count = "${var.service_count}"
+    ip_address = "${element(module.consul-service.public_server_ips, count.index)}"
+    port = 8080
+    type = "HTTP"
+    resource_path = "/unhealthy"
+    failure_threshold = "3"
+    request_interval = "30"
+
+}
+*/
