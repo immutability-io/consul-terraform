@@ -26,6 +26,6 @@ output "fabio-public-ips" {
 output "fabio-ui-a" {
     value = "https://${aws_route53_record.fabio_a.name}/routes"
 }
-output "fabio-ui-a" {
+output "fabio-ui-b" {
     value = "https://${aws_route53_record.fabio_b.name}/routes"
 }
