@@ -31,7 +31,7 @@ variable "service_count" {
 }
 
 variable "rest_service_url" {
-    default = "https://github.com/Immutability-io/go-rest/releases/download/v0.0.4/go-rest"
+    default = "https://github.com/Immutability-io/go-rest/releases/download/v0.0.5/go-rest"
     description = "The url of the service single file executable (think golang)."
 }
 
