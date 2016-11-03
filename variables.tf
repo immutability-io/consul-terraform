@@ -31,7 +31,7 @@ variable "service_count" {
 }
 
 variable "rest_service_url" {
-    default = "https://github.com/Immutability-io/go-rest/releases/download/v0.0.4/go-rest"
+    default = "https://github.com/Immutability-io/go-rest/releases/download/v0.0.5/go-rest"
     description = "The url of the service single file executable (think golang)."
 }
 
@@ -56,19 +56,17 @@ variable "consul_key" {
     description = "The key to use for the consul cluster."
 }
 
-
 variable "vpc_id" {
     description = "The VPC to use for the consul cluster."
+}
+
+variable "vpc_cidr"       {
+    description = "The VPC CIDR block."
 }
 
 variable "servers" {
     default = "3"
     description = "The number of Consul servers to launch."
-}
-
-variable "ingress_22" {
-    default = "0.0.0.0/0"
-    description = "Ingress CIDR block."
 }
 
 variable "datacenter" {
