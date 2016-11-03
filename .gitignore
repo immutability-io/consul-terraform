@@ -11,3 +11,4 @@
 **/*.csr
 **/*.tfstate
 **/*.tfstate.backup
+.vagrant
