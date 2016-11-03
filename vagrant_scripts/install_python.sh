@@ -18,3 +18,4 @@ sudo add-apt-repository -y ppa:ubuntu-lxc/lxd-stable
 sudo apt-get -y update
 sudo apt-get -y install golang
 sudo wget -O /usr/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
+sudo chmod +x /usr/bin/jq
