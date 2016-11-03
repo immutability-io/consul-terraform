@@ -3,8 +3,8 @@ sudo mkdir /etc/vault.d
 
 
 
-cat << EOF > /tmp/ubuntu-1404-vbox-read.hcl
-path "secret/svc-accts/ubuntu-1404-vbox/*" {
+cat << EOF > /tmp/ubuntu-trusty-64-read.hcl
+path "secret/svc-accts/ubuntu-trusty-64/*" {
   capabilities = ["read"]
 }
 path "auth/token/lookup-self" {
