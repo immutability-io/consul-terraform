@@ -12,3 +12,4 @@
 **/*.tfstate
 **/*.tfstate.backup
 .vagrant
+/vagrant_scripts/vault_secrets.txt
