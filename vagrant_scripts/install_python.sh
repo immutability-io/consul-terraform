@@ -4,9 +4,9 @@ echo -e "\n[python] installing...\n";
 
 sudo apt-get -qq update
 sudo apt-get -qq  upgrade
-sudo apt-get -y -qq install build-essential checkinstall ksh build-dep git
+sudo apt-get -y -qq install build-essential checkinstall ksh git unzip
 #for some reason this just won't be quiet. Maybe a vagrant thing.
-sudo apt-get -y -qq install libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev apache2-utils
+sudo apt-get -y -qq install ibreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev apache2-utils
 cd /usr/src
 sudo wget --progress=bar:force https://www.python.org/ftp/python/2.7.12/Python-2.7.12.tgz
 
@@ -37,5 +37,5 @@ sudo add-apt-repository -y ppa:ubuntu-lxc/lxd-stable
 sudo apt-get -y -qq update
 sudo apt-get -y -qq install golang
 sudo wget --progress=bar:force -O /usr/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64
-
+sudo chmod +x /usr/bin/jq
 echo -e "\n[python] install completed ;) \n";

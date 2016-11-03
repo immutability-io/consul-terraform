@@ -1,18 +1,16 @@
-provider "aws" {
-    region = "${var.region}"
-}
 
 module "consul" {
     source = "../consul-node"
     ami = "${var.ami}"
+    bastion_public_ip = "${var.bastion_public_ip}"
+    bastion_user = "${var.bastion_user}"
     servers = "${var.servers}"
     private_key = "${var.private_key}"
     key_name = "${var.key_name}"
     associate_public_ip_address = "${var.associate_public_ip_address}"
-    security_group_id = "${var.security_group_id}"
     subnet_id = "${var.subnet_id}"
     vpc_id = "${var.vpc_id}"
-    ingress_22 = "${var.ingress_22}"
+    vpc_cidr = "${var.vpc_cidr}"
     tagFinance = "${var.tagFinance}"
     tagOwnerEmail = "${var.tagOwnerEmail}"
     tagSchedule = "${var.tagSchedule}"
@@ -33,9 +31,12 @@ data "template_file" "template-consul-config" {
 resource "null_resource" "cluster-configuration" {
     count = "${var.servers}"
     connection {
-        host = "${element(module.consul.public_server_ips, count.index)}"
+        host = "${element(module.consul.private_server_ips, count.index)}"
         user = "ubuntu"
         private_key = "${var.private_key}"
+        agent        = "false"
+        bastion_host = "${var.bastion_public_ip}"
+        bastion_user = "${var.bastion_user}"
     }
 
     provisioner "file" {

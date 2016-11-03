@@ -23,6 +23,7 @@ try:
     common_name = 'application.'+myhost
     crt_file = '/export/appl/pkgs/.vault/'+common_name+'.crt'
     key_file = '/export/appl/pkgs/.vault/'+common_name+'.key'
+    dot_profile = '/vagrant/config/dot_files/profile'
 
     VAULT_TOKEN = ''
     VAULT_ADDR = 'https://127.0.0.1:8200'
@@ -39,6 +40,9 @@ try:
         print_banner("Root token")
         root_token = vault_keys["root_token"]
         print root_token
+        with open(dot_profile, 'a') as outfile:
+            outfile.write("export VAULT_ADDR="+VAULT_ADDR+"\n")
+            outfile.write("export VAULT_TOKEN="+root_token+"\n")
     else:
         print "Vault is initialized."
 
