@@ -17,7 +17,7 @@ The first thing we do is bring up a HashiCorp [Vagrant](https://www.vagrantup.co
 Vault will be installed and started during the vagrant up process. It will *not* be initialized yet. You have to ssh into the Vagrant box (`vagrant ssh`) to do this. To setup the vault:
 
 ```
-$ source /vagrant/vagrant_scripts/setupVault.sh
+$ source /vagrant/vagrant_scripts/setup_vault.sh
 ```
 
 This does a few things.  It will configure the vault, output a set of vault_secrets, and configure the vault as a Certificate Authority (CA).
