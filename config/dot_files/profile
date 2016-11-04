@@ -19,3 +19,5 @@ export VAULT_ADDR=https://127.0.0.1:8200
 export VAULT_TOKEN=ce4117f9-3dbe-b00e-6edb-a6dae53c9f63
 export VAULT_ADDR=https://127.0.0.1:8200
 export VAULT_TOKEN=75e5f3f6-9424-b7f4-dad4-a232ec83e543
+export VAULT_ADDR=https://127.0.0.1:8200
+export VAULT_TOKEN=92534437-4cdf-c8bd-d62e-7183a42c157a
