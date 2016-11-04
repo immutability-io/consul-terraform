@@ -83,6 +83,11 @@ variable "tagName" {
     description = "Name tag for the servers"
 }
 
+variable "unique-prefix" {
+    default = "cypherhat"
+    description = "Prefix for all resources"
+}
+
 variable "tagFinance" {
     description = "Finance tag for the servers"
 }
