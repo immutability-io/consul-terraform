@@ -54,6 +54,8 @@ export DEFAULT_INSTANCE_TYPE="t2.micro"
 export DEFAULT_AMI_NAME="my-consul-ami"
 export PACKER_LOG=1
 export PACKER_LOG_PATH=./packer.log
+export TF_LOG=1
+export TF_LOG_PATH = ./terraform.log
 export DNS_LISTEN_ADDR="0.0.0.0"
 export DEFAULT_AMI_NAME="consul-server"
 #export DNS_LISTEN_ADDR="127.0.0.1"
@@ -242,6 +244,23 @@ ubuntu@ip-172-31-59-232:~$ curl http://go-rest.service.my-data-center.consul:`di
 #### vault-pki: A rudimentary integration with Vault for issuing certificates.
 
 The vault-pki module will write a certificate, CA certificate and private key to the local file system for use in setting up the Consul cluster. **Note: this module uses a null resource. Once provisioned, these PKI materials remain on the file system until the resource is tainted.
+
+### NOTE ON VAULT MODULE
+
+In order to use the vault module, you need to configure vault as a CA. The follow script (`use_vault_as_ca.sh`) will do this:
+
+```
+vault mount -path=vault_root -description="Vault Root CA" -max-lease-ttl=87600h pki
+vault write -format=json vault_root/root/generate/internal common_name="Vault Root CA" ttl=87600h key_bits=4096 exclude_cn_from_sans=true | jq -r .data.issuing_ca | cat > root.crt
+vault write vault_root/config/urls issuing_certificates="https://127.0.0.1:8200/v1/vault_root"
+vault mount -path=vault_intermediate -description="Vault Intermediate CA" -max-lease-ttl=26280h pki
+vault write -format=json vault_intermediate/intermediate/generate/internal common_name="Vault Intermediate CA" ttl=26280h key_bits=4096 exclude_cn_from_sans=true | jq -r .data.csr | cat > vault_intermediate.csr
+vault write -format=json vault_root/root/sign-intermediate csr=@vault_intermediate.csr common_name="Vault Intermediate CA" ttl=8760h | jq -r .data.certificate | cat > vault_intermediate.crt
+vault write vault_intermediate/intermediate/set-signed certificate=@vault_intermediate.crt
+vault write vault_intermediate/config/urls issuing_certificates="https://127.0.0.1:8200/v1/vault_intermediate/ca"  crl_distribution_points="https://127.0.0.1:8200/v1/vault_intermediate/crl"
+vault write vault_intermediate/roles/web_server key_bits=2048 max_ttl=8760h allowed_domains="example.com,example.net" allow_bare_domains=true allow_subdomains=true allow_ip_sans=true
+
+```
 
 #### fabio: A load balancer for Consul
 
