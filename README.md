@@ -2,7 +2,7 @@
 
 This project is a development exercise in building a HashiCorp [Consul](https://consul.io) cluster in AWS using HashiCorp [Terraform] (https://terraform.io), [Packer](https://www.packer.io) and [Vault](https://vaultproject.io). I have a Slack channel for this repository. Please comment on [this issue](https://github.com/Immutability-io/consul-terraform/issues/7) to get an invite to the channel.
 
-The first thing we do is bring up a HashiCorp [Vagrant](https://www.vagrantup.com/) box. This will install a few things:
+The first thing we do is bring up a HashiCorp [Vagrant](https://www.vagrantup.com/) box (`vagrant up`). This will install a few things:
 
 * Python 2.7.12
 * Packer 0.10.1
@@ -14,31 +14,14 @@ The first thing we do is bring up a HashiCorp [Vagrant](https://www.vagrantup.co
 
 ### Vault in the Vagrant
 
-Vault will be installed and started during the vagrant up process. It will *not* be initialized yet. You have to ssh into the Vagrant box to do this. This is done by running the Python script:
+Vault will be installed and started during the vagrant up process. It will *not* be initialized yet. You have to ssh into the Vagrant box (`vagrant ssh`) to do this. To setup the vault:
 
 ```
-$ sudo python /vagrant/vagrant_scripts/configure_vault.py > vault_secrets.txt
+$ source /vagrant/vagrant_scripts/setup_vault.sh
 ```
 
-I use this Vault as a CA for the Consul cluster that I build. So, I run a script to initialize my CA. First you have to set some environment variables. You will find these in your `vault_secrets.txt` file:
+This does a few things.  It will configure the vault, output a set of vault_secrets, and configure the vault as a Certificate Authority (CA).
 
-```
-$ cat vault_secrets.txt
-...
-*------------*
-* Root token *
-*------------*
-1cc507bd-4bdb-0721-da8e-72b1a8509c52
-...
-$ export VAULT_TOKEN=1cc507bd-4bdb-0721-da8e-72b1a8509c52
-$ export VAULT_ADDR=https://127.0.0.1:8200
-```
-
-Now you can run the script to setup Vault as a CA:
-
-```
-$ sh /vagrant/vagrant_scripts/use_vault_as_ca.sh
-```
 
 You can test your CA by issuing a certificate:
 
@@ -276,4 +259,29 @@ password_file = "./config/.htpasswd"
 service_count = "3"
 vault_token = "<harvested from above>"
 
+```
+
+Exports for the same:
+
+```
+export TF_VAR_ami=$DEFAULT_AMI_ID
+export TF_VAR_key_name = "---insert your AWS Keypair name---"
+export TF_VAR_service_config = "./config/go-rest.json"
+export TF_VAR_datacenter = "my-data-center"
+export TF_VAR_private_key = "---location of AWS Keypair private key---"
+export TF_VAR_root_certificate = "./ssl/vault_root.cer"
+export TF_VAR_consul_certificate = "./ssl/consul.cer"
+export TF_VAR_consul_key = "./ssl/consul.key"
+export TF_VAR_common_name = "consul.example.com"
+export TF_VAR_ip_sans = "127.0.0.1"
+export TF_VAR_associate_public_ip_address = "true"
+export TF_VAR_region = $DEFAULT_REGION_NAME
+export TF_VAR_subnet_id = $DEFAULT_SUBNET_ID
+export TF_VAR_vpc_id = $DEFAULT_VPC_ID
+export TF_VAR_tagFinance = "CostCenter:Project"
+export TF_VAR_tagOwnerEmail = "---Your email---"
+export TF_VAR_gossip_encryption_key = "--- Use `consul keygen` ---"
+export TF_VAR_password_file = "./config/.htpasswd"
+export TF_VAR_service_count = "3"
+export TF_VAR_vault_token = $VAULT_TOKEN
 ```
