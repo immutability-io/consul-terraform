@@ -1,9 +1,13 @@
+#!/usr/bin/env bash
+
+echo -e "\n[vault environment] setup...\n";
+
 sudo mkdir -p /export/appl/pkgs/.vault
 sudo mkdir /etc/vault.d
 
 
 
-cat << EOF > /tmp/ubuntu-trusty-64-read.hcl
+cat << EOF > /tmp/vagrant-ubuntu-trusty-64-read.hcl
 path "secret/svc-accts/ubuntu-trusty-64/*" {
   capabilities = ["read"]
 }
@@ -232,3 +236,5 @@ sudo chmod 0644 /etc/init/vault.conf
 sudo cp /tmp/root.crt /usr/local/share/ca-certificates/
 sudo cp /tmp/cacert.crt /usr/local/share/ca-certificates/
 sudo update-ca-certificates
+
+echo -e "\n[vault environment] setup completed ;) \n";

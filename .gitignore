@@ -2,6 +2,7 @@
 .terraform
 **/*.log
 .environment
+.vagrant
 **/*.pem
 **/*.attr
 **/*.old
@@ -11,3 +12,4 @@
 **/*.csr
 **/*.tfstate
 **/*.tfstate.backup
+**/vault_secrets.txt
