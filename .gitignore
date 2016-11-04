@@ -12,5 +12,4 @@
 **/*.csr
 **/*.tfstate
 **/*.tfstate.backup
-**/*setup_*.sh
 **/vault_secrets.txt

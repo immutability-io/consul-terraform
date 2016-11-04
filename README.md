@@ -260,3 +260,28 @@ service_count = "3"
 vault_token = "<harvested from above>"
 
 ```
+
+Exports for the same:
+
+```
+export TF_VAR_ami=$DEFAULT_AMI_ID
+export TF_VAR_key_name = "---insert your AWS Keypair name---"
+export TF_VAR_service_config = "./config/go-rest.json"
+export TF_VAR_datacenter = "my-data-center"
+export TF_VAR_private_key = "---location of AWS Keypair private key---"
+export TF_VAR_root_certificate = "./ssl/vault_root.cer"
+export TF_VAR_consul_certificate = "./ssl/consul.cer"
+export TF_VAR_consul_key = "./ssl/consul.key"
+export TF_VAR_common_name = "consul.example.com"
+export TF_VAR_ip_sans = "127.0.0.1"
+export TF_VAR_associate_public_ip_address = "true"
+export TF_VAR_region = $DEFAULT_REGION_NAME
+export TF_VAR_subnet_id = $DEFAULT_SUBNET_ID
+export TF_VAR_vpc_id = $DEFAULT_VPC_ID
+export TF_VAR_tagFinance = "CostCenter:Project"
+export TF_VAR_tagOwnerEmail = "---Your email---"
+export TF_VAR_gossip_encryption_key = "--- Use `consul keygen` ---"
+export TF_VAR_password_file = "./config/.htpasswd"
+export TF_VAR_service_count = "3"
+export TF_VAR_vault_token = $VAULT_TOKEN
+```
