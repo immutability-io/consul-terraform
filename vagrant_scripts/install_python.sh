@@ -21,7 +21,7 @@ sudo ./configure > /tmp/python-configure.log 2>&1
 
 echo -e "\n[python] compiling...\n";
 
-sudo make --silent install
+udo make install > /tmp/python-make-install.log 2>&1
 sudo wget --progress=bar:force https://bootstrap.pypa.io/get-pip.py
 
 echo -e "\n[python] get-pip bootstrap...\n";
