@@ -13,3 +13,4 @@
 **/*.tfstate
 **/*.tfstate.backup
 **/vault_secrets.txt
+**/exports.source

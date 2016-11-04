@@ -38,9 +38,12 @@ You can take a look at the Python script and the `use_vault_as_ca.sh` script to 
 
 *Note: This entire exercise assumes that you are using Ubuntu 14.04 or greater.*
 
-We will user Packer to create a base AMI for the Consul cluster as well as the Consul services. This AMI will be used for Consul clients as well. This Packer template will use the following environment variables:
+We will user Packer to create a base AMI for the Consul cluster as well as the Consul services. This AMI will be used for Consul clients as well. This Packer template will use the following environment variables.  Later on the terraform process will use some as well.  To track these in a file that will not be checked in by git do the following:
 
 ```
+cat << EOF > /vagrant/vagrant_scripts/exports.source
+#!/usr/bin/env bash
+
 export AWS_ACCESS_KEY_ID="---insert your AWS key---"
 export AWS_SECRET_ACCESS_KEY="---insert your AWS secret key---"
 export DEFAULT_REGION_NAME="us-east-1"
@@ -56,6 +59,34 @@ export DEFAULT_AMI_NAME="consul-server"
 #export DNS_LISTEN_ADDR="127.0.0.1"
 #export DEFAULT_AMI_NAME="consul-agent"
 
+export TF_VAR_ami="\$DEFAULT_AMI_ID"
+export TF_VAR_key_name="---insert your AWS Keypair name---"
+export TF_VAR_service_config="./config/go-rest.json"
+export TF_VAR_datacenter="my-data-center"
+export TF_VAR_private_key="---location of AWS Keypair private key---"
+export TF_VAR_root_certificate="./ssl/vault_root.cer"
+export TF_VAR_consul_certificate="./ssl/consul.cer"
+export TF_VAR_consul_key="./ssl/consul.key"
+export TF_VAR_common_name="consul.example.com"
+export TF_VAR_ip_sans="127.0.0.1"
+export TF_VAR_associate_public_ip_address="true"
+export TF_VAR_region="\$DEFAULT_REGION_NAME"
+export TF_VAR_subnet_id="\$DEFAULT_SUBNET_ID"
+export TF_VAR_vpc_id="\$DEFAULT_VPC_ID"
+export TF_VAR_tagFinance="CostCenter:Project"
+export TF_VAR_tagOwnerEmail="---Your email---"
+export TF_VAR_gossip_encryption_key="--- Use `consul keygen` ---"
+export TF_VAR_password_file="./config/.htpasswd"
+export TF_VAR_service_count="3"
+export TF_VAR_vault_token="\$VAULT_TOKEN"
+EOF
+
+```
+
+Now you can make changes to `/vagrant/vagrant_scripts/exports.source` for your enviroment and then source the file to your session.  Anytime you need to update a variable do the same.
+
+```
+source /vagrant/vagrant_scripts/exports.source
 ```
 
 Once the environment variables are set, we run Packer. If you notice, there are settings to enable Packer logging. This is often useful in environments with proxies that prevent Internet egress. It is also interesting in that you see the AWS APIs that are invoked by Packer during the AMI build.
