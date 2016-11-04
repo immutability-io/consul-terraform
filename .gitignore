@@ -2,6 +2,7 @@
 .terraform
 **/*.log
 .environment
+.vagrant
 **/*.pem
 **/*.attr
 **/*.old
@@ -11,6 +12,5 @@
 **/*.csr
 **/*.tfstate
 **/*.tfstate.backup
-.vagrant
-vagrant_scripts/setup_exports.sh
+**/setup_exports.sh
 **/vault_secrets.txt
