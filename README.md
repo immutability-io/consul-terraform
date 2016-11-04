@@ -83,7 +83,7 @@ export TF_VAR_password_file="./config/.htpasswd"
 export TF_VAR_service_count="3"
 export TF_VAR_vault_token="\$VAULT_TOKEN"
 export TF_VAR_aws_route53_zone_id="---insert your AWS route53 zone id---"
-export TF_LOG_PATH="/tmp"
+export TF_LOG_PATH="/tmp/tf.log"
 export TF_LOG="TRACE"
 EOF
 
