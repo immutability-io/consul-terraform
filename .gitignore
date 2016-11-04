@@ -13,4 +13,3 @@
 **/*.tfstate.backup
 .vagrant
 vagrant_scripts/vault_secrets.txt
-vagrant_scripts/setupExports.sh
