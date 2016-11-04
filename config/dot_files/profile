@@ -13,3 +13,7 @@ export GOPATH=~
 export PATH=$PATH:$GOPATH/bin
 export VAULT_ADDR=https://127.0.0.1:8200
 export VAULT_TOKEN=62e5a1ff-d89e-357d-c2f0-7a7ad2a9cd2e
+export VAULT_ADDR=https://127.0.0.1:8200
+export VAULT_TOKEN=807efd10-9523-4b59-d911-d25224aa9c68
+export VAULT_ADDR=https://127.0.0.1:8200
+export VAULT_TOKEN=ce4117f9-3dbe-b00e-6edb-a6dae53c9f63
