@@ -83,7 +83,7 @@ EOF
 
 ```
 
-Now you can make changes to `/vagrant/vagrant_scripts/exports.source` for your enviroment and then source the file to your session.  Anytime you need to update a variable do the same.
+Now you can make changes to `/vagrant/vagrant_scripts/exports.source` for your environment and then source the file to your session.  Anytime you need to update a variable do the same.
 
 ```
 source /vagrant/vagrant_scripts/exports.source
