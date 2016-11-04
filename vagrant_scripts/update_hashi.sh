@@ -12,5 +12,8 @@ sudo mv ./terraform /usr/local/bin/terraform
 sudo wget  --progress=bar:force -O ./consul.zip https://releases.hashicorp.com/consul/0.7.0/consul_0.7.0_linux_amd64.zip
 sudo unzip ./consul.zip
 sudo mv ./consul /usr/local/bin/consul
+sudo wget  --progress=bar:force -O ./packer.zip https://releases.hashicorp.com/packer/0.11.0/packer_0.11.0_linux_amd64.zip
+sudo unzip ./packer.zip
+sudo mv ./packer /usr/local/bin/packer
 
 echo -e "\n[hashi tools] update completed ;) \n";
