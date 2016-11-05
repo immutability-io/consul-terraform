@@ -293,7 +293,10 @@ Fabio has a UI, like consul, and this Terraform module puts nginx in front of it
 
 So, there are a lot of inputs to the terraform template. These are things that vary based on your own context. I will paste *some* of these here to help you get started.
 
+One variable, `slack_key`, requires that you contact me directly. I don't want people sending incoming messages to my Slack webhook.
+
 ```
+slack_key = "<Contact me please>"
 ami = "<the AMI from your Packer build>"
 key_name = "<AWS Keypair name>"
 service_config = "./config/go-rest.json"
@@ -320,6 +323,7 @@ vault_token = "<harvested from above>"
 Exports for the same:
 
 ```
+export TF_VAR_slack_key = "<Contact me please>"
 export TF_VAR_ami=$DEFAULT_AMI_ID
 export TF_VAR_key_name = "---insert your AWS Keypair name---"
 export TF_VAR_service_config = "./config/go-rest.json"
