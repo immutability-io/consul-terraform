@@ -40,9 +40,6 @@ try:
         print_banner("Root token")
         root_token = vault_keys["root_token"]
         print root_token
-        with open(dot_profile, 'a') as outfile:
-            outfile.write("export VAULT_ADDR="+VAULT_ADDR+"\n")
-            outfile.write("export VAULT_TOKEN="+root_token+"\n")
     else:
         print "Vault is initialized."
 

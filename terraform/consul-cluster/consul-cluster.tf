@@ -11,6 +11,7 @@ module "consul" {
     subnet_id = "${var.subnet_id}"
     vpc_id = "${var.vpc_id}"
     vpc_cidr = "${var.vpc_cidr}"
+    tagName = "${var.tagName}"
     tagFinance = "${var.tagFinance}"
     tagOwnerEmail = "${var.tagOwnerEmail}"
     tagSchedule = "${var.tagSchedule}"
