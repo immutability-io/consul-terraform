@@ -9,18 +9,16 @@ data "template_file" "template-consul-client-config" {
 }
 
 
-resource "aws_instance" "consul-service"
-{
+resource "aws_instance" "vault-service" {
     ami = "${var.ami}"
     count = "${var.service_count}"
     instance_type = "${var.instance_type}"
     key_name = "${var.key_name}"
     subnet_id = "${var.subnet_id}"
     associate_public_ip_address = "${var.associate_public_ip_address}"
-    vpc_security_group_ids = ["${aws_security_group.consul-service.id}"]
+    vpc_security_group_ids = ["${aws_security_group.vault-service.id}"]
 
-    connection
-    {
+    connection {
         user          = "ubuntu"
         host          = "${self.private_ip}"
         private_key   = "${var.private_key}"
@@ -29,8 +27,7 @@ resource "aws_instance" "consul-service"
         bastion_user  = "${var.bastion_user}"
     }
 
-    tags
-    {
+    tags {
         Name = "${var.tagName}-${count.index}"
         Finance = "${var.tagFinance}"
         OwnerEmail = "${var.tagOwnerEmail}"
