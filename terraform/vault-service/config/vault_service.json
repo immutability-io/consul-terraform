@@ -1,0 +1,14 @@
+{
+  "service": {
+    "name": "vault",
+    "port": 8200,
+    "tags": ["vault", "urlprefix-vault.service.consul/"],
+    "check": {
+      "id": "vault-health",
+      "name": "Running on port 8200",
+      "http": "https://localhost:8200/v1/sys/health",
+      "interval": "10s",
+      "timeout": "1s"
+    }
+  }
+}
