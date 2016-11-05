@@ -4,6 +4,7 @@ provider "aws" {
 
 module "consul-certificates" {
     source = "./terraform/vault-pki"
+    temp_file = "./consul_tmp.json"
     certificate = "${var.consul_certificate}"
     private_key = "${var.consul_key}"
     issuer_certificate = "${var.root_certificate}"
@@ -16,6 +17,7 @@ module "consul-certificates" {
 
 module "vault-certificates" {
     source = "./terraform/vault-pki"
+    temp_file = "./vault_tmp.json"
     certificate = "${var.vault_certificate}"
     private_key = "${var.vault_key}"
     issuer_certificate = "${var.vault_root_certificate}"
