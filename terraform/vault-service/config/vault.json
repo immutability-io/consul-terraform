@@ -1,0 +1,18 @@
+{
+  "default_lease_ttl":"24h",
+  "max_lease_ttl":"24h",
+  "backend": {
+    "consul":{
+      "address":"127.0.0.1:8500",
+      "path":"vault/",
+      "advertise_addr":"https://vault_ip:8200"
+    }
+  },
+  "listener":{
+    "tcp":{
+      "address":"vault_ip:8200",
+      "tls_cert_file": "/etc/vault.d/vault.crt",
+      "tls_key_file": "/etc/vault.d/vault.key"
+    }
+  }
+}
