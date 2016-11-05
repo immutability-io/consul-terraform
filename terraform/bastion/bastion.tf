@@ -15,7 +15,7 @@ resource "aws_instance" "bastion" {
 }
 
 resource "aws_security_group" "bastion" {
-    name        = "${var.tagName}"
+    name        = "${var.tagName}-security-group"
     vpc_id      = "${var.vpc_id}"
     description = "Bastion security group"
 
