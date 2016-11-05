@@ -54,8 +54,8 @@ export DEFAULT_INSTANCE_TYPE="t2.micro"
 export DEFAULT_AMI_NAME="my-consul-ami"
 export PACKER_LOG=1
 export PACKER_LOG_PATH=./packer.log
-export TF_LOG=1
-export TF_LOG_PATH = ./terraform.log
+export TF_LOG_PATH="/tmp/terraform.log"
+export TF_LOG="DEBUG"
 export DNS_LISTEN_ADDR="0.0.0.0"
 export DEFAULT_AMI_NAME="consul-server"
 #export DNS_LISTEN_ADDR="127.0.0.1"
@@ -85,8 +85,6 @@ export TF_VAR_password_file="./config/.htpasswd"
 export TF_VAR_service_count="3"
 export TF_VAR_vault_token="\$VAULT_TOKEN"
 export TF_VAR_aws_route53_zone_id="---insert your AWS route53 zone id---"
-export TF_LOG_PATH="/tmp/tf.log"
-export TF_LOG="DEBUG"
 EOF
 
 ```
