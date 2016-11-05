@@ -21,6 +21,7 @@ module "bastion" {
     subnet_id = "${var.subnet_id}"
     vpc_id = "${var.vpc_id}"
     vpc_cidr = "${var.vpc_cidr}"
+    tagName = "${var.unique-prefix}-bastion"
     tagFinance = "${var.tagFinance}"
     tagOwnerEmail = "${var.tagOwnerEmail}"
     tagSchedule = "${var.tagSchedule}"
@@ -40,6 +41,7 @@ module "consul-cluster" {
     subnet_id = "${var.subnet_id}"
     vpc_id = "${var.vpc_id}"
     vpc_cidr = "${var.vpc_cidr}"
+    tagName = "${var.unique-prefix}-consul"
     tagFinance = "${var.tagFinance}"
     tagOwnerEmail = "${var.tagOwnerEmail}"
     tagSchedule = "${var.tagSchedule}"
@@ -47,9 +49,9 @@ module "consul-cluster" {
     tagAutoStart = "${var.tagAutoStart}"
     datacenter = "${var.datacenter}"
     gossip_encryption_key = "${var.gossip_encryption_key}"
-    consul_certificate = "${var.consul_certificate}"
-    consul_key = "${var.consul_key}"
-    root_certificate = "${var.root_certificate}"
+    consul_certificate = "${module.vault-pki.certificate}"
+    consul_key = "${module.vault-pki.private_key}"
+    root_certificate = "${module.vault-pki.issuer_certificate}"
     password_file = "${var.password_file}"
 }
 
@@ -68,6 +70,7 @@ module "consul-service" {
     subnet_id = "${var.subnet_id}"
     vpc_id = "${var.vpc_id}"
     vpc_cidr = "${var.vpc_cidr}"
+    tagName = "${var.unique-prefix}-service"
     tagFinance = "${var.tagFinance}"
     tagOwnerEmail = "${var.tagOwnerEmail}"
     tagSchedule = "${var.tagSchedule}"
@@ -75,9 +78,9 @@ module "consul-service" {
     tagAutoStart = "${var.tagAutoStart}"
     datacenter = "${var.datacenter}"
     gossip_encryption_key = "${var.gossip_encryption_key}"
-    consul_certificate = "${var.consul_certificate}"
-    consul_key = "${var.consul_key}"
-    root_certificate = "${var.root_certificate}"
+    consul_certificate = "${module.vault-pki.certificate}"
+    consul_key = "${module.vault-pki.private_key}"
+    root_certificate = "${module.vault-pki.issuer_certificate}"
     rest_service_url = "${var.rest_service_url}"
 }
 
@@ -94,6 +97,7 @@ module "fabio" {
     subnet_id = "${var.subnet_id}"
     vpc_id = "${var.vpc_id}"
     vpc_cidr = "${var.vpc_cidr}"
+    tagName = "${var.unique-prefix}-fabio"
     tagFinance = "${var.tagFinance}"
     tagOwnerEmail = "${var.tagOwnerEmail}"
     tagSchedule = "${var.tagSchedule}"
@@ -101,16 +105,16 @@ module "fabio" {
     tagAutoStart = "${var.tagAutoStart}"
     datacenter = "${var.datacenter}"
     gossip_encryption_key = "${var.gossip_encryption_key}"
-    consul_certificate = "${var.consul_certificate}"
-    consul_key = "${var.consul_key}"
-    root_certificate = "${var.root_certificate}"
+    consul_certificate = "${module.vault-pki.certificate}"
+    consul_key = "${module.vault-pki.private_key}"
+    root_certificate = "${module.vault-pki.issuer_certificate}"
     password_file = "${var.password_file}"
 }
 
 resource "aws_iam_server_certificate" "consul_certificate" {
     name_prefix      = "consul"
-    certificate_body = "${file(var.consul_certificate)}"
-    private_key      = "${file(var.consul_key)}"
+    certificate_body = "${module.vault-pki.certificate_body}"
+    private_key      = "${module.vault-pki.private_key_body}"
 
     lifecycle {
         create_before_destroy = true
@@ -119,7 +123,7 @@ resource "aws_iam_server_certificate" "consul_certificate" {
 
 module "consul-ui-load-balancer" {
     source = "./terraform/load-balancer"
-    tagName = "consul-ui"
+    tagName = "${var.unique-prefix}-consul-ui-elb"
     tagFinance = "${var.tagFinance}"
     tagOwnerEmail = "${var.tagOwnerEmail}"
     tagSchedule = "${var.tagSchedule}"
