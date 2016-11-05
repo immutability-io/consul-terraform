@@ -1,4 +1,0 @@
-vault write -format=json vault_intermediate/issue/web_server common_name="test.example.com"  ttl=720h > test.example.com.json
-cat test.example.com.json | jq -r .data.certificate | cat > test.example.com.crt
-cat test.example.com.json | jq -r .data.issuing_ca | cat > issuing_ca.crt
-cat test.example.com.json | jq -r .data.private_key | cat > test.example.com.key
