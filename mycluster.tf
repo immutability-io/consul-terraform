@@ -210,14 +210,6 @@ resource "aws_route53_record" "consul" {
    ttl = "10"
    records = ["${module.consul-ui-load-balancer.dns_name}"]
 }
-
-resource "null_resource" "notify-slack-channel" {
-    provisioner "local-exec" {
-        command = <<EOT
-        curl -X POST --data-urlencode 'payload={"channel": "#aws-deployments", "username": "terraform", "text": "Fabio was deployed here: <https://${aws_route53_record.fabio_a.name}/routes>. Consul was deployed here: <https://${aws_route53_record.consul.name}/ui>", "icon_emoji": ":squirrel:"}' https://hooks.slack.com/services/T0LV60J3V/B2Y4A34M6/${var.slack_key}
-EOT
-    }
-}
 /*
 resource "aws_route53_record" "resty" {
     zone_id = "${var.aws_route53_zone_id}"

@@ -77,18 +77,23 @@ resource "aws_instance" "vault-service" {
     }
 
     provisioner "file" {
-        source = "${path.module}/config/rest_service.conf"
-        destination = "/tmp/rest_service.conf"
-    }
-
-    provisioner "file" {
         source = "${path.module}/config/upstart.conf"
         destination = "/tmp/upstart.conf"
     }
 
     provisioner "file" {
+        source = "${path.module}/config/vault_service.json"
+        destination = "/tmp/vault_service.json"
+    }
+
+    provisioner "file" {
         source = "${path.module}/config/vault.conf"
         destination = "/tmp/vault.conf"
+    }
+
+    provisioner "file" {
+        source = "${path.module}/scripts/install_vault_service.sh"
+        destination = "/tmp/install_vault_service.sh"
     }
 
     provisioner "remote-exec" {
