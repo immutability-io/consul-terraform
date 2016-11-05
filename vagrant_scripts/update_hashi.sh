@@ -6,7 +6,7 @@ sudo wget  --progress=bar:force -O ./vault.zip https://releases.hashicorp.com/va
 sudo unzip ./vault.zip
 sudo mv ./vault /usr/local/bin/vault
 sudo rm /usr/local/bin/terraform*
-sudo wget  --progress=bar:force -O ./terraform.zip https://releases.hashicorp.com/terraform/0.7.7/terraform_0.7.7_linux_amd64.zip
+sudo wget  --progress=bar:force -O ./terraform.zip https://releases.hashicorp.com/terraform/0.7.9/terraform_0.7.9_linux_amd64.zip
 sudo unzip ./terraform.zip
 sudo mv ./terraform /usr/local/bin/terraform
 sudo wget  --progress=bar:force -O ./consul.zip https://releases.hashicorp.com/consul/0.7.0/consul_0.7.0_linux_amd64.zip
