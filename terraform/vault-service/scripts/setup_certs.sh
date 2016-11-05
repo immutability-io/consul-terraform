@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 set -e
 
-
-
+if [ ! -d "/etc/vault.d" ]; then
+  sudo mkdir /etc/vault.d
+fi
 if [ ! -d "/etc/consul.d" ]; then
   sudo mkdir /etc/consul.d
 fi
@@ -28,11 +29,6 @@ echo "Setup Vault Certificate"
 sudo chown root:root /tmp/vault.crt
 sudo mv /tmp/vault.crt /etc/vault.d/vault.crt
 sudo chmod 0644 /etc/vault.d/vault.crt
-
-echo "Setup Consul Key"
-sudo chown root:root /tmp/consul.key
-sudo mv /tmp/consul.key /etc/consul.d/consul.key
-sudo chmod 0644 /etc/consul.d/consul.key
 
 echo "Setup Vault Key"
 sudo chown root:root /tmp/vault.key

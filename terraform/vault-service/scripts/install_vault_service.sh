@@ -15,10 +15,6 @@ echo "Registering Vault with Consul..."
 sudo chmod 777 /tmp/vault_service.json
 sudo mv /tmp/vault_service.json /etc/consul.d
 
-echo "Configure Vault ..."
-sudo chmod 777 /tmp/vault_service.json
-sudo mv /tmp/vault_service.json /etc/consul.d
-
 sudo chmod 777 /tmp/vault.json
 sed -i "s/vault_ip/`ifconfig eth0 | grep "inet " | awk -F'[: ]+' '{ print $4 }'`/g" /tmp/vault.json
 sudo mv /tmp/vault.json /etc/vault.d
