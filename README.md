@@ -247,9 +247,11 @@ ubuntu@ip-172-31-59-232:~$ curl http://go-rest.service.my-data-center.consul:`di
 
 #### vault-pki: A rudimentary integration with Vault for issuing certificates.
 
-The vault-pki module will write a certificate, CA certificate and private key to the local file system for use in setting up the Consul cluster. **Note: this module uses a null resource. Once provisioned, these PKI materials remain on the file system until the resource is tainted.
+The vault-pki module will write a certificate, CA certificate and private key to the local file system for use in setting up the Consul cluster.
 
 ### NOTE ON VAULT MODULE
+
+This module is a *hack*. It is just a place holder, and a weak one at that, until the vault terraform provider has been... provided... [Rumor is that this will be in Terraform 0.8](https://twitter.com/mitchellh/status/794247604372525056)
 
 In order to use the vault module, you need to configure vault as a CA. The follow script (`use_vault_as_ca.sh`) will do this:
 
