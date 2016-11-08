@@ -1,7 +1,6 @@
 
 resource "aws_elb" "load-balancer" {
     name                      = "${var.tagName}-elb"
-    availability_zones        = ["us-east-1b"]
     cross_zone_load_balancing = true
 
     listener {
@@ -21,6 +20,7 @@ resource "aws_elb" "load-balancer" {
     }
 
     security_groups = ["${aws_security_group.load-balancer.id}"]
+    subnets = ["${var.subnet_ids}"]
     instances = ["${var.instance_ids}"]
 
     tags {

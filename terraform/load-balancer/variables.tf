@@ -7,6 +7,10 @@ variable "vpc_id" {
     description = "The VPC to use."
 }
 
+variable "subnet_ids" {
+    description = "Subnets for your elb."
+}
+
 variable "vpc_cidr" {
 }
 
