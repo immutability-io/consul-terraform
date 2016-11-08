@@ -26,6 +26,10 @@ variable "vault_token" {
     description = "The vault token."
 }
 
+variable "temp_file" {
+    description = "The name of the temp file."
+}
+
 variable "vault_addr" {
     default = "https://127.0.0.1:8200"
     description = "The vault address."

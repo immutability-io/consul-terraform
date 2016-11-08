@@ -2,11 +2,25 @@ provider "aws" {
     region = "${var.region}"
 }
 
-module "vault-pki" {
+module "consul-certificates" {
     source = "./terraform/vault-pki"
+    temp_file = "./consul_tmp.json"
     certificate = "${var.consul_certificate}"
     private_key = "${var.consul_key}"
     issuer_certificate = "${var.root_certificate}"
+    common_name = "${var.common_name}"
+    ip_sans = "${var.ip_sans}"
+    alt_names = "${var.alt_names}"
+    vault_token = "${var.vault_token}"
+    vault_addr = "${var.vault_addr}"
+}
+
+module "vault-certificates" {
+    source = "./terraform/vault-pki"
+    temp_file = "./vault_tmp.json"
+    certificate = "${var.vault_certificate}"
+    private_key = "${var.vault_key}"
+    issuer_certificate = "${var.vault_root_certificate}"
     common_name = "${var.common_name}"
     ip_sans = "${var.ip_sans}"
     alt_names = "${var.alt_names}"
@@ -49,9 +63,9 @@ module "consul-cluster" {
     tagAutoStart = "${var.tagAutoStart}"
     datacenter = "${var.datacenter}"
     gossip_encryption_key = "${var.gossip_encryption_key}"
-    consul_certificate = "${module.vault-pki.certificate}"
-    consul_key = "${module.vault-pki.private_key}"
-    root_certificate = "${module.vault-pki.issuer_certificate}"
+    consul_certificate = "${module.consul-certificates.certificate}"
+    consul_key = "${module.consul-certificates.private_key}"
+    root_certificate = "${module.consul-certificates.issuer_certificate}"
     password_file = "${var.password_file}"
 }
 
@@ -78,10 +92,39 @@ module "consul-service" {
     tagAutoStart = "${var.tagAutoStart}"
     datacenter = "${var.datacenter}"
     gossip_encryption_key = "${var.gossip_encryption_key}"
-    consul_certificate = "${module.vault-pki.certificate}"
-    consul_key = "${module.vault-pki.private_key}"
-    root_certificate = "${module.vault-pki.issuer_certificate}"
+    consul_certificate = "${module.consul-certificates.certificate}"
+    consul_key = "${module.consul-certificates.private_key}"
+    root_certificate = "${module.consul-certificates.issuer_certificate}"
     rest_service_url = "${var.rest_service_url}"
+}
+
+module "vault-service" {
+    source = "./terraform/vault-service"
+    instance_type = "t2.nano"
+    consul_cluster_ips = "${module.consul-cluster.private_server_ips}"
+    ami = "${var.ami}"
+    service_count = "2"
+    private_key = "${file(var.private_key)}"
+    key_name = "${var.key_name}"
+    bastion_public_ip = "${module.bastion.public_ip}"
+    bastion_user = "${module.bastion.user}"
+    associate_public_ip_address = "${var.associate_public_ip_address}"
+    subnet_id = "${var.subnet_id}"
+    vpc_id = "${var.vpc_id}"
+    vpc_cidr = "${var.vpc_cidr}"
+    tagName = "${var.unique-prefix}-vault"
+    tagFinance = "${var.tagFinance}"
+    tagOwnerEmail = "${var.tagOwnerEmail}"
+    tagSchedule = "${var.tagSchedule}"
+    tagBusinessJustification = "${var.tagBusinessJustification}"
+    tagAutoStart = "${var.tagAutoStart}"
+    datacenter = "${var.datacenter}"
+    gossip_encryption_key = "${var.gossip_encryption_key}"
+    consul_certificate = "${module.consul-certificates.certificate}"
+    consul_key = "${module.consul-certificates.private_key}"
+    vault_certificate = "${module.vault-certificates.certificate}"
+    vault_key = "${module.vault-certificates.private_key}"
+    root_certificate = "${module.consul-certificates.issuer_certificate}"
 }
 
 module "fabio" {
@@ -105,16 +148,16 @@ module "fabio" {
     tagAutoStart = "${var.tagAutoStart}"
     datacenter = "${var.datacenter}"
     gossip_encryption_key = "${var.gossip_encryption_key}"
-    consul_certificate = "${module.vault-pki.certificate}"
-    consul_key = "${module.vault-pki.private_key}"
-    root_certificate = "${module.vault-pki.issuer_certificate}"
+    consul_certificate = "${module.consul-certificates.certificate}"
+    consul_key = "${module.consul-certificates.private_key}"
+    root_certificate = "${module.consul-certificates.issuer_certificate}"
     password_file = "${var.password_file}"
 }
 
 resource "aws_iam_server_certificate" "consul_certificate" {
     name_prefix      = "consul"
-    certificate_body = "${module.vault-pki.certificate_body}"
-    private_key      = "${module.vault-pki.private_key_body}"
+    certificate_body = "${module.consul-certificates.certificate_body}"
+    private_key      = "${module.consul-certificates.private_key_body}"
 
     lifecycle {
         create_before_destroy = true
@@ -168,14 +211,6 @@ resource "aws_route53_record" "consul" {
    type = "CNAME"
    ttl = "10"
    records = ["${module.consul-ui-load-balancer.dns_name}"]
-}
-
-resource "null_resource" "notify-slack-channel" {
-    provisioner "local-exec" {
-        command = <<EOT
-        curl -X POST --data-urlencode 'payload={"channel": "#aws-deployments", "username": "terraform", "text": "Fabio was deployed here: <https://${aws_route53_record.fabio_a.name}/routes>. Consul was deployed here: <https://${aws_route53_record.consul.name}/ui>", "icon_emoji": ":squirrel:"}' https://hooks.slack.com/services/T0LV60J3V/B2Y4A34M6/${var.slack_key}
-EOT
-    }
 }
 /*
 resource "aws_route53_record" "resty" {
