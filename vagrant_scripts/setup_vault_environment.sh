@@ -6,9 +6,9 @@ sudo mkdir -p /export/appl/pkgs/.vault
 sudo mkdir /etc/vault.d
 
 
-
-cat << EOF > /tmp/vagrant-ubuntu-trusty-64-read.hcl
-path "secret/svc-accts/ubuntu-trusty-64/*" {
+hcl_uname=`python -c "import os;print os.uname()[1]"`
+cat << EOF > /tmp/$hcl_uname-read.hcl
+path "secret/svc-accts/$hcl_uname/*" {
   capabilities = ["read"]
 }
 path "auth/token/lookup-self" {
@@ -207,31 +207,29 @@ tdkhcUbrM1CO4UptzMw=
 -----END CERTIFICATE-----
 EOF
 
-cat << EOF > /tmp/vault.conf
-description "Vault agent"
+cat << EOF > /tmp/vault.service
+[Unit]
+Description=vault server
+Requires=network-online.target
+#After=network-online.target consul.service
 
-start on started networking
-stop on runlevel [!2345]
+[Service]
+EnvironmentFile=-/etc/service/vault
+Environment=GOMAXPROCS=`nproc`
+Restart=on-failure
+ExecStart=/usr/local/bin/vault server $OPTIONS -config=/etc/vault.d >> /var/log/vault.log 2>&1
+ExecStartPost=/bin/bash -c "for key in $KEYS; do /usr/local/sbin/vault unseal $CERT $key; done"
 
-respawn
-# This is to avoid Upstart re-spawning the process upon `consul leave`
-normal exit 0 INT
-
-script
-  if [ -f "/etc/service/vault" ]; then
-    . /etc/service/vault
-  fi
-
-  # Make sure to use all our CPUs, because Consul can block a scheduler thread
-  export GOMAXPROCS=`nproc`
-
-  exec /usr/local/bin/vault server -config="/etc/vault.d" >>/var/log/vault.log 2>&1 &
-end script
+[Install]
+WantedBy=multi-user.target
 EOF
 
-sudo chown root:root /tmp/vault.conf
-sudo mv /tmp/vault.conf /etc/init/vault.conf
-sudo chmod 0644 /etc/init/vault.conf
+sudo chown root:root /tmp/vault.service
+sudo mv /tmp/vault.service /etc/systemd/system/vault.service
+sudo chmod 0644 /etc/systemd/system/vault.service
+sudo systemctl daemon-reload
+sudo systemctl enable vault.service
+sudo systemctl start vault.service
 
 sudo cp /tmp/root.crt /usr/local/share/ca-certificates/
 sudo cp /tmp/cacert.crt /usr/local/share/ca-certificates/

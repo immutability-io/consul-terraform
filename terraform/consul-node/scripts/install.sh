@@ -12,15 +12,13 @@ EOF
 
 sudo mv /tmp/nginx.conf /etc/nginx/sites-available/default
 
-echo "Installing Upstart service..."
-if [ ! -d "/etc/consul.d" ]; then
-  sudo mkdir -p /etc/consul.d
+echo "Installing Consul Systemd service..."
+if [ ! -d "/etc/sysconfig" ]; then
+  sudo mkdir -p /etc/sysconfig
 fi
-if [ ! -d "/etc/service" ]; then
-  sudo mkdir -p /etc/service
-fi
-sudo chown root:root /tmp/upstart.conf
-sudo mv /tmp/upstart.conf /etc/init/consul.conf
-sudo chmod 0644 /etc/init/consul.conf
-sudo mv /tmp/consul_flags /etc/service/consul
-sudo chmod 0644 /etc/service/consul
+
+sudo chown root:root /tmp/consul.service
+sudo mv /tmp/consul.service /etc/systemd/system/consul.service
+sudo chmod 0644 /etc/systemd/system/consul.service
+sudo systemctl daemon-reload
+sudo systemctl enable consul.service

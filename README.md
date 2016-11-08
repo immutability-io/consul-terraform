@@ -48,7 +48,7 @@ export AWS_ACCESS_KEY_ID="---insert your AWS key---"
 export AWS_SECRET_ACCESS_KEY="---insert your AWS secret key---"
 export DEFAULT_REGION_NAME="us-east-1"
 export DEFAULT_VPC_ID="---insert your AWS VPC ID---"
-export DEFAULT_AMI_ID="ami-2d39803a"
+export DEFAULT_AMI_ID="ami-40d28157"
 export DEFAULT_SUBNET_ID="---insert your AWS subnet---"
 export DEFAULT_INSTANCE_TYPE="t2.micro"
 export DEFAULT_AMI_NAME="my-consul-ami"
@@ -61,7 +61,8 @@ export DEFAULT_AMI_NAME="consul-server"
 #export DNS_LISTEN_ADDR="127.0.0.1"
 #export DEFAULT_AMI_NAME="consul-agent"
 
-export TF_VAR_ami="\$DEFAULT_AMI_ID"
+export TF_VAR_slack_key="---get it from the slack channel---"
+export TF_VAR_ami="--insert your packer AMI id here---"
 export TF_VAR_key_name="---insert your AWS Keypair name---"
 export TF_VAR_service_config="./config/go-rest.json"
 export TF_VAR_datacenter="my-data-center"
@@ -147,7 +148,7 @@ The modules in this project are:
 The consul-node module creates an EC2 instance (based on the AMI we built above) and pushes various configurations to it:
 
 * IP Tables configuration to allow the Consul gossip traffic on ports 8300, 8301, 8302, 8400
-* An upstart configuration to load consul as soon as networking starts.
+* A Systemd configuration to load consul as soon as networking starts.
 * An nginx.conf to proxy 443 (HTTPS) to the Consul UI on 8500. Nginx is configured for basic authentication using an .htpasswd file. See [here](https://www.digitalocean.com/community/tutorials/how-to-set-up-password-authentication-with-nginx-on-ubuntu-14-04). htpasswd is installed in the vagrant box, so you can use it to generate your own .htpasswd file.
 
 This module also creates a security group that allows gossip traffic on the above ports.

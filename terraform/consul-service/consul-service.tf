@@ -82,8 +82,8 @@ resource "aws_instance" "consul-service"
     }
 
     provisioner "file" {
-        source = "${path.module}/config/upstart.conf"
-        destination = "/tmp/upstart.conf"
+        source = "${path.module}/config/consul.service"
+        destination = "/tmp/consul.service"
     }
 
     provisioner "remote-exec" {
