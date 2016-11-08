@@ -1,0 +1,14 @@
+[Unit]
+Description=Consul-enabled rest service
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+Restart=on-failure
+RestartSec=10s
+ExecStartPre=test -x /usr/local/bin/rest_service || { stop; exit 0; }
+ExecStart=/usr/local/bin/rest_service
+SuccessExitStatus=0 INT
+
+[Install]
+WantedBy=multi-user.target

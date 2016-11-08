@@ -3,7 +3,7 @@ set -e
 
 
 echo "Starting Consul using Systemd..."
-sudo service start consul
+sudo service consul start
 echo "Starting fabio using upstart..."
 sleep 10
-sudo start fabio
+sudo service fabio start

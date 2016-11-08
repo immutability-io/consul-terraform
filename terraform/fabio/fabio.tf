@@ -73,8 +73,8 @@ resource "aws_instance" "fabio"
     }
 
     provisioner "file" {
-        source = "${path.module}/config/fabio.conf"
-        destination = "/tmp/fabio.conf"
+        source = "${path.module}/config/fabio.service"
+        destination = "/tmp/fabio.service"
     }
 
     provisioner "file" {
