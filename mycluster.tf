@@ -122,6 +122,8 @@ resource "aws_iam_server_certificate" "consul_certificate" {
 }
 
 module "consul-ui-load-balancer" {
+    vpc_id = "${var.vpc_id}"
+    subnet_ids = "${var.subnet_id}"
     source = "./terraform/load-balancer"
     tagName = "${var.unique-prefix}-consul-ui-elb"
     tagFinance = "${var.tagFinance}"
