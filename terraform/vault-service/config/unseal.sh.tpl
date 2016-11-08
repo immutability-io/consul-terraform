@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+VAULTHOST=`uname -n`.ec2.internal:8200
+
 logger() {
   DT=$(date '+%Y/%m/%d %H:%M:%S')
   echo "$DT vault-unseal.sh: $1"
@@ -60,8 +62,8 @@ while ! sudo netstat -tulpn | grep 8200 > /dev/null; do
 done
 
 logger "Setting variables"
-CONSUL=https://127.0.0.1:8500
-VAULT=https://127.0.0.1:8200
+CONSUL=http://127.0.0.1:8500
+export VAULT_ADDR=https://`uname -n`.ec2.internal:8200
 cget() { curl -sf "$CONSUL/v1/kv/service/vault/$1?raw"; }
 
 logger "Check if Vault's been initialized"
