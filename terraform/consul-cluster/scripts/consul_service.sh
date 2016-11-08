@@ -2,5 +2,5 @@
 set -e
 
 
-echo "Starting Consul using upstart ..."
-sudo start consul
+echo "Starting Consul using systemd ..."
+sudo systemctl start consul

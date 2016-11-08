@@ -71,13 +71,8 @@ variable "rest_service_url" {
 }
 
 variable "rest_service_conf" {
-    default = "scripts/rest_service.conf"
+    default = "scripts/rest_service.service"
     description = "The name/path of the service config (health check)."
-}
-
-variable "service_upstart_conf" {
-    default = "scripts/upstart.conf"
-    description = "The name/path of the service upstart script."
 }
 
 variable "vpc_id" {

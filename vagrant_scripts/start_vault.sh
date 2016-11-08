@@ -2,6 +2,6 @@
 
 echo -e "\n[vault] start...\n";
 
-sudo start vault
+sudo systemctl start vault
 
 echo -e "\n[vault] start completed ;) \n";
