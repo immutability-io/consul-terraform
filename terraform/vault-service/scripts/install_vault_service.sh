@@ -14,7 +14,7 @@ fi
 echo "Registering Vault with Consul..."
 VAULT_ADDR=`uname -n`.ec2.internal
 sudo chmod 777 /tmp/vault_service.json
-sed -i "s/vault_ip/`echo $VAULT_ADDR`/g" /tmp/vault_service.json
+sed -i "s/vault_url/`echo $VAULT_ADDR`/g" /tmp/vault_service.json
 sudo mv /tmp/vault_service.json /etc/consul.d
 
 sudo chmod 777 /tmp/vault.json
