@@ -18,6 +18,7 @@ sudo mv /tmp/vault_service.json /etc/consul.d
 sudo chmod 777 /tmp/vault.json
 sed -i "s/vault_ip/`ifconfig eth0 | grep "inet " | awk -F'[: ]+' '{ print $4 }'`/g" /tmp/vault.json
 sudo mv /tmp/vault.json /etc/vault.d
+echo $(date '+%s') | sudo tee -a /etc/vault.d/configured > /dev/null
 
 echo "Installing Vault Upstart..."
 sudo chown root:root /tmp/vault.conf

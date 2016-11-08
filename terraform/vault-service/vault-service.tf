@@ -8,6 +8,9 @@ data "template_file" "template-consul-client-config" {
     }
 }
 
+data "template_file" "vault-unseal-script" {
+    template = "${file("${path.module}/config/unseal.sh.tpl")}"
+}
 
 resource "aws_instance" "vault-service" {
     ami = "${var.ami}"
@@ -121,6 +124,11 @@ resource "aws_instance" "vault-service" {
             "${path.module}/scripts/dnsmasq.sh"
         ]
     }
+
+    provisioner "remote-exec" {
+        inline = "${data.template_file.vault-unseal-script.rendered}"
+    }
+
 }
 resource "aws_security_group" "vault-service" {
     name = "${var.tagName}-security-group"
