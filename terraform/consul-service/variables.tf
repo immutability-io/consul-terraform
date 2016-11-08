@@ -71,7 +71,7 @@ variable "rest_service_url" {
 }
 
 variable "rest_service_conf" {
-    default = "scripts/rest_service.conf"
+    default = "scripts/rest_service.service"
     description = "The name/path of the service config (health check)."
 }
 

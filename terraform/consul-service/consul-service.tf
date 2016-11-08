@@ -77,8 +77,8 @@ resource "aws_instance" "consul-service"
     }
 
     provisioner "file" {
-        source = "${path.module}/config/rest_service.conf"
-        destination = "/tmp/rest_service.conf"
+        source = "${path.module}/config/rest_service.service"
+        destination = "/tmp/rest_service.service"
     }
 
     provisioner "file" {

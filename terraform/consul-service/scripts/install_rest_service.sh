@@ -9,7 +9,7 @@ if [ ! -d "/etc/service" ]; then
 fi
 
 echo "Download REST service..."
-sudo wget -O /tmp/rest_service ${rest_service_url}
+sudo wget --quiet -O /tmp/rest_service ${rest_service_url}
 
 echo "Registering REST service with Consul..."
 sudo chmod 777 /tmp/service.json
@@ -19,10 +19,12 @@ echo "Installing REST service..."
 sudo chmod 777 /tmp/rest_service
 sudo mv /tmp/rest_service /usr/local/bin
 
-echo "Installing Upstart REST service..."
-sudo chown root:root /tmp/rest_service.conf
-sudo mv /tmp/rest_service.conf /etc/init/rest_service.conf
-sudo chmod 0644 /etc/init/rest_service.conf
+echo "Installing Systemd REST service..."
+sudo chown root:root /tmp/rest_service.service
+sudo mv /tmp/rest_service.service /etc/systemd/system/rest_service.service
+sudo chmod 0644 /etc/systemd/system/rest_service.service
+sudo systemctl daemon-reload
+sudo systemctl enable rest_service.service
 
 echo "Installing Consul data directory..."
 sudo mkdir -p /opt/consul/data

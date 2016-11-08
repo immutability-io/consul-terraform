@@ -16,7 +16,7 @@ module "vault-pki" {
 
 module "bastion" {
     source = "./terraform/bastion"
-    ami = "ami-2d39803a"
+    ami = "${var.ami}"
     key_name = "${var.key_name}"
     subnet_id = "${var.subnet_id}"
     vpc_id = "${var.vpc_id}"
