@@ -6,7 +6,7 @@
     "check": {
       "id": "vault-health",
       "name": "Running on port 8200",
-      "script": "VAULT_ADDR=vault_url vault status",
+      "script": "VAULT_ADDR=https://vault_url:8200 vault status",
       "interval": "10s",
       "timeout": "1s"
     }
