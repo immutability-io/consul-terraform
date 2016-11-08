@@ -75,11 +75,6 @@ variable "rest_service_conf" {
     description = "The name/path of the service config (health check)."
 }
 
-variable "service_upstart_conf" {
-    default = "scripts/upstart.conf"
-    description = "The name/path of the service upstart script."
-}
-
 variable "vpc_id" {
     description = "The VPC to use for the consul cluster."
 }

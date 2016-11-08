@@ -28,8 +28,8 @@ resource "aws_instance" "consul-node" {
     }
 
     provisioner "file" {
-        source = "${path.module}/config/upstart.conf"
-        destination = "/tmp/upstart.conf"
+        source = "${path.module}/config/consul.service"
+        destination = "/tmp/consul.service"
     }
 
     provisioner "file" {
