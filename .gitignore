@@ -15,3 +15,4 @@
 **/vault_secrets.txt
 **/exports.source
 **/tmp.json
+**/.htpasswd
