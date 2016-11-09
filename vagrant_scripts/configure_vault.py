@@ -17,7 +17,7 @@ def print_banner(message):
 
 try:
     myhost = os.uname()[1]
-    policy_directory = '/tmp'
+    policy_directory = '/vagrant'
     policy_name = myhost+'-read'
     policy_file = policy_name+'.hcl'
     common_name = 'application.'+myhost

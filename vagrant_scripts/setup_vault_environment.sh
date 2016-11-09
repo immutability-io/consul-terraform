@@ -7,7 +7,7 @@ sudo mkdir /etc/vault.d
 
 
 hcl_uname=`python -c "import os;print os.uname()[1]"`
-cat << EOF > /tmp/$hcl_uname-read.hcl
+cat << EOF > /vagrant/$hcl_uname-read.hcl
 path "secret/svc-accts/$hcl_uname/*" {
   capabilities = ["read"]
 }
