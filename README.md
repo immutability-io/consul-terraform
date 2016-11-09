@@ -61,6 +61,7 @@ export DEFAULT_AMI_NAME="consul-server"
 #export DNS_LISTEN_ADDR="127.0.0.1"
 #export DEFAULT_AMI_NAME="consul-agent"
 
+export TF_VAR_unique-prefix="`python -c "import uuid;print uuid.uuid1()"`"
 export TF_VAR_slack_key="---get it from the slack channel---"
 export TF_VAR_ami="---insert your packer AMI id here---"
 export TF_VAR_key_name="---insert your AWS Keypair name---"
