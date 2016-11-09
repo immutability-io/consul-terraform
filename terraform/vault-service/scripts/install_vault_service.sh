@@ -10,6 +10,10 @@ fi
 if [ ! -d "/etc/service" ]; then
   sudo mkdir /etc/service
 fi
+echo "Installing Systemd service..."
+if [ ! -d "/etc/sysconfig" ]; then
+  sudo mkdir -p /etc/sysconfig
+fi
 
 echo "Registering Vault with Consul..."
 VAULT_ADDR=`uname -n`.ec2.internal
@@ -22,10 +26,13 @@ sed -i "s/vault_ip/`ifconfig eth0 | grep "inet " | awk -F'[: ]+' '{ print $4 }'`
 sudo mv /tmp/vault.json /etc/vault.d
 echo $(date '+%s') | sudo tee -a /etc/vault.d/configured > /dev/null
 
-echo "Installing Vault Upstart..."
-sudo chown root:root /tmp/vault.conf
-sudo mv /tmp/vault.conf /etc/init/vault.conf
-sudo chmod 0644 /etc/init/vault.conf
+
+echo "Installing Systemd Vault service..."
+sudo chown root:root /tmp/vault.service
+sudo mv /tmp/vault.service /etc/systemd/system/vault.service
+sudo chmod 0644 /etc/systemd/system/vault.service
+sudo systemctl daemon-reload
+sudo systemctl enable vault.service
 
 echo "Installing Consul data directory..."
 sudo mkdir -p /opt/consul/data
@@ -37,8 +44,9 @@ CONSUL_FLAGS="-client"
 EOF
 
 echo "Installing Consul Upstart service..."
-sudo chown root:root /tmp/upstart.conf
-sudo mv /tmp/upstart.conf /etc/init/consul.conf
-sudo chmod 0644 /etc/init/consul.conf
-sudo mv /tmp/consul_flags /etc/service/consul
-sudo chmod 0644 /etc/service/consul
+
+sudo chown root:root /tmp/consul.service
+sudo mv /tmp/consul.service /etc/systemd/system/consul.service
+sudo chmod 0644 /etc/systemd/system/consul.service
+sudo systemctl daemon-reload
+sudo systemctl enable consul.service
