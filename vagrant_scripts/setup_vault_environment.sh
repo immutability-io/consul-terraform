@@ -235,4 +235,8 @@ sudo cp /tmp/root.crt /usr/local/share/ca-certificates/
 sudo cp /tmp/cacert.crt /usr/local/share/ca-certificates/
 sudo update-ca-certificates
 
+sudo apt-get update
+sudo apt-get upgrade -y
+sudo apt-get dist-upgrade -y
+
 echo -e "\n[vault environment] setup completed ;) \n";
