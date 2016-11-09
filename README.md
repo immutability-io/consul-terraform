@@ -9,7 +9,7 @@ The first thing we do is bring up a HashiCorp [Vagrant](https://www.vagrantup.co
 * Vault 0.6.2
 * Consul 0.7.0
 * golang 1.6+
-* Terraform 0.7.7
+* Terraform 0.7.9
 * git
 
 ### Vault in the Vagrant

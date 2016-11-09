@@ -14,7 +14,7 @@ variable "gossip_encryption_key" {
 }
 
 variable "password_file" {
-    description = "Result sudo htpasswd -c .htpasswd admin."
+    description = "Result sudo htpasswd -c .htpasswd."
 }
 
 variable "bastion_public_ip" {

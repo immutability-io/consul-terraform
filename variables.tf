@@ -48,12 +48,24 @@ variable "root_certificate" {
     description = "The root certificate for the consul cluster."
 }
 
+variable "vault_root_certificate" {
+    description = "The root certificate for the vault cluster."
+}
+
 variable "consul_certificate" {
     description = "The certificate use for the consul cluster."
 }
 
 variable "consul_key" {
     description = "The key to use for the consul cluster."
+}
+
+variable "vault_certificate" {
+    description = "The certificate use for the vault cluster."
+}
+
+variable "vault_key" {
+    description = "The key to use for the vault cluster."
 }
 
 variable "vpc_id" {
@@ -82,6 +94,7 @@ variable "tagName" {
     default = "consul-server"
     description = "Name tag for the servers"
 }
+
 
 variable "unique_prefix" {
     default = "unset_unique_prefix"
