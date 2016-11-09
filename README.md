@@ -14,10 +14,10 @@ The first thing we do is bring up a HashiCorp [Vagrant](https://www.vagrantup.co
 
 ### Vault in the Vagrant
 
-Vault will be installed and started during the vagrant up process. It will *not* be initialized yet. You have to ssh into the Vagrant box (`vagrant ssh`) to do this. To setup the vault:
+Vault will be installed and started during the vagrant up process. It will *not* be initialized yet. You have to ssh into the Vagrant box (`vagrant ssh`) to do this. To setup the vault and provide your domain(s) as an argument.
 
 ```
-$ source /vagrant/vagrant_scripts/setup_vault.sh
+$ source /vagrant/vagrant_scripts/setup_vault.sh example.com,example.net
 ```
 
 This does a few things.  It will configure the vault, output a set of vault_secrets, and configure the vault as a Certificate Authority (CA).
@@ -61,7 +61,7 @@ export DEFAULT_AMI_NAME="consul-server"
 #export DNS_LISTEN_ADDR="127.0.0.1"
 #export DEFAULT_AMI_NAME="consul-agent"
 
-export TF_VAR_unique-prefix="`python -c "import uuid;print uuid.uuid1()"`"
+export TF_VAR_unique_prefix="`python -c "import uuid;print uuid.uuid1()"`"
 export TF_VAR_slack_key="---get it from the slack channel---"
 export TF_VAR_ami="---insert your packer AMI id here---"
 export TF_VAR_key_name="---insert your AWS Keypair name---"

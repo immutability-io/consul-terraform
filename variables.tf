@@ -83,8 +83,8 @@ variable "tagName" {
     description = "Name tag for the servers"
 }
 
-variable "unique-prefix" w{
-    default = "unset-unique-prefix"
+variable "unique_prefix" {
+    default = "unset_unique_prefix"
     description = "Prefix for all resources"
 }
 

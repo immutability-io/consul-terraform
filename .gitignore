@@ -3,6 +3,7 @@
 **/*.log
 .environment
 .vagrant
+**/*.hcl
 **/*.pem
 **/*.attr
 **/*.old

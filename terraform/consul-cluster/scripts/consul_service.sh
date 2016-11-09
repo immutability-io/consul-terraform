@@ -3,4 +3,4 @@ set -e
 
 
 echo "Starting Consul using systemd ..."
-sudo systemctl start consul
+sudo service start consul
