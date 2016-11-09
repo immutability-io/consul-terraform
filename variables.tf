@@ -95,8 +95,8 @@ variable "tagName" {
     description = "Name tag for the servers"
 }
 
-variable "unique-prefix" {
-    default = "cypherhat"
+variable "unique-prefix" w{
+    default = "unset-unique-prefix"
     description = "Prefix for all resources"
 }
 
