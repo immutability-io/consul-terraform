@@ -23,6 +23,8 @@ ENVCONSUL_DOWNLOAD=https://releases.hashicorp.com/envconsul/${ENVCONSUL_VERSION}
 CONSUL_DIR=/opt/consul
 CONSUL_BACKINATOR_DOWNLOAD=https://s3.amazonaws.com/immutability.io/distro/consul-backinator.zip
 VAULT_DOWNLOAD=https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip
+CONSUL_CLI_DOWNLOAD=https://github.com/CiscoCloud/consul-cli/releases/download/v0.3.1/consul-cli_0.3.1_linux_amd64.tar.gz
+
 
 logger "Fetching Consul"
 logger $CONSUL_DOWNLOAD
@@ -52,6 +54,17 @@ logger "Installing Consul Backinator"
 unzip consul-backinator.zip -d /usr/local/bin
 chmod 0755 /usr/local/bin/consul-backinator
 chown root:root /usr/local/bin/consul-backinator
+
+logger "Fetching Consul HTTP API Client"
+logger $CONSUL_CLI_DOWNLOAD
+curl $CONSUL_CLI_DOWNLOAD > consul-cli_0.3.1_linux_amd64.tar.gz
+
+logger "Installing Consul HTTP API Client"
+gunzip consul-cli_0.3.1_linux_amd64.tar.gz
+tar -xvf consul-cli_0.3.1_linux_amd64.tar
+mv ./consul-cli_0.3.1_linux_amd64/consul-cli /usr/local/bin/consul-cli
+chmod 0755 /usr/local/bin/consul-cli
+chown root:root /usr/local/bin/consul-cli
 
 logger "Fetching Consul Template"
 logger $CONSUL_TEMPLATE_DOWNLOAD
