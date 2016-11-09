@@ -80,18 +80,13 @@ resource "aws_instance" "vault-service" {
     }
 
     provisioner "file" {
-        source = "${path.module}/config/upstart.conf"
-        destination = "/tmp/upstart.conf"
+        source = "${path.module}/config/consul.service"
+        destination = "/tmp/consul.service"
     }
 
     provisioner "file" {
-        source = "${path.module}/config/vault_service.json"
-        destination = "/tmp/vault_service.json"
-    }
-
-    provisioner "file" {
-        source = "${path.module}/config/vault.conf"
-        destination = "/tmp/vault.conf"
+        source = "${path.module}/config/vault.service"
+        destination = "/tmp/vault.service"
     }
 
     provisioner "file" {
