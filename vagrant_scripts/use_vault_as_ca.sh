@@ -17,8 +17,17 @@ vault write -format=json vault_root/root/sign-intermediate csr=@vault_intermedia
 vault write vault_intermediate/intermediate/set-signed certificate=@vault_intermediate.crt
 vault write vault_intermediate/config/urls issuing_certificates="https://127.0.0.1:8200/v1/vault_intermediate/ca"  crl_distribution_points="https://127.0.0.1:8200/v1/vault_intermediate/crl"
 vault write vault_intermediate/roles/web_server key_bits=2048 max_ttl=8760h allowed_domains="ec2.internal,$1" allow_bare_domains=true allow_subdomains=true allow_ip_sans=true
-vault write -format=json vault_intermediate/issue/web_server common_name="*.ec2.internal" alt_names="" ip_sans="127.0.0.1" ttl=720h > ./tmp.json
+vault write -format=json vault_intermediate/issue/web_server common_name="$1" alt_names="" ip_sans="127.0.0.1" ttl=720h > ./tmp.json
 
+echo "writing certs and keys for : $1 to `pwd`"
 cat ./tmp.json | jq -r .data.certificate | cat > "$1".crt
-cat ./tmp.json | jq -r .data.issuing_ca | cat > "$1".crt
+cat ./tmp.json | jq -r .data.issuing_ca | cat > "$1"_issuer.crt
 cat ./tmp.json | jq -r .data.private_key | cat > "$1".key
+
+echo "writing certs and keys for vault *.ec2.internal to `pwd`"
+vault write -format=json vault_intermediate/issue/web_server common_name="*.ec2.internal" alt_names="" ip_sans="127.0.0.1" ttl=720h > ./vault.tmp.json
+cat ./vault.tmp.json | jq -r .data.certificate | cat > vault.ec2.crt
+cat ./vault.tmp.json | jq -r .data.issuing_ca | cat > vault.ec2_issuer.crt
+cat ./vault.tmp.json | jq -r .data.private_key | cat > vault.ec2.key
+
+echo "Done creating certs.  They are in `pwd`.  Be sure to put them in your tfvars"
