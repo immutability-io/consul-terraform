@@ -33,7 +33,7 @@ done
 
 logger "Check if the Vault service is running"
 SLEEPTIME=1
-while ! service vault status | grep "active" > /dev/null; do
+while ! service vault status | grep "active (running)" > /dev/null; do
   if [ $SLEEPTIME -gt 20 ]; then
     logger "Check if the Vault service is running"
     logger "ERROR: VAULT SETUP NOT COMPLETE! Manual intervention required."

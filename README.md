@@ -14,16 +14,16 @@ The first thing we do is bring up a HashiCorp [Vagrant](https://www.vagrantup.co
 
 ### Vault in the Vagrant
 
-Vault will be installed and started during the vagrant up process. It will *not* be initialized yet. You have to ssh into the Vagrant box (`vagrant ssh`) to do this. To setup the vault:
+Vault will be installed and started during the vagrant up process. It will *not* be initialized yet. You have to ssh into the Vagrant box (`vagrant ssh`) to do this. To setup the vault and provide your domain(s) as an argument.
 
 ```
-$ source /vagrant/vagrant_scripts/setup_vault.sh
+$ source /vagrant/vagrant_scripts/setup_vault.sh example.com,example.net
 ```
 
-This does a few things.  It will configure the vault, output a set of vault_secrets, and configure the vault as a Certificate Authority (CA).
+This does a few things.  It will configure the vault, output a set of vault_secrets, and configure the vault as a Certificate Authority (CA).  You will find the cert and key for your domain in the folder where you ran the command above.
 
 
-You can test your CA by issuing a certificate:
+If you would like to play a bit more you can test your CA by issuing a certificate, but you do not need to do this:
 
 ```
 vault write -format=json vault_intermediate/issue/web_server common_name="test.example.com"  ip_sans="172.17.0.2" ttl=720h > test.example.com.json
@@ -61,7 +61,7 @@ export DEFAULT_AMI_NAME="consul-server"
 #export DNS_LISTEN_ADDR="127.0.0.1"
 #export DEFAULT_AMI_NAME="consul-agent"
 
-export TF_VAR_unique-prefix="`python -c "import uuid;print uuid.uuid1()"`"
+export TF_VAR_unique_prefix="`python -c "import uuid;print uuid.uuid1()"`"
 export TF_VAR_slack_key="---get it from the slack channel---"
 export TF_VAR_ami="---insert your packer AMI id here---"
 export TF_VAR_key_name="---insert your AWS Keypair name---"
@@ -72,7 +72,11 @@ export TF_VAR_root_certificate="./ssl/vault_root.cer"
 export TF_VAR_consul_certificate="./ssl/consul.cer"
 export TF_VAR_consul_key="./ssl/consul.key"
 export TF_VAR_domain_name="example.com"
-export TF_VAR_common_name="test.example.com"
+#Do what you want... you can use the same cert for all, but you shouldn't.
+export TF_VAR_vault_root_certificate="~/vault_root.crt"
+export TF_VAR_vault_certificate="~/vault.cer"
+export TF_VAR_vault_key="~/vault.key"
+export TF_VAR_common_name="*.ec2.internal"
 export TF_VAR_alt_names="test1.example.com"
 export TF_VAR_ip_sans="127.0.0.1"
 export TF_VAR_associate_public_ip_address="true"
@@ -91,7 +95,7 @@ EOF
 
 ```
 
-Now you can make changes to `/vagrant/vagrant_scripts/exports.source` for your environment and then source the file to your session.  Anytime you need to update a variable do the same.
+Now you can make changes to `/vagrant/vagrant_scripts/exports.source` for your environment and then source the file to your session.  Anytime you need to update a variable do the same.  Note, there are a lot of things you need to fill in here so maybe we shall make this a bit easier later.
 
 ```
 source /vagrant/vagrant_scripts/exports.source
