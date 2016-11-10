@@ -2,6 +2,6 @@
 
 echo -e "\n[vault] start...\n";
 
-sudo service start vault
+sudo service vault start 
 
 echo -e "\n[vault] start completed ;) \n";
