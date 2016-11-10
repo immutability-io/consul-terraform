@@ -38,6 +38,9 @@ resource "aws_security_group" "load-balancer" {
     description = "load-balancer traffic"
     vpc_id = "${var.vpc_id}"
 
+    tags {
+        Name = "${var.tagName}"
+    }
     // These are for internal traffic
 
     ingress {
