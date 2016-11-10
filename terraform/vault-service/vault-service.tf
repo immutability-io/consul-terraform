@@ -130,6 +130,9 @@ resource "aws_security_group" "vault-service" {
     description = "Vault internal traffic + maintenance."
     vpc_id = "${var.vpc_id}"
 
+    tags {
+        Name = "${var.tagName}"
+    }
     // These are for internal traffic
 
     ingress {

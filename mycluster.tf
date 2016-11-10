@@ -168,7 +168,7 @@ module "consul-ui-load-balancer" {
     vpc_id = "${var.vpc_id}"
     subnet_ids = "${var.subnet_id}"
     source = "./terraform/load-balancer"
-    tagName = "${var.unique_prefix}-consul-ui-elb"
+    tagName = "${var.unique_prefix}-consul-ui"
     tagFinance = "${var.tagFinance}"
     tagOwnerEmail = "${var.tagOwnerEmail}"
     tagSchedule = "${var.tagSchedule}"

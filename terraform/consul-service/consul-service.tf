@@ -117,6 +117,9 @@ resource "aws_security_group" "consul-service" {
     description = "Consul internal traffic + maintenance."
     vpc_id = "${var.vpc_id}"
 
+    tags {
+        Name = "${var.tagName}"
+    }
     // These are for internal traffic
 
     ingress {

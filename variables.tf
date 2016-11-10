@@ -152,7 +152,3 @@ variable "aws_route53_zone_id" {
 variable "domain_name" {
     description = "The domain name."
 }
-
-variable "slack_key" {
-    description = "API Key to notify a slack channel."
-}
