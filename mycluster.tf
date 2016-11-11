@@ -107,7 +107,6 @@ module "vault-service" {
     private_key = "${file(var.private_key)}"
     key_name = "${var.key_name}"
     keybase_keys  = "${var.keybase_keys}"
-    key_shares    = "${var.key_shares}"
     key_threshold = "${var.key_threshold}"
     bastion_public_ip = "${module.bastion.public_ip}"
     bastion_user = "${module.bastion.user}"
