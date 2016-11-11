@@ -10,6 +10,11 @@ data "template_file" "template-consul-client-config" {
 
 data "template_file" "vault-unseal-script" {
     template = "${file("${path.module}/config/unseal.sh.tpl")}"
+    vars {
+        keybase_keys  = "${var.keybase_keys}"
+        key_shares    = "${var.key_shares}"
+        key_threshold = "${var.key_threshold}"
+    }
 }
 
 resource "aws_instance" "vault-service" {

@@ -55,6 +55,7 @@
       "inline": [
         "sleep 30",
         "sh /ops/{{user `scripts_dir`}}/dependencies.sh",
+        "sh /ops/{{user `scripts_dir`}}/keybase.sh",
         "sh /ops/{{user `scripts_dir`}}/consul.sh",
         "sh /ops/{{user `scripts_dir`}}/dnsmasq.sh {{user `dns_listen_addr`}}",
         "sh /ops/{{user `scripts_dir`}}/cleanup.sh"
