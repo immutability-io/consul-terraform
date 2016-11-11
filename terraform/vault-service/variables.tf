@@ -11,6 +11,18 @@ variable "key_name" {
     description = "SSH key name in your AWS account for AWS instances."
 }
 
+variable "keybase_keys" {
+    description = "Names of Keybase keys to encrypt unseal keys."
+}
+
+variable "key_shares" {
+    description = "Number of unseal keys to generate."
+}
+
+variable "key_threshold" {
+    description = "Number of unseal keys to require."
+}
+
 variable "root_certificate" {
     description = "The root certificate for the consul cluster."
 }

@@ -67,29 +67,46 @@ export VAULT_ADDR=https://`uname -n`.ec2.internal:8200
 cget() { curl -sf "$CONSUL/v1/kv/service/vault/$1?raw"; }
 
 logger "Check if Vault's been initialized"
-if [ ! $(cget root-token) ]; then
+if [ ! $(cget initialized) ]; then
   logger "Initializing Vault"
   logger $(
-    vault init | tee /tmp/vault.init > /dev/null
+    vault init -key-shares=${key_shares} -key-threshold=${key_threshold} -pgp-keys="${keybase_keys}" | tee /tmp/vault.init > /dev/null
+  )
+  logger $(
+    curl -fX PUT "$CONSUL/v1/kv/service/vault/initialized" -d "true"
   )
 
   logger "Store master keys in Consul for operator to retrieve and remove"
   COUNTER=1
   cat /tmp/vault.init | grep '^Unseal' | awk '{print $4}' | for key in $(cat -); do
     logger "Saving service/vault/unseal-key-$COUNTER"
-    logger $(
-      curl -fX PUT "$CONSUL/v1/kv/service/vault/unseal-key-$COUNTER" -d $key
-    )
+    echo $key > /tmp/unseal-key-$COUNTER.txt
     COUNTER=$((COUNTER + 1))
   done
 
   logger "export ROOT_TOKEN"
   export ROOT_TOKEN=$(cat /tmp/vault.init | grep '^Initial' | awk '{print $4}')
-
-  logger "Saving service/vault/root-token"
-  logger $(
-    curl -fX PUT "$CONSUL/v1/kv/service/vault/root-token" -d $ROOT_TOKEN
-  )
+  COUNTER=1
+  for i in $(echo "${keybase_keys}" | sed "s/,/ /g")
+  do
+      # call your procedure/other scripts here below
+      logger "Saving service/vault/root-token"
+      keybase encrypt $i -m $ROOT_TOKEN -o /tmp/$i.txt
+      logger $(
+        curl -X PUT "$CONSUL/v1/kv/service/vault/$i-root-token" -d @/tmp/$i.txt
+      )
+      logger $(
+        curl -X PUT "$CONSUL/v1/kv/service/vault/$i-unseal-key" -d @/tmp/unseal-key-$COUNTER.txt
+      )
+      logger "Remove ROOT_TOKEN from environment"
+      logger $(
+        shred -u -z /tmp/$i.txt
+      )
+      logger $(
+        shred -u -z /tmp/unseal-key-$COUNTER.txt
+      )
+      COUNTER=$((COUNTER + 1))
+  done
 
   logger "Remove master keys from disk"
   logger $(
@@ -103,10 +120,8 @@ logger "Checking if Vault is already unsealed"
 if vault status | grep "Sealed: false" > /dev/null; then
   logger "Vault is already unsealed"
 else
-  logger "Unsealing Vault"
-  vault unseal $(cget unseal-key-1)
-  vault unseal $(cget unseal-key-2)
-  vault unseal $(cget unseal-key-3)
+  logger "Must unseal vault manually using:"
+  logger "$keybase_keys"
 fi
 
 logger "--Vault Status--"
