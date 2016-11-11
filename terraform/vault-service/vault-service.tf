@@ -8,15 +8,6 @@ data "template_file" "template-consul-client-config" {
     }
 }
 
-data "template_file" "vault-unseal-script" {
-    template = "${file("${path.module}/config/unseal.sh.tpl")}"
-    vars {
-        keybase_keys  = "${var.keybase_keys}"
-        key_shares    = "${var.key_shares}"
-        key_threshold = "${var.key_threshold}"
-    }
-}
-
 resource "aws_instance" "vault-service" {
     ami = "${var.ami}"
     count = "${var.service_count}"
@@ -99,6 +90,11 @@ resource "aws_instance" "vault-service" {
         destination = "/tmp/install_vault_service.sh"
     }
 
+    provisioner "file" {
+        source = "${path.module}/scripts/vaultinit.sh"
+        destination = "/tmp/vaultinit.sh"
+    }
+
     provisioner "remote-exec" {
         scripts = [
             "${path.module}/scripts/stop_nginx.sh"
@@ -126,7 +122,10 @@ resource "aws_instance" "vault-service" {
     }
 
     provisioner "remote-exec" {
-        inline = "${data.template_file.vault-unseal-script.rendered}"
+        inline = [
+          "chmod +x /tmp/vaultinit.sh",
+          "/tmp/vaultinit.sh ${var.keybase_keys} ${var.key_threshold}",
+        ]
     }
 
 }

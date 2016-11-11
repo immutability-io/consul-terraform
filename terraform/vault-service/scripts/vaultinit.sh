@@ -69,41 +69,35 @@ if [[ $? -eq 2 ]] ; then
 fi
 
 logger "Attempting Vault initialization"
-vault init -key-shares=${key_shares} -key-threshold=${key_threshold} | tee /tmp/vault.init > /dev/null
 
-logger "Store master keys in Consul for operator to retrieve and remove"
-COUNTER=1
-cat /tmp/vault.init | grep '^Unseal' | awk '{print $4}' | for key in $(cat -); do
-  logger "Saving service/vault/unseal-key-$COUNTER"
-  vault unseal $key
-  export unsealkey$COUNTER=$key
-  COUNTER=$((COUNTER + 1))
-done
-logger "export ROOT_TOKEN"
+KEYBASE=(`echo "$1" | sed "s/,/ /g"`)
+KEYSHARES=${#KEYBASE[@]}
+vault init -key-shares=$KEYSHARES -key-threshold=$2 | tee /tmp/vault.init > /dev/null
+
 export ROOT_TOKEN=$(cat /tmp/vault.init | grep '^Initial' | awk '{print $4}')
-COUNTER=1
-for i in $(echo "${keybase_keys}" | sed "s/,/ /g")
-do
-    # call your procedure/other scripts here below
-    logger "Saving service/vault/root-token"
-    UNSEALKEY="unsealkey$COUNTER"
-    keybase encrypt $i -m $UNSEALKEY -o /tmp/unseal.$i.txt
-    keybase encrypt $i -m $ROOT_TOKEN -o /tmp/$i.txt
-    logger $(
-      curl -X PUT "$CONSUL/v1/kv/service/vault/$i-root-token" -d @/tmp/$i.txt
-    )
-    logger $(
-      curl -X PUT "$CONSUL/v1/kv/service/vault/$i-unseal-key" -d @/tmp/unseal.$i.txt
-    )
-    logger "Remove ROOT_TOKEN from environment"
-    logger $(
-      shred -u -z /tmp/$i.txt
-    )
-    logger "Remove UNSEAL KEYS from environment"
-    logger $(
-      shred -u -z /tmp/unseal.$i.txt
-    )
-    COUNTER=$((COUNTER + 1))
+logger "Store master keys in Consul for operator to retrieve and remove"
+COUNTER=0
+cat /tmp/vault.init | grep '^Unseal' | awk '{print $4}' | for key in $(cat -); do
+  logger "Saving service/vault/${KEYBASE[COUNTER]}-unseal-key"
+  vault unseal $key
+  keybase encrypt ${KEYBASE[COUNTER]} -m $key -o /tmp/${KEYBASE[COUNTER]}.txt
+  logger $(
+    curl -X PUT "$CONSUL/v1/kv/service/vault/${KEYBASE[COUNTER]}-unseal-key" -d @/tmp/${KEYBASE[COUNTER]}.txt
+  )
+  logger "Saving service/vault/${KEYBASE[COUNTER]}-root-token"
+  keybase encrypt ${KEYBASE[COUNTER]} -m $ROOT_TOKEN -o /tmp/${KEYBASE[COUNTER]}.root.txt
+  logger $(
+    curl -X PUT "$CONSUL/v1/kv/service/vault/${KEYBASE[COUNTER]}-root-token" -d @/tmp/${KEYBASE[COUNTER]}.root.txt
+  )
+  logger "Remove ${KEYBASE[COUNTER]}'s copy of the ROOT_TOKEN from environment"
+  logger $(
+    shred -u -z /tmp/${KEYBASE[COUNTER]}.root.txt
+  )
+  logger "Remove ${KEYBASE[COUNTER]}'s Key Share from environment"
+  logger $(
+    shred -u -z /tmp/${KEYBASE[COUNTER]}.txt
+  )
+  COUNTER=$((COUNTER + 1))
 done
 
 logger "Remove master keys from disk"
