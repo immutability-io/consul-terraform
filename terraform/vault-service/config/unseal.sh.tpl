@@ -1,7 +1,4 @@
 #!/bin/bash
-set -e
-
-VAULTHOST=`uname -n`.ec2.internal:8200
 
 logger() {
   DT=$(date '+%Y/%m/%d %H:%M:%S')
@@ -64,86 +61,52 @@ done
 logger "Setting variables"
 CONSUL=http://127.0.0.1:8500
 export VAULT_ADDR=https://`uname -n`.ec2.internal:8200
-cget() { curl -sf "$CONSUL/v1/kv/service/vault/$1?raw"; }
 
-logger "Check if Vault's been initialized"
-if [ ! $(cget initialized) ]; then
-  logger "Initializing Vault"
-  logger $(
-    vault init -key-shares=${key_shares} -key-threshold=${key_threshold} -pgp-keys="${keybase_keys}" | tee /tmp/vault.init > /dev/null
-  )
-  logger $(
-    curl -fX PUT "$CONSUL/v1/kv/service/vault/initialized" -d "true"
-  )
+logger "Check to see if vault is initialized"
+vault status
+if [[ $? -eq 2 ]] ; then
+    exit 0
+fi
 
-  logger "Store master keys in Consul for operator to retrieve and remove"
-  COUNTER=1
-  cat /tmp/vault.init | grep '^Unseal' | awk '{print $4}' | for key in $(cat -); do
-    logger "Saving service/vault/unseal-key-$COUNTER"
-    echo $key > /tmp/unseal-key-$COUNTER.txt
+logger "Attempting Vault initialization"
+vault init -key-shares=${key_shares} -key-threshold=${key_threshold} | tee /tmp/vault.init > /dev/null
+
+logger "Store master keys in Consul for operator to retrieve and remove"
+COUNTER=1
+cat /tmp/vault.init | grep '^Unseal' | awk '{print $4}' | for key in $(cat -); do
+  logger "Saving service/vault/unseal-key-$COUNTER"
+  vault unseal $key
+  export unsealkey$COUNTER=$key
+  COUNTER=$((COUNTER + 1))
+done
+logger "export ROOT_TOKEN"
+export ROOT_TOKEN=$(cat /tmp/vault.init | grep '^Initial' | awk '{print $4}')
+COUNTER=1
+for i in $(echo "${keybase_keys}" | sed "s/,/ /g")
+do
+    # call your procedure/other scripts here below
+    logger "Saving service/vault/root-token"
+    UNSEALKEY="unsealkey$COUNTER"
+    keybase encrypt $i -m $UNSEALKEY -o /tmp/unseal.$i.txt
+    keybase encrypt $i -m $ROOT_TOKEN -o /tmp/$i.txt
+    logger $(
+      curl -X PUT "$CONSUL/v1/kv/service/vault/$i-root-token" -d @/tmp/$i.txt
+    )
+    logger $(
+      curl -X PUT "$CONSUL/v1/kv/service/vault/$i-unseal-key" -d @/tmp/unseal.$i.txt
+    )
+    logger "Remove ROOT_TOKEN from environment"
+    logger $(
+      shred -u -z /tmp/$i.txt
+    )
+    logger "Remove UNSEAL KEYS from environment"
+    logger $(
+      shred -u -z /tmp/unseal.$i.txt
+    )
     COUNTER=$((COUNTER + 1))
-  done
+done
 
-  logger "export ROOT_TOKEN"
-  export ROOT_TOKEN=$(cat /tmp/vault.init | grep '^Initial' | awk '{print $4}')
-  COUNTER=1
-  for i in $(echo "${keybase_keys}" | sed "s/,/ /g")
-  do
-      # call your procedure/other scripts here below
-      logger "Saving service/vault/root-token"
-      keybase encrypt $i -m $ROOT_TOKEN -o /tmp/$i.txt
-      logger $(
-        curl -X PUT "$CONSUL/v1/kv/service/vault/$i-root-token" -d @/tmp/$i.txt
-      )
-      logger $(
-        curl -X PUT "$CONSUL/v1/kv/service/vault/$i-unseal-key" -d @/tmp/unseal-key-$COUNTER.txt
-      )
-      logger "Remove ROOT_TOKEN from environment"
-      logger $(
-        shred -u -z /tmp/$i.txt
-      )
-      logger $(
-        shred -u -z /tmp/unseal-key-$COUNTER.txt
-      )
-      COUNTER=$((COUNTER + 1))
-  done
-
-  logger "Remove master keys from disk"
-  logger $(
-    shred -u -z /tmp/vault.init
-  )
-else
-  logger "Vault has already been initialized, skipping."
-fi
-
-logger "Checking if Vault is already unsealed"
-if vault status | grep "Sealed: false" > /dev/null; then
-  logger "Vault is already unsealed"
-else
-  logger "Must unseal vault manually using:"
-  logger "$keybase_keys"
-fi
-
-logger "--Vault Status--"
-logger "$(vault status)"
-
-logger "Done"
-
-instructions() {
-  cat <<EOF
-
-We use an instance of HashiCorp Vault for secrets management.
-
-It has been automatically initialized and unsealed once. Future unsealing must
-be done manually.
-
-The unseal keys and root token have been temporarily stored in Consul K/V.
-
-  /service/vault/root-token
-  /service/vault/unseal-key-{1..5}
-
-Please securely distribute and record these secrets and remove them from Consul.
-EOF
-}
-
-instructions
+logger "Remove master keys from disk"
+logger $(
+  shred -u -z /tmp/vault.init
+)
