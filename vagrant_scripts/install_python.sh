@@ -4,7 +4,7 @@ echo -e "\n[python] installing...\n";
 
 sudo apt-get -qq update
 sudo apt-get -qq  upgrade
-sudo apt-get -y -qq install build-essential checkinstall ksh git unzip
+sudo apt-get -y -qq install build-essential checkinstall ksh git unzip awscli
 #for some reason this just won't be quiet. Maybe a vagrant thing.
 sudo apt-get -y -qq install libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev apache2-utils
 cd /usr/src
