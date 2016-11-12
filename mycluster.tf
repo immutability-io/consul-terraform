@@ -214,6 +214,16 @@ resource "aws_route53_record" "consul" {
    ttl = "10"
    records = ["${module.consul-ui-load-balancer.dns_name}"]
 }
+
+data "terraform_remote_state" "consul" {
+    backend = "s3"
+    config {
+        bucket = "${var.s3_tfstate_bucket}"
+        key = "consul-terraform/terraform.tfstate"
+        region = "${var.region}"
+        encrypt = "true"
+    }
+}
 /*
 resource "aws_route53_record" "resty" {
     zone_id = "${var.aws_route53_zone_id}"

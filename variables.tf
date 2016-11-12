@@ -160,3 +160,7 @@ variable "keybase_keys" {
 variable "key_threshold" {
     description = "Number of unseal keys to require."
 }
+
+variable "s3_tfstate_bucket" {
+  description = "Bucket for remote tfstate"
+}
