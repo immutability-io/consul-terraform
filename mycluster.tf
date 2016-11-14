@@ -104,6 +104,7 @@ module "vault-service" {
     consul_cluster_ips = "${module.consul-cluster.private_server_ips}"
     ami = "${var.ami}"
     service_count = "2"
+    domain_name="${var.domain_name}"
     private_key = "${file(var.private_key)}"
     key_name = "${var.key_name}"
     keybase_keys  = "${var.keybase_keys}"
