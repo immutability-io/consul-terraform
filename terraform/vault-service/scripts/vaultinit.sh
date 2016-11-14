@@ -2,8 +2,8 @@
 
 logger() {
   DT=$(date '+%Y/%m/%d %H:%M:%S')
-  echo "$DT vault-unseal.sh: $1"
-  echo "$DT vault-unseal.sh: $1" | sudo tee -a /var/log/remote-exec.log > /dev/null
+  echo "$DT vaultinit.sh: $1"
+  echo "$DT vaultinit.sh: $1" | sudo tee -a /var/log/remote-exec.log > /dev/null
 }
 
 logger "Begin script"
@@ -60,7 +60,7 @@ done
 
 logger "Setting variables"
 CONSUL=http://127.0.0.1:8500
-export VAULT_ADDR=https://`uname -n`.ec2.internal:8200
+VAULT_ADDR=https://`uname -n`.ec2.internal:8200
 
 logger "Check to see if vault is initialized"
 vault status
@@ -74,7 +74,7 @@ KEYBASE=(`echo "$1" | sed "s/,/ /g"`)
 KEYSHARES=${#KEYBASE[@]}
 vault init -key-shares=$KEYSHARES -key-threshold=$2 | tee /tmp/vault.init > /dev/null
 
-export ROOT_TOKEN=$(cat /tmp/vault.init | grep '^Initial' | awk '{print $4}')
+ROOT_TOKEN=$(cat /tmp/vault.init | grep '^Initial' | awk '{print $4}')
 logger "Store master keys in Consul for operator to retrieve and remove"
 COUNTER=0
 cat /tmp/vault.init | grep '^Unseal' | awk '{print $4}' | for key in $(cat -); do
@@ -99,6 +99,9 @@ cat /tmp/vault.init | grep '^Unseal' | awk '{print $4}' | for key in $(cat -); d
   )
   COUNTER=$((COUNTER + 1))
 done
+
+logger "Use vault as a CA"
+/tmp/use_vault_as_ca.sh $ROOT_TOKEN $3
 
 logger "Remove master keys from disk"
 logger $(

@@ -95,6 +95,11 @@ resource "aws_instance" "vault-service" {
         destination = "/tmp/vaultinit.sh"
     }
 
+    provisioner "file" {
+        source = "${path.module}/scripts/use_vault_as_ca.sh"
+        destination = "/tmp/use_vault_as_ca.sh"
+    }
+
     provisioner "remote-exec" {
         scripts = [
             "${path.module}/scripts/stop_nginx.sh"
@@ -123,8 +128,9 @@ resource "aws_instance" "vault-service" {
 
     provisioner "remote-exec" {
         inline = [
+          "chmod +x /tmp/use_vault_as_ca.sh",
           "chmod +x /tmp/vaultinit.sh",
-          "/tmp/vaultinit.sh ${var.keybase_keys} ${var.key_threshold}",
+          "/tmp/vaultinit.sh ${var.keybase_keys} ${var.key_threshold} ${var.domain_name}",
         ]
     }
 
