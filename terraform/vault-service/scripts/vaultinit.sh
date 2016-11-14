@@ -60,7 +60,7 @@ done
 
 logger "Setting variables"
 CONSUL=http://127.0.0.1:8500
-export VAULT_ADDR=https://`uname -n`.ec2.internal:8200
+VAULT_ADDR=https://`uname -n`.ec2.internal:8200
 
 logger "Check to see if vault is initialized"
 vault status
@@ -74,7 +74,7 @@ KEYBASE=(`echo "$1" | sed "s/,/ /g"`)
 KEYSHARES=${#KEYBASE[@]}
 vault init -key-shares=$KEYSHARES -key-threshold=$2 | tee /tmp/vault.init > /dev/null
 
-export ROOT_TOKEN=$(cat /tmp/vault.init | grep '^Initial' | awk '{print $4}')
+ROOT_TOKEN=$(cat /tmp/vault.init | grep '^Initial' | awk '{print $4}')
 logger "Store master keys in Consul for operator to retrieve and remove"
 COUNTER=0
 cat /tmp/vault.init | grep '^Unseal' | awk '{print $4}' | for key in $(cat -); do
