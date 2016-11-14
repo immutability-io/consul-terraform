@@ -2,8 +2,8 @@
 
 logger() {
   DT=$(date '+%Y/%m/%d %H:%M:%S')
-  echo "$DT vault-unseal.sh: $1"
-  echo "$DT vault-unseal.sh: $1" | sudo tee -a /var/log/remote-exec.log > /dev/null
+  echo "$DT vaultinit.sh: $1"
+  echo "$DT vaultinit.sh: $1" | sudo tee -a /var/log/remote-exec.log > /dev/null
 }
 
 logger "Begin script"
@@ -99,6 +99,9 @@ cat /tmp/vault.init | grep '^Unseal' | awk '{print $4}' | for key in $(cat -); d
   )
   COUNTER=$((COUNTER + 1))
 done
+
+logger "Use vault as a CA"
+/tmp/use_vault_as_ca.sh $ROOT_TOKEN $3
 
 logger "Remove master keys from disk"
 logger $(
