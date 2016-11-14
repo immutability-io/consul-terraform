@@ -111,3 +111,7 @@ variable "tagAutoStart" {
     default = "Off"
     description = "AutoStart tag for the servers"
 }
+
+variable "domain_name" {
+    description = "The domain name that vault issues certificates for."
+}
