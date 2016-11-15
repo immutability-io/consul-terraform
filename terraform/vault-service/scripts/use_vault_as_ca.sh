@@ -8,10 +8,10 @@ logger() {
 
 echo "Use Vault as CA with allowed domains: $2"
 
-VAULT_ADDR=https://`uname -n`.ec2.internal:8200
-CONSUL_VAULT_ADDR=https://vault.service.consul:8200
-VAULT_TOKEN=$1
-CONSUL=http://127.0.0.1:8500
+export VAULT_ADDR=https://`uname -n`.ec2.internal:8200
+export CONSUL_VAULT_ADDR=https://vault.service.consul:8200
+export VAULT_TOKEN=$1
+export CONSUL=http://127.0.0.1:8500
 
 echo "vault mount vault_root"
 logger $(vault mount -path=vault_root -description="Vault Root CA" -max-lease-ttl=87600h pki)
