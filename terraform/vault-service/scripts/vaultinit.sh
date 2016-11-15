@@ -60,7 +60,7 @@ done
 
 logger "Setting variables"
 CONSUL=http://127.0.0.1:8500
-VAULT_ADDR=https://`uname -n`.ec2.internal:8200
+export VAULT_ADDR=https://`uname -n`.ec2.internal:8200
 
 logger "Check to see if vault is initialized"
 vault status
