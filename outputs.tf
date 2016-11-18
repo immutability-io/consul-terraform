@@ -29,3 +29,8 @@ output "fabio_ui_a" {
 output "fabio_ui_b" {
     value = "https://${aws_route53_record.fabio_b.name}/routes"
 }
+
+
+output "website" {
+    value = "https://${aws_route53_record.website.name}/website"
+}
