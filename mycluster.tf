@@ -284,7 +284,7 @@ resource "aws_route53_health_check" "website-health" {
     ip_address = "${element(module.website.public_server_ips, count.index)}"
     port = 443
     type = "HTTPS"
-    resource_path = "/index.html"
+    resource_path = "/health/index.html"
     failure_threshold = "3"
     request_interval = "30"
 
