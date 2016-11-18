@@ -8,6 +8,10 @@ if [ ! -d "/etc/service" ]; then
   sudo mkdir /etc/service
 fi
 
+echo "Create health check..."
+sudo mkdir /usr/share/nginx/html/health
+sudo cp /usr/share/nginx/html/index.* /usr/share/nginx/html/health
+
 echo "Download website-health ..."
 cd /usr/share/nginx/html
 sudo git clone ${website_repo}
@@ -24,7 +28,7 @@ cat >/tmp/website.json << EOF
     "check": {
       "id": "website-health",
       "name": "Running on port 443",
-      "http": "https://localhost/index.html",
+      "http": "https://localhost/health/index.html",
       "interval": "10s",
       "timeout": "1s"
     }
