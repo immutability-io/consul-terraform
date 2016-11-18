@@ -28,6 +28,19 @@ module "vault-certificates" {
     vault_addr = "${var.vault_addr}"
 }
 
+module "website-certificates" {
+    source = "./terraform/vault-pki"
+    temp_file = "./vault_tmp.json"
+    certificate = "./ssl/www.crt"
+    private_key = "./ssl/www.key"
+    issuer_certificate = "./ssl/www.root.crt"
+    common_name = "www.immutability.io"
+    ip_sans = "${var.ip_sans}"
+    alt_names = "localhost"
+    vault_token = "${var.vault_token}"
+    vault_addr = "${var.vault_addr}"
+}
+
 module "bastion" {
     source = "./terraform/bastion"
     ami = "${var.ami}"
@@ -157,6 +170,37 @@ module "fabio" {
     password_file = "${var.password_file}"
 }
 
+
+module "website" {
+    source = "./terraform/website"
+    consul_cluster_ips = "${module.consul-cluster.private_server_ips}"
+    ami = "${var.ami}"
+    service_count = "${var.service_count}"
+    private_key = "${file(var.private_key)}"
+    key_name = "${var.key_name}"
+    bastion_public_ip = "${module.bastion.public_ip}"
+    bastion_user = "${module.bastion.user}"
+    associate_public_ip_address = "${var.associate_public_ip_address}"
+    subnet_id = "${var.subnet_id}"
+    vpc_id = "${var.vpc_id}"
+    vpc_cidr = "${var.vpc_cidr}"
+    tagName = "${var.unique_prefix}-website"
+    tagFinance = "${var.tagFinance}"
+    tagOwnerEmail = "${var.tagOwnerEmail}"
+    tagSchedule = "${var.tagSchedule}"
+    tagBusinessJustification = "${var.tagBusinessJustification}"
+    tagAutoStart = "${var.tagAutoStart}"
+    datacenter = "${var.datacenter}"
+    gossip_encryption_key = "${var.gossip_encryption_key}"
+    consul_certificate = "${module.consul-certificates.certificate}"
+    consul_key = "${module.consul-certificates.private_key}"
+    website_root_certificate = "${module.website-certificates.issuer_certificate}"
+    website_certificate = "${module.website-certificates.certificate}"
+    website_key = "${module.website-certificates.private_key}"
+    root_certificate = "${module.consul-certificates.issuer_certificate}"
+    password_file = "${var.password_file}"
+}
+
 resource "aws_iam_server_certificate" "consul_certificate" {
     name_prefix      = "consul"
     certificate_body = "${module.consul-certificates.certificate_body}"
@@ -225,24 +269,23 @@ data "terraform_remote_state" "consul" {
         encrypt = "true"
     }
 }
-/*
-resource "aws_route53_record" "resty" {
+
+resource "aws_route53_record" "website" {
     zone_id = "${var.aws_route53_zone_id}"
-    name = "resty.${var.domain_name}"
+    name = "www.immutability.io"
     type = "A"
     ttl = "10"
-    records = ["${module.consul-service.public_server_ips}"]
+    records = ["${module.website.public_server_ips}"]
 }
 
 
-resource "aws_route53_health_check" "resty-health" {
+resource "aws_route53_health_check" "website-health" {
     count = "${var.service_count}"
-    ip_address = "${element(module.consul-service.public_server_ips, count.index)}"
-    port = 8080
-    type = "HTTP"
-    resource_path = "/unhealthy"
+    ip_address = "${element(module.website.public_server_ips, count.index)}"
+    port = 443
+    type = "HTTPS"
+    resource_path = "/health/index.html"
     failure_threshold = "3"
     request_interval = "30"
 
 }
-*/
