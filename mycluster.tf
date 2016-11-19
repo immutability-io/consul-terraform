@@ -30,11 +30,24 @@ module "vault-certificates" {
 
 module "website-certificates" {
     source = "./terraform/vault-pki"
-    temp_file = "./vault_tmp.json"
+    temp_file = "./website_tmp.json"
     certificate = "./ssl/www.crt"
     private_key = "./ssl/www.key"
     issuer_certificate = "./ssl/www.root.crt"
     common_name = "www.immutability.io"
+    ip_sans = "${var.ip_sans}"
+    alt_names = "localhost"
+    vault_token = "${var.vault_token}"
+    vault_addr = "${var.vault_addr}"
+}
+
+module "service-certificates" {
+    source = "./terraform/vault-pki"
+    temp_file = "./service_tmp.json"
+    certificate = "./ssl/service.crt"
+    private_key = "./ssl/service.key"
+    issuer_certificate = "./ssl/service.root.crt"
+    common_name = "*.immutability.io"
     ip_sans = "${var.ip_sans}"
     alt_names = "localhost"
     vault_token = "${var.vault_token}"
@@ -108,6 +121,9 @@ module "consul-service" {
     consul_certificate = "${module.consul-certificates.certificate}"
     consul_key = "${module.consul-certificates.private_key}"
     root_certificate = "${module.consul-certificates.issuer_certificate}"
+    fabio_certificate = "${module.service-certificates.certificate}"
+    fabio_key = "${module.service-certificates.private_key}"
+    fabio_root_certificate = "${module.service-certificates.issuer_certificate}"
     rest_service_url = "${var.rest_service_url}"
 }
 
