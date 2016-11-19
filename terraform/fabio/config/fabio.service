@@ -5,7 +5,7 @@ After=network-online.target
 
 [Service]
 Restart=on-failure
-ExecStart=/usr/local/bin/fabio
+ExecStart=/usr/local/bin/fabio -cfg /etc/fabio/fabio.properties
 SuccessExitStatus=0 INT
 
 [Install]

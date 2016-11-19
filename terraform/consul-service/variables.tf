@@ -23,6 +23,18 @@ variable "consul_key" {
     description = "The key to use for the consul cluster."
 }
 
+variable "service_root_certificate" {
+    description = "The root certificate for the services."
+}
+
+variable "service_certificate" {
+    description = "The certificate use for the services."
+}
+
+variable "service_key" {
+    description = "The key to use for the services."
+}
+
 variable "consul_cluster_ips" {
     type = "list"
     description = "List of consul cluster IPs."
@@ -66,7 +78,7 @@ variable "service_config" {
 }
 
 variable "rest_service_url" {
-    default = "https://github.com/Immutability-io/go-rest/releases/download/v0.0.5/go-rest"
+    default = "https://github.com/Immutability-io/go-rest/releases/download/v0.0.6/go-rest"
     description = "The url of the service single file executable (think golang)."
 }
 

@@ -58,6 +58,11 @@ resource "aws_instance" "fabio"
     }
 
     provisioner "file" {
+        source = "${path.module}/config/fabio.properties"
+        destination = "/tmp/fabio.properties"
+    }
+
+    provisioner "file" {
         source = "${var.root_certificate}"
         destination = "/tmp/root.crt"
     }
@@ -70,6 +75,22 @@ resource "aws_instance" "fabio"
     provisioner "file" {
         source = "${var.consul_key}"
         destination = "/tmp/consul.key"
+    }
+
+
+    provisioner "file" {
+        source = "${var.fabio_root_certificate}"
+        destination = "/tmp/fabio_root.crt"
+    }
+
+    provisioner "file" {
+        source = "${var.fabio_certificate}"
+        destination = "/tmp/fabio.crt"
+    }
+
+    provisioner "file" {
+        source = "${var.fabio_key}"
+        destination = "/tmp/fabio.key"
     }
 
     provisioner "file" {
