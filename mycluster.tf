@@ -120,10 +120,10 @@ module "consul-service" {
     gossip_encryption_key = "${var.gossip_encryption_key}"
     consul_certificate = "${module.consul-certificates.certificate}"
     consul_key = "${module.consul-certificates.private_key}"
+    service_certificate = "${module.service-certificates.certificate}"
+    service_key = "${module.service-certificates.private_key}"
+    service_root_certificate = "${module.service-certificates.issuer_certificate}"
     root_certificate = "${module.consul-certificates.issuer_certificate}"
-    fabio_certificate = "${module.service-certificates.certificate}"
-    fabio_key = "${module.service-certificates.private_key}"
-    fabio_root_certificate = "${module.service-certificates.issuer_certificate}"
     rest_service_url = "${var.rest_service_url}"
 }
 
@@ -183,6 +183,9 @@ module "fabio" {
     consul_certificate = "${module.consul-certificates.certificate}"
     consul_key = "${module.consul-certificates.private_key}"
     root_certificate = "${module.consul-certificates.issuer_certificate}"
+    fabio_certificate = "${module.service-certificates.certificate}"
+    fabio_key = "${module.service-certificates.private_key}"
+    fabio_root_certificate = "${module.service-certificates.issuer_certificate}"
     password_file = "${var.password_file}"
 }
 
