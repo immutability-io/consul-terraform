@@ -73,10 +73,6 @@ variable "subnet_id" {
     description = "The Subnet to use for the service."
 }
 
-variable "service_config" {
-    description = "The name/path of the consul config file for the service."
-}
-
 variable "rest_service_url" {
     default = "https://github.com/Immutability-io/go-rest/releases/download/v0.0.6/go-rest"
     description = "The url of the service single file executable (think golang)."

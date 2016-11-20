@@ -101,7 +101,6 @@ module "consul-service" {
     consul_cluster_ips = "${module.consul-cluster.private_server_ips}"
     ami = "${var.ami}"
     service_count = "${var.service_count}"
-    service_config = "${var.service_config}"
     private_key = "${file(var.private_key)}"
     key_name = "${var.key_name}"
     bastion_public_ip = "${module.bastion.public_ip}"

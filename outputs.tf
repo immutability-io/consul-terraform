@@ -26,11 +26,11 @@ output "fabio_public_ips" {
 output "fabio_ui_a" {
     value = "https://${aws_route53_record.fabio_a.name}/routes"
 }
+
 output "fabio_ui_b" {
     value = "https://${aws_route53_record.fabio_b.name}/routes"
 }
 
-
 output "website" {
-    value = "https://${aws_route53_record.website.name}/website"
+    value = "https://${aws_route53_record.website.name}"
 }
