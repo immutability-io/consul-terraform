@@ -57,7 +57,7 @@ resource "aws_instance" "consul-service"
     }
 
     provisioner "file" {
-        source = "${var.service_config}"
+        source = "${path.module}/config/service.json"
         destination = "/tmp/service.json"
     }
 
