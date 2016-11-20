@@ -1,10 +1,10 @@
 {
   "service": {
-    "name": "go-rest",
+    "name": "hello",
     "port": 443,
-    "tags": ["go-rest", "urlprefix-/hello"],
+    "tags": ["hello", "urlprefix-hello.service.consul/"],
     "check": {
-      "id": "go-rest-health",
+      "id": "hello-health",
       "name": "Running on port 443",
       "http": "https://localhost/unhealthy",
       "interval": "10s",

@@ -150,15 +150,15 @@ resource "aws_security_group" "fabio" {
     }
 
     ingress {
-        from_port = 9999
-        to_port = 9999
+        from_port = 443
+        to_port = 443
         protocol = "tcp"
         cidr_blocks = ["0.0.0.0/0"]
     }
 
     ingress {
-        from_port = 443
-        to_port = 443
+        from_port = 8443
+        to_port = 8443
         protocol = "tcp"
         cidr_blocks = ["0.0.0.0/0"]
     }
