@@ -32,12 +32,12 @@ sudo chmod 0644 /etc/consul.d/consul.key
 
 echo "Setup service Certificate"
 sudo chown root:root /tmp/service.crt
-sudo mv /tmp/consul.crt /etc/ssl/service.crt
+sudo mv /tmp/service.crt /etc/ssl/service.crt
 sudo chmod 0644 /etc/ssl/service.crt
 
 echo "Setup service Key"
 sudo chown root:root /tmp/service.key
-sudo mv /tmp/consul.key /etc/ssl/service.key
+sudo mv /tmp/service.key /etc/ssl/service.key
 sudo chmod 0644 /etc/ssl/service.key
 
 echo "Setup Consul config"

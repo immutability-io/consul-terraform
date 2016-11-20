@@ -34,7 +34,7 @@ sudo chmod 0644 /etc/ssl/fabio.crt
 
 echo "Setup fabio Key"
 sudo chown root:root /tmp/fabio.key
-sudo mv /tmp/consul.key /etc/ssl/fabio.key
+sudo mv /tmp/fabio.key /etc/ssl/fabio.key
 sudo chmod 0644 /etc/ssl/fabio.key
 
 echo "Setup Consul config"
