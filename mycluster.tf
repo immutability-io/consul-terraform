@@ -47,9 +47,9 @@ module "service-certificates" {
     certificate = "./ssl/service.crt"
     private_key = "./ssl/service.key"
     issuer_certificate = "./ssl/service.root.crt"
-    common_name = "*.immutability.io"
+    common_name = "hello.service.consul"
     ip_sans = "${var.ip_sans}"
-    alt_names = "localhost"
+    alt_names = "localhost,*.immutability.io"
     vault_token = "${var.vault_token}"
     vault_addr = "${var.vault_addr}"
 }
@@ -123,7 +123,6 @@ module "consul-service" {
     service_key = "${module.service-certificates.private_key}"
     service_root_certificate = "${module.service-certificates.issuer_certificate}"
     root_certificate = "${module.consul-certificates.issuer_certificate}"
-    rest_service_url = "${var.rest_service_url}"
 }
 
 module "vault-service" {
