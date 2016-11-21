@@ -47,7 +47,7 @@ module "service-certificates" {
     certificate = "./ssl/service.crt"
     private_key = "./ssl/service.key"
     issuer_certificate = "./ssl/service.root.crt"
-    common_name = "hello.service.consul"
+    common_name = "prototype.service.consul"
     ip_sans = "${var.ip_sans}"
     alt_names = "localhost,*.immutability.io"
     vault_token = "${var.vault_token}"
