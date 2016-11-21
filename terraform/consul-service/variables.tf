@@ -74,7 +74,7 @@ variable "subnet_id" {
 }
 
 variable "rest_service_url" {
-    default = "https://github.com/Immutability-io/go-rest/releases/download/v0.0.6/go-rest"
+    default = "https://github.com/Immutability-io/go-rest/releases/download/v0.0.7/go-rest"
     description = "The url of the service single file executable (think golang)."
 }
 
