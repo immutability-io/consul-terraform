@@ -23,6 +23,19 @@ variable "consul_key" {
     description = "The key to use for the consul cluster."
 }
 
+
+variable "fabio_root_certificate" {
+    description = "The root certificate for fabio."
+}
+
+variable "fabio_certificate" {
+    description = "The certificate use for fabio."
+}
+
+variable "fabio_key" {
+    description = "The key to use for fabio."
+}
+
 variable "consul_cluster_ips" {
     type = "list"
     description = "List of consul cluster IPs."

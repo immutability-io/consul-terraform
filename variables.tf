@@ -22,17 +22,8 @@ variable "associate_public_ip_address" {
     default = false
 }
 
-variable "service_config" {
-    description = "The name/path of the consul config file for the service."
-}
-
 variable "service_count" {
     description = "Number of instances."
-}
-
-variable "rest_service_url" {
-    default = "https://github.com/Immutability-io/go-rest/releases/download/v0.0.5/go-rest"
-    description = "The url of the service single file executable (think golang)."
 }
 
 variable "region" {

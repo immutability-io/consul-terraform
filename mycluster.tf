@@ -30,13 +30,26 @@ module "vault-certificates" {
 
 module "website-certificates" {
     source = "./terraform/vault-pki"
-    temp_file = "./vault_tmp.json"
+    temp_file = "./website_tmp.json"
     certificate = "./ssl/www.crt"
     private_key = "./ssl/www.key"
     issuer_certificate = "./ssl/www.root.crt"
     common_name = "www.immutability.io"
     ip_sans = "${var.ip_sans}"
     alt_names = "localhost"
+    vault_token = "${var.vault_token}"
+    vault_addr = "${var.vault_addr}"
+}
+
+module "service-certificates" {
+    source = "./terraform/vault-pki"
+    temp_file = "./service_tmp.json"
+    certificate = "./ssl/service.crt"
+    private_key = "./ssl/service.key"
+    issuer_certificate = "./ssl/service.root.crt"
+    common_name = "prototype.service.consul"
+    ip_sans = "${var.ip_sans}"
+    alt_names = "localhost,*.immutability.io"
     vault_token = "${var.vault_token}"
     vault_addr = "${var.vault_addr}"
 }
@@ -88,7 +101,6 @@ module "consul-service" {
     consul_cluster_ips = "${module.consul-cluster.private_server_ips}"
     ami = "${var.ami}"
     service_count = "${var.service_count}"
-    service_config = "${var.service_config}"
     private_key = "${file(var.private_key)}"
     key_name = "${var.key_name}"
     bastion_public_ip = "${module.bastion.public_ip}"
@@ -107,8 +119,10 @@ module "consul-service" {
     gossip_encryption_key = "${var.gossip_encryption_key}"
     consul_certificate = "${module.consul-certificates.certificate}"
     consul_key = "${module.consul-certificates.private_key}"
+    service_certificate = "${module.service-certificates.certificate}"
+    service_key = "${module.service-certificates.private_key}"
+    service_root_certificate = "${module.service-certificates.issuer_certificate}"
     root_certificate = "${module.consul-certificates.issuer_certificate}"
-    rest_service_url = "${var.rest_service_url}"
 }
 
 module "vault-service" {
@@ -167,6 +181,9 @@ module "fabio" {
     consul_certificate = "${module.consul-certificates.certificate}"
     consul_key = "${module.consul-certificates.private_key}"
     root_certificate = "${module.consul-certificates.issuer_certificate}"
+    fabio_certificate = "${module.service-certificates.certificate}"
+    fabio_key = "${module.service-certificates.private_key}"
+    fabio_root_certificate = "${module.service-certificates.issuer_certificate}"
     password_file = "${var.password_file}"
 }
 

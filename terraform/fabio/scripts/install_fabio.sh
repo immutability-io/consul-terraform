@@ -7,6 +7,9 @@ fi
 if [ ! -d "/etc/service" ]; then
   sudo mkdir /etc/service
 fi
+if [ ! -d "/etc/fabio" ]; then
+  sudo mkdir /etc/fabio
+fi
 
 echo "Download fabio ..."
 sudo wget --quiet -O /tmp/fabio ${fabio_url}
@@ -14,6 +17,8 @@ sudo wget --quiet -O /tmp/fabio ${fabio_url}
 echo "Installing fabio ..."
 sudo chmod 777 /tmp/fabio
 sudo mv /tmp/fabio /usr/local/bin
+sudo chmod 777 /tmp/fabio.properties
+sudo mv /tmp/fabio.properties /etc/fabio
 
 echo "Installing Systemd fabio..."
 sudo chown root:root /tmp/fabio.service

@@ -58,6 +58,11 @@ resource "aws_instance" "fabio"
     }
 
     provisioner "file" {
+        source = "${path.module}/config/fabio.properties"
+        destination = "/tmp/fabio.properties"
+    }
+
+    provisioner "file" {
         source = "${var.root_certificate}"
         destination = "/tmp/root.crt"
     }
@@ -70,6 +75,22 @@ resource "aws_instance" "fabio"
     provisioner "file" {
         source = "${var.consul_key}"
         destination = "/tmp/consul.key"
+    }
+
+
+    provisioner "file" {
+        source = "${var.fabio_root_certificate}"
+        destination = "/tmp/fabio_root.crt"
+    }
+
+    provisioner "file" {
+        source = "${var.fabio_certificate}"
+        destination = "/tmp/fabio.crt"
+    }
+
+    provisioner "file" {
+        source = "${var.fabio_key}"
+        destination = "/tmp/fabio.key"
     }
 
     provisioner "file" {
@@ -129,15 +150,15 @@ resource "aws_security_group" "fabio" {
     }
 
     ingress {
-        from_port = 9999
-        to_port = 9999
+        from_port = 443
+        to_port = 443
         protocol = "tcp"
         cidr_blocks = ["0.0.0.0/0"]
     }
 
     ingress {
-        from_port = 443
-        to_port = 443
+        from_port = 8443
+        to_port = 8443
         protocol = "tcp"
         cidr_blocks = ["0.0.0.0/0"]
     }
