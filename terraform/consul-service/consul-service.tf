@@ -57,7 +57,7 @@ resource "aws_instance" "consul-service"
     }
 
     provisioner "file" {
-        source = "${var.service_config}"
+        source = "${path.module}/config/service.json"
         destination = "/tmp/service.json"
     }
 
@@ -74,6 +74,21 @@ resource "aws_instance" "consul-service"
     provisioner "file" {
         source = "${var.consul_key}"
         destination = "/tmp/consul.key"
+    }
+
+    provisioner "file" {
+        source = "${var.service_root_certificate}"
+        destination = "/tmp/service_root.crt"
+    }
+
+    provisioner "file" {
+        source = "${var.service_certificate}"
+        destination = "/tmp/service.crt"
+    }
+
+    provisioner "file" {
+        source = "${var.service_key}"
+        destination = "/tmp/service.key"
     }
 
     provisioner "file" {

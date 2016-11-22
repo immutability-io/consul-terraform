@@ -1,0 +1,14 @@
+{
+  "service": {
+    "name": "prototype",
+    "port": 443,
+    "tags": ["prototype", "urlprefix-prototype.service.consul/"],
+    "check": {
+      "id": "prototype-health",
+      "name": "Running on port 443",
+      "http": "https://localhost/unhealthy",
+      "interval": "10s",
+      "timeout": "1s"
+    }
+  }
+}
