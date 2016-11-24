@@ -68,7 +68,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", path: "vagrant_scripts/install_python.sh"
   config.vm.provision "shell", path: "vagrant_scripts/update_hashi.sh"
   config.vm.provision "shell", path: "vagrant_scripts/keybase.sh"
-  config.vm.provision "shell", path: "vagrant_scripts/setup_vault_environment.sh"
+  config.vm.provision "shell", path: "vagrant_scripts/setup_environment.sh"
   config.vm.provision "shell", path: "vagrant_scripts/start_vault.sh"
   config.vm.provision "shell", path: "vagrant_scripts/dot_files.sh"
 end
