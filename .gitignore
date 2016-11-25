@@ -13,7 +13,7 @@
 **/*.csr
 **/*.tfstate
 **/*.tfstate.backup
-**/vault_secrets.txt
+**/vault.init
 **/exports.source
 **/tmp.json
 **/.htpasswd
