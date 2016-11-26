@@ -2,6 +2,7 @@ provider "aws" {
     region = "${var.region}"
 }
 
+
 module "consul-certificates" {
     source = "./terraform/vault-pki"
     temp_file = "./consul_tmp.json"
