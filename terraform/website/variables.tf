@@ -116,3 +116,7 @@ variable "tagAutoStart" {
     default = "Off"
     description = "AutoStart tag for the servers"
 }
+
+variable "nginx_config" {
+    description = "NGINX configuration for this website"
+}

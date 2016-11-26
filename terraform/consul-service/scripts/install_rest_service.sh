@@ -14,6 +14,8 @@ sudo wget --quiet -O /tmp/rest_service ${rest_service_url}
 echo "Registering REST service with Consul..."
 sudo chmod 777 /tmp/service.json
 sudo mv /tmp/service.json /etc/consul.d
+sudo chmod 777 /tmp/clear.json
+sudo mv /tmp/clear.json /etc/consul.d
 
 echo "Installing REST service..."
 sudo chmod 777 /tmp/rest_service

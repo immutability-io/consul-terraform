@@ -53,7 +53,7 @@ resource "aws_instance" "website"
     }
 
     provisioner "file" {
-        source = "${path.module}/config/nginx.conf"
+        source = "${var.nginx_config}"
         destination = "/tmp/nginx.conf"
     }
 
