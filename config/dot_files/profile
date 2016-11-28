@@ -9,5 +9,5 @@ if [ -n "$BASH_VERSION" ]; then
 fi
 
 
-export GOPATH=~
+export GOPATH=/development/go
 export PATH=$PATH:$GOPATH/bin
