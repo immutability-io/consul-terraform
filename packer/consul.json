@@ -60,9 +60,7 @@
     },
     {
       "type": "shell",
-      "execute_command": "{{ .Vars }} sh '{{ .Path }}'",
       "inline": [
-        "sleep 30",
         "sh /ops/{{user `scripts_dir`}}/install_hashistack.sh"
       ]
     },

@@ -2,7 +2,7 @@
 
 set -e
 
-function grab {
+grab () {
   echo "Tool: $1"
   echo "Version: $2"
 
