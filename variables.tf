@@ -132,7 +132,6 @@ variable "vault_token" {
 }
 
 variable "vault_addr" {
-    default = "https://127.0.0.1:8200"
     description = "The vault address."
 }
 
